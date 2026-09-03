@@ -17,8 +17,8 @@ const BASIS = "https://www.smard.de/app/chart_data";
 const AUSGABE = path.join(process.cwd(), "data", "profile");
 
 const FILTER = {
-  pv: { id: 4070, label: "Photovoltaik, Ist-Erzeugung" },
-  wind: { id: 4069, label: "Wind onshore, Ist-Erzeugung" },
+  pv: { id: 4068, label: "Photovoltaik, Ist-Erzeugung" },
+  wind: { id: 4067, label: "Wind onshore, Ist-Erzeugung" },
   preis: { id: 4169, label: "Grosshandelspreis Day-Ahead DE/LU" },
 };
 
@@ -62,6 +62,24 @@ const berlinFormat = new Intl.DateTimeFormat("de-DE", {
 });
 const jahrVon = (ms) => Number(berlinFormat.format(new Date(ms)));
 
+/** Monat, Tag und Stunde eines Zeitstempels in Europe/Berlin. */
+const berlinTeile = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Europe/Berlin",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  hourCycle: "h23",
+});
+
+const TAGE_IM_MONAT = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const TAGE_VOR_MONAT = TAGE_IM_MONAT.reduce(
+  (a, d, i) => {
+    a.push(a[i] + d);
+    return a;
+  },
+  [0],
+);
+
 const CACHE = process.env.SMARD_CACHE ?? "";
 
 async function holeReihe(filterId, region, jahr) {
@@ -93,12 +111,62 @@ async function holeReihe(filterId, region, jahr) {
   return punkte;
 }
 
-/** Lueckenhafte Messwerte linear ueberbruecken, Raender mit Nachbarwert. */
+/**
+ * Zeitstempelbehaftete Messwerte auf ein festes Raster von 8.760 Stunden legen.
+ *
+ * Das Raster ist ein Normaljahr aus 365 Tagen zu 24 Stunden Ortszeit. Damit
+ * liegen Erzeugung, Preis und Last in derselben Stunde uebereinander, was fuer
+ * die Bewertung der Abregelung entscheidend ist.
+ *
+ * - der 29. Februar entfaellt in Schaltjahren
+ * - die doppelte Stunde der Rueckstellung auf Normalzeit wird gemittelt
+ * - die fehlende Stunde der Umstellung auf Sommerzeit wird interpoliert
+ * - Fehlwerte der Quelle werden ebenso interpoliert
+ */
+function aufRaster(punkte, name) {
+  const summe = new Float64Array(STUNDEN);
+  const anzahl = new Uint16Array(STUNDEN);
+
+  for (const [ts, wert] of punkte) {
+    if (wert === null || wert === undefined || Number.isNaN(wert)) continue;
+    const teile = berlinTeile.formatToParts(new Date(ts));
+    let monat = 0;
+    let tag = 0;
+    let stunde = 0;
+    for (const t of teile) {
+      if (t.type === "month") monat = Number(t.value);
+      else if (t.type === "day") tag = Number(t.value);
+      else if (t.type === "hour") stunde = Number(t.value);
+    }
+    if (monat === 2 && tag === 29) continue;
+    const platz = (TAGE_VOR_MONAT[monat - 1] + tag - 1) * 24 + stunde;
+    if (platz < 0 || platz >= STUNDEN) continue;
+    summe[platz] += wert;
+    anzahl[platz] += 1;
+  }
+
+  const werte = new Array(STUNDEN);
+  let luecken = 0;
+  for (let i = 0; i < STUNDEN; i++) {
+    if (anzahl[i] === 0) {
+      werte[i] = null;
+      luecken++;
+    } else {
+      werte[i] = summe[i] / anzahl[i];
+    }
+  }
+  if (luecken > 24) {
+    throw new Error(`${name}: ${luecken} Stunden ohne Messwert, Reihe unvollstaendig`);
+  }
+  return { werte: lueckenFuellen(werte), luecken };
+}
+
+/** Fehlende Stunden linear ueberbruecken, Raender mit dem Nachbarwert. */
 function lueckenFuellen(werte) {
   const w = werte.slice();
   let letzterGueltig = -1;
   for (let i = 0; i < w.length; i++) {
-    if (w[i] === null || w[i] === undefined || Number.isNaN(w[i])) continue;
+    if (w[i] === null) continue;
     if (letzterGueltig < 0) {
       for (let j = 0; j < i; j++) w[j] = w[i];
     } else if (i - letzterGueltig > 1) {
@@ -115,22 +183,10 @@ function lueckenFuellen(werte) {
   return w;
 }
 
-/**
- * Auf genau 8.760 Stunden bringen. Ein Kalenderjahr hat wegen der
- * Sommerzeitumstellung 8.759 oder 8.761 Stundenwerte, die Abweichung wird
- * linear ueber das Jahr verteilt statt an der Umstellungsstunde eingefuegt.
- */
-function auf8760(werte) {
-  if (werte.length === STUNDEN) return werte.slice();
-  const aus = new Array(STUNDEN);
-  const skala = (werte.length - 1) / (STUNDEN - 1);
-  for (let i = 0; i < STUNDEN; i++) {
-    const p = i * skala;
-    const u = Math.floor(p);
-    const o = Math.min(u + 1, werte.length - 1);
-    aus[i] = werte[u] + (werte[o] - werte[u]) * (p - u);
-  }
-  return aus;
+function perzentil(werte, p) {
+  const s = werte.slice().sort((a, b) => a - b);
+  const i = Math.min(s.length - 1, Math.max(0, Math.round((p / 100) * (s.length - 1))));
+  return s[i];
 }
 
 /**
@@ -192,7 +248,9 @@ async function main() {
       rohdaten[art][region] = {};
       for (const jahr of JAHRE) {
         const punkte = await holeReihe(FILTER[art].id, region, jahr);
-        rohdaten[art][region][jahr] = auf8760(lueckenFuellen(punkte.map(([, v]) => v)));
+        const { werte, luecken } = aufRaster(punkte, `${art} ${region} ${jahr}`);
+        rohdaten[art][region][jahr] = werte;
+        if (luecken > 0) console.log(`  ${art} ${region} ${jahr}: ${luecken} Stunden interpoliert`);
       }
     }
   }
@@ -239,7 +297,9 @@ async function main() {
   const preise = {};
   for (const jahr of JAHRE) {
     const punkte = await holeReihe(FILTER.preis.id, "DE", jahr);
-    const reihe = auf8760(lueckenFuellen(punkte.map(([, v]) => v))).map((v) => runde(v, 2));
+    const { werte, luecken } = aufRaster(punkte, `preis ${jahr}`);
+    const reihe = werte.map((v) => runde(v, 2));
+    if (luecken > 0) console.log(`  preis ${jahr}: ${luecken} Stunden interpoliert`);
     preise[jahr] = reihe;
     const mittel = reihe.reduce((a, b) => a + b, 0) / reihe.length;
     const negativ = reihe.filter((v) => v < 0).length;
@@ -261,7 +321,7 @@ async function main() {
   const verarbeitung = (art) => [
     "Wochendateien der SMARD-Chart-API je Regelzone zusammengefuegt",
     "Fehlwerte linear interpoliert",
-    "auf genau 8.760 Stundenwerte je Kalenderjahr resampled, Sommerzeitumstellung dadurch geglaettet",
+    "auf ein festes Raster von 365 Tagen zu 24 Stunden Ortszeit gelegt, 29. Februar entfaellt, doppelte Stunde der Zeitumstellung gemittelt, fehlende interpoliert",
     "je Jahr und Regelzone auf das Jahresmaximum normiert, dadurch unabhaengig vom Zubau installierter Leistung",
     `Umrechnung Flotte zu Einzelanlage ueber p = faktor * flotte^gamma, kalibriert auf Spitzenleistung ${KALIBRIERUNG[art].zielSpitze} und ${KALIBRIERUNG[art].beleg}`,
     "die Umrechnung geschieht erst beim Laden im Browser, die Datei enthaelt das unveraenderte Flottenprofil",
@@ -290,7 +350,7 @@ async function main() {
         verarbeitung: [
           "Wochendateien der SMARD-Chart-API zusammengefuegt",
           "Fehlwerte linear interpoliert",
-          "auf genau 8.760 Stundenwerte je Kalenderjahr resampled",
+          "auf ein festes Raster von 365 Tagen zu 24 Stunden Ortszeit gelegt, deckungsgleich mit den Erzeugungsreihen",
           "unveraendert in EUR/MWh, 2 Nachkommastellen, negative Preise bleiben erhalten",
         ],
       }),

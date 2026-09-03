@@ -1,0 +1,225 @@
+import type {
+  AnlagenTyp,
+  Annahmen,
+  Alternative,
+  FcaAngebot,
+  Projekt,
+  Regelzone,
+} from "@/lib/typen";
+
+/**
+ * Zuordnung Bundesland zur Regelzone. Massgeblich fuer Erzeugungs- und
+ * Referenzprofil. Die Grenzen der Regelzonen folgen nicht exakt den
+ * Landesgrenzen, fuer den Prototyp wird die ueberwiegende Zone gesetzt.
+ */
+export const BUNDESLAENDER: { name: string; regelzone: Regelzone }[] = [
+  { name: "Baden-Wuerttemberg", regelzone: "TransnetBW" },
+  { name: "Bayern", regelzone: "TenneT" },
+  { name: "Berlin", regelzone: "50Hertz" },
+  { name: "Brandenburg", regelzone: "50Hertz" },
+  { name: "Bremen", regelzone: "TenneT" },
+  { name: "Hamburg", regelzone: "50Hertz" },
+  { name: "Hessen", regelzone: "TenneT" },
+  { name: "Mecklenburg-Vorpommern", regelzone: "50Hertz" },
+  { name: "Niedersachsen", regelzone: "TenneT" },
+  { name: "Nordrhein-Westfalen", regelzone: "Amprion" },
+  { name: "Rheinland-Pfalz", regelzone: "Amprion" },
+  { name: "Saarland", regelzone: "Amprion" },
+  { name: "Sachsen", regelzone: "50Hertz" },
+  { name: "Sachsen-Anhalt", regelzone: "50Hertz" },
+  { name: "Schleswig-Holstein", regelzone: "TenneT" },
+  { name: "Thueringen", regelzone: "50Hertz" },
+];
+
+export const regelzoneVon = (bundesland: string): Regelzone =>
+  BUNDESLAENDER.find((b) => b.name === bundesland)?.regelzone ?? "50Hertz";
+
+export const ANLAGENTYPEN: { typ: AnlagenTyp; titel: string; kurz: string }[] = [
+  {
+    typ: "bess",
+    titel: "Batteriespeicher",
+    kurz: "Stand-alone-BESS, Erloes aus Arbitrage am Day-Ahead-Markt und aus Systemdienstleistungen",
+  },
+  {
+    typ: "pv_freiflaeche",
+    titel: "PV Freiflaeche",
+    kurz: "Freiflaechenanlage, Erloes aus Direktvermarktung oder PPA, haeufig mit Ueberbauung",
+  },
+  {
+    typ: "industrielle_last",
+    titel: "Industrielle Last",
+    kurz: "Elektrifizierungsvorhaben, Nutzen aus der Substitution des Altsystems",
+  },
+];
+
+/** Startwerte je Anlagentyp. Alle Werte sind im UI aenderbar. */
+export const PROJEKT_VORLAGE: Record<AnlagenTyp, Omit<Projekt, "id">> = {
+  bess: {
+    name: "BESS Umspannwerk Nord",
+    typ: "bess",
+    installierteLeistungMW: 50,
+    speicherKapazitaetMWh: 100,
+    netzanschlussLeistungMW: 50,
+    bundesland: "Brandenburg",
+    inbetriebnahmeJahr: 2028,
+    capexProMW: 120_000,
+    capexProMWhSpeicher: 145_000,
+    betriebsjahre: 20,
+  },
+  pv_freiflaeche: {
+    name: "PV Freiflaeche Sued",
+    typ: "pv_freiflaeche",
+    installierteLeistungMW: 60,
+    netzanschlussLeistungMW: 45,
+    bundesland: "Baden-Wuerttemberg",
+    inbetriebnahmeJahr: 2028,
+    capexProMW: 480_000,
+    betriebsjahre: 25,
+  },
+  industrielle_last: {
+    name: "Prozesswaerme Werk 2",
+    typ: "industrielle_last",
+    installierteLeistungMW: 30,
+    netzanschlussLeistungMW: 30,
+    bundesland: "Nordrhein-Westfalen",
+    inbetriebnahmeJahr: 2028,
+    capexProMW: 450_000,
+    betriebsjahre: 20,
+    lastprofil: "prozesswaerme",
+  },
+};
+
+export const ANNAHMEN_VORLAGE: Record<AnlagenTyp, Annahmen> = {
+  bess: {
+    diskontsatzProzent: 7,
+    opexProMWJahr: 9_000,
+    degradationProzentProJahr: 1.5,
+    verguetung: "markt",
+    ppaPreisEurProMWh: 70,
+    marktwertfaktor: 0.95,
+    negativePreiseAbregeln: false,
+    wirkungsgradProzent: 86,
+    maxZyklenProTag: 1.5,
+    verschleissEurProMWh: 6,
+    sdlErloesEurProMWJahr: 40_000,
+    wertProMWhEur: 0,
+    blindleistungCapexEurProMW: 12_000,
+    blindleistungVerlustProzent: 0.8,
+    engpassStressfaktorP90: 1.5,
+    engpasstiefe: "gleitend",
+  },
+  pv_freiflaeche: {
+    diskontsatzProzent: 6,
+    opexProMWJahr: 9_500,
+    degradationProzentProJahr: 0.5,
+    verguetung: "ppa",
+    ppaPreisEurProMWh: 72,
+    marktwertfaktor: 0.97,
+    negativePreiseAbregeln: true,
+    wirkungsgradProzent: 86,
+    maxZyklenProTag: 1.5,
+    verschleissEurProMWh: 0,
+    sdlErloesEurProMWJahr: 0,
+    wertProMWhEur: 0,
+    blindleistungCapexEurProMW: 9_000,
+    blindleistungVerlustProzent: 0.8,
+    engpassStressfaktorP90: 1.5,
+    engpasstiefe: "gleitend",
+  },
+  industrielle_last: {
+    diskontsatzProzent: 6.5,
+    opexProMWJahr: 14_000,
+    degradationProzentProJahr: 0,
+    verguetung: "markt",
+    ppaPreisEurProMWh: 70,
+    marktwertfaktor: 1,
+    negativePreiseAbregeln: false,
+    wirkungsgradProzent: 86,
+    maxZyklenProTag: 1.5,
+    verschleissEurProMWh: 0,
+    sdlErloesEurProMWJahr: 0,
+    wertProMWhEur: 22,
+    blindleistungCapexEurProMW: 9_000,
+    blindleistungVerlustProzent: 0.8,
+    engpassStressfaktorP90: 1.5,
+    engpasstiefe: "gleitend",
+  },
+};
+
+export const ANGEBOT_VORLAGE: Record<AnlagenTyp, FcaAngebot> = {
+  bess: {
+    archetyp: "dynamisch_referenzanlage",
+    maxEinspeiseleistungMW: 15,
+    maxEntnahmeleistungMW: 50,
+    zeitfenster: [{ tage: [0, 1, 2, 3, 4], vonStunde: 17, bisStunde: 21, limitMW: 15 }],
+    referenzreihe: "wind",
+    schwellwert: 0.55,
+    engpassHaeufigkeitProzent: 9,
+    engpassKorrelation: 0.8,
+    zugangsprinzip: "lifo",
+    positionImStack: 4,
+    anzahlImStack: 5,
+    entschaedigung: "keine",
+    entschaedigungSatzEurProMWh: 0,
+    leistungsgradientProzentProMin: 10,
+    blindleistungsAuflage: true,
+    systemdienstleistungenEingeschraenkt: true,
+    laufzeitJahre: 6,
+  },
+  pv_freiflaeche: {
+    archetyp: "dynamisch_referenzanlage",
+    maxEinspeiseleistungMW: 20,
+    maxEntnahmeleistungMW: 45,
+    zeitfenster: [{ tage: [0, 1, 2, 3, 4, 5, 6], vonStunde: 10, bisStunde: 16, limitMW: 20 }],
+    referenzreihe: "pv",
+    schwellwert: 0.5,
+    engpassHaeufigkeitProzent: 8,
+    engpassKorrelation: 0.85,
+    zugangsprinzip: "pro_rata",
+    positionImStack: 3,
+    anzahlImStack: 5,
+    entschaedigung: "keine",
+    entschaedigungSatzEurProMWh: 0,
+    leistungsgradientProzentProMin: 10,
+    blindleistungsAuflage: true,
+    systemdienstleistungenEingeschraenkt: false,
+    laufzeitJahre: 7,
+  },
+  industrielle_last: {
+    archetyp: "zeitfenster",
+    maxEinspeiseleistungMW: 30,
+    maxEntnahmeleistungMW: 12,
+    zeitfenster: [{ tage: [0, 1, 2, 3, 4], vonStunde: 7, bisStunde: 11, limitMW: 12 }],
+    referenzreihe: "pv",
+    schwellwert: 0.5,
+    engpassHaeufigkeitProzent: 6,
+    engpassKorrelation: 0.4,
+    zugangsprinzip: "pro_rata",
+    positionImStack: 3,
+    anzahlImStack: 5,
+    entschaedigung: "keine",
+    entschaedigungSatzEurProMWh: 0,
+    leistungsgradientProzentProMin: 12,
+    blindleistungsAuflage: false,
+    systemdienstleistungenEingeschraenkt: false,
+    laufzeitJahre: 5,
+  },
+};
+
+export const ALTERNATIVE_VORLAGE: Record<AnlagenTyp, Alternative> = {
+  bess: {
+    festerAnschlussVerfuegbarAbJahr: 6,
+    festerAnschlussBaukostenzuschussEur: 4_200_000,
+    fcaBaukostenzuschussEur: 1_100_000,
+  },
+  pv_freiflaeche: {
+    festerAnschlussVerfuegbarAbJahr: 7,
+    festerAnschlussBaukostenzuschussEur: 3_400_000,
+    fcaBaukostenzuschussEur: 900_000,
+  },
+  industrielle_last: {
+    festerAnschlussVerfuegbarAbJahr: 5,
+    festerAnschlussBaukostenzuschussEur: 2_600_000,
+    fcaBaukostenzuschussEur: 700_000,
+  },
+};

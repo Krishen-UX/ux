@@ -15,8 +15,22 @@ const AUSGABE = path.join(process.cwd(), "data", "profile");
 const JAHRE = [2023, 2024, 2025];
 const STUNDEN = 8760;
 
-/** Wochentag des 1. Januar, 0 = Montag. */
-const startTag = (jahr) => (new Date(Date.UTC(jahr, 0, 1)).getUTCDay() + 6) % 7;
+/**
+ * Wochentag je Tag im Raster der Zeitreihen, 0 = Montag. Der 29. Februar
+ * entfaellt, damit das Raster zu den SMARD-Reihen passt.
+ */
+function wochentagRaster(jahr) {
+  const aus = new Uint8Array(365);
+  const datum = new Date(Date.UTC(jahr, 0, 1));
+  let tag = 0;
+  while (tag < 365) {
+    if (!(datum.getUTCMonth() === 1 && datum.getUTCDate() === 29)) {
+      aus[tag++] = (datum.getUTCDay() + 6) % 7;
+    }
+    datum.setUTCDate(datum.getUTCDate() + 1);
+  }
+  return aus;
+}
 
 /** Jahreszeit nach BDEW: Winter, Uebergang, Sommer. */
 function jahreszeit(tagImJahr) {
@@ -81,12 +95,12 @@ function rauschen(saat) {
 
 function baue(profil, jahr) {
   const zufall = rauschen(jahr * 7919 + 13);
-  const tag0 = startTag(jahr);
+  const tage = wochentagRaster(jahr);
   const werte = new Array(STUNDEN);
   for (let h = 0; h < STUNDEN; h++) {
     const tagImJahr = Math.floor(h / 24);
     const stunde = h % 24;
-    const wochentag = (tag0 + tagImJahr) % 7;
+    const wochentag = tage[tagImJahr];
     let v = profil.werktag[stunde];
     if (wochentag === 5) v *= profil.samstagFaktor;
     else if (wochentag === 6) v *= profil.sonntagFaktor;
@@ -125,7 +139,7 @@ async function main() {
         abgerufenAm: new Date().toISOString().slice(0, 10),
         verarbeitung: [
           "Stundenfaktoren je Tagestyp analytisch gesetzt, angelehnt an BDEW-Gewerbeprofile",
-          "Tagestyp aus dem tatsaechlichen Wochentag des jeweiligen Kalenderjahrs, dadurch deckungsgleich mit den SMARD-Reihen",
+          "Tagestyp aus dem tatsaechlichen Wochentag des jeweiligen Kalenderjahrs im 365-Tage-Raster ohne 29. Februar, dadurch deckungsgleich mit den SMARD-Reihen",
           "Jahreszeitfaktoren Winter, Uebergang, Sommer nach BDEW-Zeitraeumen",
           "deterministische Tagesschwankung von plus minus 3 Prozent",
           "auf Spitzenlast 1,0 normiert",
