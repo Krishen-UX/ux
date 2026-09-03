@@ -43,7 +43,7 @@ function merke(schluessel: string, baue: () => Float32Array): Reihe {
 
 /**
  * Flottenprofil der Regelzone, normiert auf das Jahresmaximum. Das ist die
- * Groesse, an der sich eine Referenzanlagenregelung orientiert.
+ * Größe, an der sich eine Referenzanlagenregelung orientiert.
  */
 export function referenzprofil(
   reihe: Referenzreihe,
@@ -57,7 +57,7 @@ export function referenzprofil(
 
 /**
  * Erzeugungsprofil einer Einzelanlage am Standort, als Anteil der
- * installierten Leistung. Aus dem Flottenprofil ueber die im ETL bestimmte
+ * installierten Leistung. Aus dem Flottenprofil über die im ETL bestimmte
  * Potenztransformation, siehe Datenkopf.
  */
 export function erzeugungsprofil(
@@ -98,7 +98,7 @@ interface LastDatei {
 
 export const LASTPROFILE = (lastDaten as unknown as LastDatei).profile;
 
-/** Oberes Perzentil der Referenzreihe, Bezugsgroesse fuer die Engpasstiefe. */
+/** Oberes Perzentil der Referenzreihe, Bezugsgröße für die Engpasstiefe. */
 export function referenzSpitze(reihe: Referenzreihe, zone: Regelzone, jahr: Wetterjahr): number {
   const schluessel = `spitze:${reihe}:${zone}:${jahr}`;
   const vorhanden = speicher.get(schluessel);

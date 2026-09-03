@@ -23,7 +23,7 @@ describe("statische Kappung", () => {
     expect(Math.max(...lauf.einspeisungFca)).toBeGreaterThan(17);
   });
 
-  it("regelt nichts ab, wenn die Kappung ueber der Anschlussleistung liegt", () => {
+  it("regelt nichts ab, wenn die Kappung über der Anschlussleistung liegt", () => {
     const { projekt, angebot, annahmen } = vorlage("pv_freiflaeche");
     angebot.archetyp = "statisch_kappung";
     angebot.maxEinspeiseleistungMW = projekt.netzanschlussLeistungMW * 2;
@@ -34,7 +34,7 @@ describe("statische Kappung", () => {
     expect(lauf.abregelungStunden).toBe(0);
   });
 
-  it("regelt vollstaendig ab, wenn die Kappung null ist", () => {
+  it("regelt vollständig ab, wenn die Kappung null ist", () => {
     const { projekt, angebot, annahmen } = vorlage("pv_freiflaeche");
     angebot.archetyp = "statisch_kappung";
     angebot.maxEinspeiseleistungMW = 0;
@@ -51,14 +51,14 @@ describe("Zugangsprinzip", () => {
     ...aenderung,
   });
 
-  it("verteilt pro rata gleichmaessig", () => {
+  it("verteilt pro rata gleichmäßig", () => {
     const a = angebot({ zugangsprinzip: "pro_rata" });
     expect(kuerzungsanteil(0, a)).toBe(0);
     expect(kuerzungsanteil(0.4, a)).toBeCloseTo(0.4);
     expect(kuerzungsanteil(1, a)).toBeCloseTo(1);
   });
 
-  it("kuerzt bei LIFO von hinten nach vorn", () => {
+  it("kürzt bei LIFO von hinten nach vorn", () => {
     const bei = (position: number, tiefe: number) =>
       kuerzungsanteil(tiefe, angebot({ zugangsprinzip: "lifo", positionImStack: position, anzahlImStack: 5 }));
     // 40 Prozent Engpass entspricht zwei von fuenf Teilnehmern.
@@ -66,13 +66,13 @@ describe("Zugangsprinzip", () => {
     expect(bei(4, 0.4)).toBeCloseTo(1);
     expect(bei(3, 0.4)).toBeCloseTo(0);
     expect(bei(1, 0.4)).toBeCloseTo(0);
-    // Der Grenzteilnehmer traegt den Rest.
+    // Der Grenzteilnehmer trägt den Rest.
     expect(bei(4, 0.3)).toBeCloseTo(0.5);
     // Bei vollem Engpass trifft es alle.
     expect(bei(1, 1)).toBeCloseTo(1);
   });
 
-  it("summiert sich ueber den Stack auf dieselbe Menge wie pro rata", () => {
+  it("summiert sich über den Stack auf dieselbe Menge wie pro rata", () => {
     for (const tiefe of [0.1, 0.25, 0.5, 0.73, 1]) {
       const n = 7;
       let lifo = 0;
@@ -107,11 +107,11 @@ describe("Zugangsprinzip", () => {
 });
 
 describe("Energiebilanz", () => {
-  it("schliesst bei der PV-Freiflaeche", () => {
+  it("schließt bei der PV-Freifläche", () => {
     const { projekt, angebot, annahmen } = vorlage("pv_freiflaeche");
     angebot.blindleistungsAuflage = false;
     const lauf = simuliereJahr({ projekt, angebot, annahmen, jahr: 2023 });
-    // Verfuegbar = eingespeist unter FCA + Abregelung durch FCA + Kappung durch Ueberbauung.
+    // Verfügbar = eingespeist unter FCA + Abregelung durch FCA + Kappung durch Überbauung.
     expect(summe(lauf.verfuegbar)).toBeCloseTo(
       lauf.einspeisungFcaMWh + lauf.abregelungMWh + lauf.ueberbauungMWh,
       3,
@@ -122,7 +122,7 @@ describe("Energiebilanz", () => {
     );
   });
 
-  it("schliesst bei der industriellen Last", () => {
+  it("schließt bei der industriellen Last", () => {
     const { projekt, angebot, annahmen } = vorlage("industrielle_last");
     const lauf = simuliereJahr({ projekt, angebot, annahmen, jahr: 2023 });
     expect(lauf.entnahmeReferenzMWh).toBeCloseTo(lauf.entnahmeFcaMWh + lauf.abregelungMWh, 3);
@@ -136,7 +136,7 @@ describe("Energiebilanz", () => {
     const eta = annahmen.wirkungsgradProzent / 100;
     expect(lauf.einspeisungReferenzMWh).toBeCloseTo(lauf.entnahmeReferenzMWh * eta, 3);
     expect(lauf.einspeisungFcaMWh).toBeCloseTo(lauf.entnahmeFcaMWh * eta, 3);
-    // Das Zyklenbudget wird nicht ueberschritten.
+    // Das Zyklenbudget wird nicht überschritten.
     const budget = (projekt.speicherKapazitaetMWh ?? 0) * annahmen.maxZyklenProTag * 365;
     expect(lauf.einspeisungReferenzMWh).toBeLessThanOrEqual(budget + 1);
   });
@@ -159,8 +159,8 @@ describe("Zeitfenster", () => {
   });
 });
 
-describe("Entschaedigung", () => {
-  it("ersetzt bei voller Entschaedigung den entgangenen Erloes", () => {
+describe("Entschädigung", () => {
+  it("ersetzt bei voller Entschädigung den entgangenen Erlös", () => {
     const { projekt, angebot, annahmen } = vorlage("pv_freiflaeche");
     angebot.entschaedigung = "voll";
     const lauf = simuliereJahr({ projekt, angebot, annahmen, jahr: 2024 });

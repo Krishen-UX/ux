@@ -8,12 +8,12 @@ import type {
 } from "@/lib/typen";
 
 /**
- * Zuordnung Bundesland zur Regelzone. Massgeblich fuer Erzeugungs- und
+ * Zuordnung Bundesland zur Regelzone. Maßgeblich für Erzeugungs- und
  * Referenzprofil. Die Grenzen der Regelzonen folgen nicht exakt den
- * Landesgrenzen, fuer den Prototyp wird die ueberwiegende Zone gesetzt.
+ * Landesgrenzen, für den Prototyp wird die überwiegende Zone gesetzt.
  */
 export const BUNDESLAENDER: { name: string; regelzone: Regelzone }[] = [
-  { name: "Baden-Wuerttemberg", regelzone: "TransnetBW" },
+  { name: "Baden-Württemberg", regelzone: "TransnetBW" },
   { name: "Bayern", regelzone: "TenneT" },
   { name: "Berlin", regelzone: "50Hertz" },
   { name: "Brandenburg", regelzone: "50Hertz" },
@@ -28,7 +28,7 @@ export const BUNDESLAENDER: { name: string; regelzone: Regelzone }[] = [
   { name: "Sachsen", regelzone: "50Hertz" },
   { name: "Sachsen-Anhalt", regelzone: "50Hertz" },
   { name: "Schleswig-Holstein", regelzone: "TenneT" },
-  { name: "Thueringen", regelzone: "50Hertz" },
+  { name: "Thüringen", regelzone: "50Hertz" },
 ];
 
 export const regelzoneVon = (bundesland: string): Regelzone =>
@@ -38,12 +38,12 @@ export const ANLAGENTYPEN: { typ: AnlagenTyp; titel: string; kurz: string }[] = 
   {
     typ: "bess",
     titel: "Batteriespeicher",
-    kurz: "Stand-alone-BESS, Erloes aus Arbitrage am Day-Ahead-Markt und aus Systemdienstleistungen",
+    kurz: "Stand-alone-BESS, Erlös aus Arbitrage am Day-Ahead-Markt und aus Systemdienstleistungen",
   },
   {
     typ: "pv_freiflaeche",
-    titel: "PV Freiflaeche",
-    kurz: "Freiflaechenanlage, Erloes aus Direktvermarktung oder PPA, haeufig mit Ueberbauung",
+    titel: "PV Freifläche",
+    kurz: "Freiflächenanlage, Erlös aus Direktvermarktung oder PPA, häufig mit Überbauung",
   },
   {
     typ: "industrielle_last",
@@ -52,7 +52,7 @@ export const ANLAGENTYPEN: { typ: AnlagenTyp; titel: string; kurz: string }[] = 
   },
 ];
 
-/** Startwerte je Anlagentyp. Alle Werte sind im UI aenderbar. */
+/** Startwerte je Anlagentyp. Alle Werte sind im UI änderbar. */
 export const PROJEKT_VORLAGE: Record<AnlagenTyp, Omit<Projekt, "id">> = {
   bess: {
     name: "BESS Umspannwerk Nord",
@@ -67,17 +67,17 @@ export const PROJEKT_VORLAGE: Record<AnlagenTyp, Omit<Projekt, "id">> = {
     betriebsjahre: 20,
   },
   pv_freiflaeche: {
-    name: "PV Freiflaeche Sued",
+    name: "PV Freifläche Süd",
     typ: "pv_freiflaeche",
     installierteLeistungMW: 60,
     netzanschlussLeistungMW: 45,
-    bundesland: "Baden-Wuerttemberg",
+    bundesland: "Baden-Württemberg",
     inbetriebnahmeJahr: 2028,
     capexProMW: 480_000,
     betriebsjahre: 25,
   },
   industrielle_last: {
-    name: "Prozesswaerme Werk 2",
+    name: "Prozesswärme Werk 2",
     typ: "industrielle_last",
     installierteLeistungMW: 30,
     netzanschlussLeistungMW: 30,
@@ -154,7 +154,7 @@ export const ANGEBOT_VORLAGE: Record<AnlagenTyp, FcaAngebot> = {
     zeitfenster: [{ tage: [0, 1, 2, 3, 4], vonStunde: 17, bisStunde: 21, limitMW: 15 }],
     referenzreihe: "wind",
     schwellwert: 0.55,
-    engpassHaeufigkeitProzent: 9,
+    engpassHäufigkeitProzent: 9,
     engpassKorrelation: 0.8,
     zugangsprinzip: "lifo",
     positionImStack: 4,
@@ -173,7 +173,7 @@ export const ANGEBOT_VORLAGE: Record<AnlagenTyp, FcaAngebot> = {
     zeitfenster: [{ tage: [0, 1, 2, 3, 4, 5, 6], vonStunde: 10, bisStunde: 16, limitMW: 20 }],
     referenzreihe: "pv",
     schwellwert: 0.5,
-    engpassHaeufigkeitProzent: 8,
+    engpassHäufigkeitProzent: 8,
     engpassKorrelation: 0.85,
     zugangsprinzip: "pro_rata",
     positionImStack: 3,
@@ -192,7 +192,7 @@ export const ANGEBOT_VORLAGE: Record<AnlagenTyp, FcaAngebot> = {
     zeitfenster: [{ tage: [0, 1, 2, 3, 4], vonStunde: 7, bisStunde: 11, limitMW: 12 }],
     referenzreihe: "pv",
     schwellwert: 0.5,
-    engpassHaeufigkeitProzent: 6,
+    engpassHäufigkeitProzent: 6,
     engpassKorrelation: 0.4,
     zugangsprinzip: "pro_rata",
     positionImStack: 3,

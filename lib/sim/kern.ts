@@ -18,21 +18,21 @@ export interface LaufVorgaben {
   angebot: FcaAngebot;
   annahmen: Annahmen;
   jahr: Wetterjahr;
-  /** Verschaerfung des Engpasses fuer den P90-Lauf. */
+  /** Verschärfung des Engpasses für den P90-Lauf. */
   stress?: number;
 }
 
-/** Richtung, die das FCA einschraenkt. */
+/** Richtung, die das FCA einschränkt. */
 export const eingeschraenkteRichtung = (projekt: Projekt): "einspeisung" | "entnahme" =>
   projekt.typ === "industrielle_last" ? "entnahme" : "einspeisung";
 
 /**
- * Ein Simulationsjahr in Stundenaufloesung.
+ * Ein Simulationsjahr in Stundenauflösung.
  *
- * Gerechnet werden immer zwei Faelle nebeneinander: der feste Anschluss als
+ * Gerechnet werden immer zwei Fälle nebeneinander: der feste Anschluss als
  * Referenz und derselbe Standort unter den Bedingungen des FCA. Die Differenz
- * ist der Verlust, den das Angebot verursacht. Die Kappung durch Ueberbauung
- * faellt in beiden Faellen an und wird getrennt ausgewiesen.
+ * ist der Verlust, den das Angebot verursacht. Die Kappung durch Überbauung
+ * fällt in beiden Fällen an und wird getrennt ausgewiesen.
  */
 export function simuliereJahr({
   projekt,
@@ -50,7 +50,7 @@ export function simuliereJahr({
   const tiefe = engpasstiefe(angebot, annahmen, zone, jahr, stress);
   const limitFn = ARCHETYPEN[angebot.archetyp];
 
-  // Zulaessige Leistung in der eingeschraenkten Richtung.
+  // Zulässige Leistung in der eingeschränkten Richtung.
   const limit: Reihe = new Float32Array(STUNDEN);
   for (let h = 0; h < STUNDEN; h++) {
     limit[h] = Math.max(
@@ -62,8 +62,8 @@ export function simuliereJahr({
     );
   }
 
-  // Rampenbegrenzung: nach einer Kuerzung kann die Anlage nur mit dem
-  // vereinbarten Gradienten zurueckkehren.
+  // Rampenbegrenzung: nach einer Kürzung kann die Anlage nur mit dem
+  // vereinbarten Gradienten zurückkehren.
   const maxSprung =
     (angebot.leistungsgradientProzentProMin / 100) * 60 * projekt.installierteLeistungMW;
   const rampe = (reihe: Reihe): Reihe => {
@@ -74,8 +74,8 @@ export function simuliereJahr({
     return reihe;
   };
 
-  // Die Blindleistungsauflage kostet Wirkleistung, unabhaengig von der Kappung.
-  // Sie wird getrennt ausgewiesen und nicht als Abregelungsstunde gezaehlt.
+  // Die Blindleistungsauflage kostet Wirkleistung, unabhängig von der Kappung.
+  // Sie wird getrennt ausgewiesen und nicht als Abregelungsstunde gezählt.
   const verlust = angebot.blindleistungsAuflage
     ? 1 - annahmen.blindleistungVerlustProzent / 100
     : 1;

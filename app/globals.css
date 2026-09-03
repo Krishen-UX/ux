@@ -8,7 +8,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -19,6 +19,13 @@
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
   --color-chart-5: var(--chart-5);
+  --color-akzent: var(--akzent);
+  --color-akzent-schwach: var(--akzent-schwach);
+  --color-verlust: var(--verlust);
+  --color-verlust-schwach: var(--verlust-schwach);
+  --color-gut: var(--gut);
+  --color-mittel: var(--mittel);
+  --color-schlecht: var(--schlecht);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
@@ -55,24 +62,35 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
+  --primary: oklch(0.5 0.088 216);
+  --primary-foreground: oklch(0.99 0.004 216);
+  --secondary: oklch(0.968 0.003 240);
+  --secondary-foreground: oklch(0.24 0.012 240);
+  --muted: oklch(0.968 0.003 240);
+  --muted-foreground: oklch(0.505 0.012 240);
+  --accent: oklch(0.955 0.014 216);
+  --accent-foreground: oklch(0.36 0.07 216);
+  --destructive: oklch(0.55 0.16 32);
+  --border: oklch(0.905 0.005 240);
+  --input: oklch(0.895 0.006 240);
+  --ring: oklch(0.5 0.088 216);
+
+  /* Eine Akzentfarbe fuer alles Aktive und fuer die genutzte Arbeit,
+     eine Verlustfarbe fuer die abgeregelte Flaeche, sonst Neutraltoene. */
+  --akzent: oklch(0.5 0.088 216);
+  --akzent-schwach: oklch(0.93 0.024 216);
+  --verlust: oklch(0.6 0.144 42);
+  --verlust-schwach: oklch(0.93 0.048 42);
+  --gut: oklch(0.52 0.098 158);
+  --mittel: oklch(0.66 0.125 76);
+  --schlecht: oklch(0.55 0.16 32);
+
+  --chart-1: var(--akzent);
+  --chart-2: var(--verlust);
+  --chart-3: oklch(0.62 0.02 240);
+  --chart-4: oklch(0.75 0.015 240);
+  --chart-5: oklch(0.4 0.02 240);
+  --radius: 0.375rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -121,10 +139,53 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    --font-sans:
+      ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+      sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    @apply font-sans;
+    font-size: 14px;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground text-[13px] leading-snug;
+  }
+  /* Kennzahlen sollen beim Ziehen am Regler nicht springen. */
+  .ziffern {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  input[type="number"] {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Druckansicht: das Faktenblatt fuellt eine Seite, alles andere entfaellt. */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
   }
   html {
-    @apply font-sans;
+    font-size: 12px;
+  }
+  body {
+    background: white;
+  }
+  .nicht-drucken {
+    display: none !important;
+  }
+  .nur-drucken {
+    display: block !important;
+  }
+  .druckseite {
+    box-shadow: none !important;
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+  .seitenumbruch-vermeiden {
+    break-inside: avoid;
   }
 }

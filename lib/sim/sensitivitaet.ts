@@ -15,7 +15,7 @@ interface Variante {
   parameter: string;
   aenderung: string;
   verhandlungspunkt: string;
-  /** Faellt weg, wenn der Parameter im vorliegenden Angebot keine Rolle spielt. */
+  /** Fällt weg, wenn der Parameter im vorliegenden Angebot keine Rolle spielt. */
   greift: (angebot: FcaAngebot, projekt: Projekt) => boolean;
   anwenden: (angebot: FcaAngebot, alternative: Alternative, projekt: Projekt) => void;
 }
@@ -27,9 +27,9 @@ export const VARIANTEN: Variante[] = [
   {
     schluessel: "position",
     parameter: "Position in der Anschlussreihenfolge",
-    aenderung: "zwei Plaetze weiter vorn",
+    aenderung: "zwei Plätze weiter vorn",
     verhandlungspunkt:
-      "Position im LIFO-Stack festschreiben und um mindestens zwei Plaetze verbessern, ersatzweise auf pro rata wechseln.",
+      "Position im LIFO-Stack festschreiben und um mindestens zwei Plätze verbessern, ersatzweise auf pro rata wechseln.",
     greift: (a) => dynamisch(a) && a.zugangsprinzip === "lifo" && a.positionImStack > 1,
     anwenden: (a) => {
       a.positionImStack = Math.max(1, a.positionImStack - 2);
@@ -40,7 +40,7 @@ export const VARIANTEN: Variante[] = [
     parameter: "Zugangsprinzip",
     aenderung: "pro rata statt LIFO",
     verhandlungspunkt:
-      "Gleichmaessige Verteilung der Kuerzung auf alle Teilnehmer am Knoten statt Reihenfolge nach Anschlussdatum.",
+      "Gleichmaessige Verteilung der Kürzung auf alle Teilnehmer am Knoten statt Reihenfolge nach Anschlussdatum.",
     greift: (a) => dynamisch(a) && a.zugangsprinzip === "lifo",
     anwenden: (a) => {
       a.zugangsprinzip = "pro_rata";
@@ -51,7 +51,7 @@ export const VARIANTEN: Variante[] = [
     parameter: "Garantierte Mindestleistung",
     aenderung: "plus 25 Prozent der Anschlussleistung",
     verhandlungspunkt:
-      "Hoehere garantierte Mindestleistung waehrend der Kuerzung, damit ein Sockelertrag bankfaehig bleibt.",
+      "Höhere garantierte Mindestleistung während der Kürzung, damit ein Sockelertrag bankfähig bleibt.",
     greift: () => true,
     anwenden: (a, _alt, p) => {
       a.maxEinspeiseleistungMW = Math.min(
@@ -69,33 +69,33 @@ export const VARIANTEN: Variante[] = [
     },
   },
   {
-    schluessel: "ausloeser",
-    parameter: "Ausloeser der Kuerzung",
-    aenderung: "Schwelle zehn Punkte hoeher",
+    schluessel: "auslöser",
+    parameter: "Auslöser der Kürzung",
+    aenderung: "Schwelle zehn Punkte höher",
     verhandlungspunkt:
-      "Ausloeseschwelle der Referenzanlage anheben und die Referenz vertraglich benennen, statt sie offen zu lassen.",
+      "Auslöseschwelle der Referenzanlage anheben und die Referenz vertraglich benennen, statt sie offen zu lassen.",
     greift: (a) => a.archetyp === "dynamisch_referenzanlage",
     anwenden: (a) => {
       a.schwellwert = Math.min(0.95, a.schwellwert + 0.1);
     },
   },
   {
-    schluessel: "haeufigkeit",
-    parameter: "Angenommene Engpasshaeufigkeit",
+    schluessel: "häufigkeit",
+    parameter: "Angenommene Engpasshäufigkeit",
     aenderung: "drei Punkte niedriger",
     verhandlungspunkt:
-      "Engpassprognose des Netzbetreibers offenlegen lassen und eine Obergrenze der Kuerzungsstunden vereinbaren.",
+      "Engpassprognose des Netzbetreibers offenlegen lassen und eine Obergrenze der Kürzungsstunden vereinbaren.",
     greift: (a) => a.archetyp === "volldynamisch",
     anwenden: (a) => {
-      a.engpassHaeufigkeitProzent = Math.max(0, a.engpassHaeufigkeitProzent - 3);
+      a.engpassHäufigkeitProzent = Math.max(0, a.engpassHäufigkeitProzent - 3);
     },
   },
   {
     schluessel: "fenster",
     parameter: "Breite der Zeitfenster",
-    aenderung: "zwei Stunden kuerzer",
+    aenderung: "zwei Stunden kürzer",
     verhandlungspunkt:
-      "Sperrfenster auf die tatsaechlichen Engpassstunden zuschneiden statt auf pauschale Tagesbloecke.",
+      "Sperrfenster auf die tatsächlichen Engpassstunden zuschneiden statt auf pauschale Tagesblöcke.",
     greift: (a) => a.archetyp === "zeitfenster" && a.zeitfenster.length > 0,
     anwenden: (a) => {
       a.zeitfenster = a.zeitfenster.map((f) => ({
@@ -106,7 +106,7 @@ export const VARIANTEN: Variante[] = [
   },
   {
     schluessel: "kappung",
-    parameter: "Hoehe der statischen Kappung",
+    parameter: "Höhe der statischen Kappung",
     aenderung: "plus zehn Prozent",
     verhandlungspunkt: "Kappungsgrenze anheben, sie ist der einzige Hebel dieses Vertragstyps.",
     greift: (a) => a.archetyp === "statisch_kappung",
@@ -118,11 +118,11 @@ export const VARIANTEN: Variante[] = [
     },
   },
   {
-    schluessel: "entschaedigung",
-    parameter: "Entschaedigung",
+    schluessel: "entschädigung",
+    parameter: "Entschädigung",
     aenderung: "40 Euro je abgeregelter MWh",
     verhandlungspunkt:
-      "Entschaedigung fuer abgeregelte Arbeit vereinbaren, mindestens fuer Kuerzungen oberhalb einer Freimenge.",
+      "Entschädigung für abgeregelte Arbeit vereinbaren, mindestens für Kürzungen oberhalb einer Freimenge.",
     greift: (a) => a.entschaedigung === "keine",
     anwenden: (a) => {
       a.entschaedigung = "teilweise";
@@ -132,9 +132,9 @@ export const VARIANTEN: Variante[] = [
   {
     schluessel: "sdl",
     parameter: "Systemdienstleistungen",
-    aenderung: "Einschraenkung entfaellt",
+    aenderung: "Einschränkung entfällt",
     verhandlungspunkt:
-      "Teilnahme an Regelleistungsmaerkten freigeben, sie beruehrt den Engpass in der Regel nicht.",
+      "Teilnahme an Regelleistungsmärkten freigeben, sie berührt den Engpass in der Regel nicht.",
     greift: (a, p) => a.systemdienstleistungenEingeschraenkt && p.typ === "bess",
     anwenden: (a) => {
       a.systemdienstleistungenEingeschraenkt = false;
@@ -143,9 +143,9 @@ export const VARIANTEN: Variante[] = [
   {
     schluessel: "blindleistung",
     parameter: "Blindleistungsauflage",
-    aenderung: "entfaellt",
+    aenderung: "entfällt",
     verhandlungspunkt:
-      "Blindleistungsbereitstellung gesondert verguetet oder gestrichen, statt sie in die Anschlussauflage zu schieben.",
+      "Blindleistungsbereitstellung gesondert vergütet oder gestrichen, statt sie in die Anschlussauflage zu schieben.",
     greift: (a) => a.blindleistungsAuflage,
     anwenden: (a) => {
       a.blindleistungsAuflage = false;
@@ -154,9 +154,9 @@ export const VARIANTEN: Variante[] = [
   {
     schluessel: "laufzeit",
     parameter: "Zeitpunkt des Netzausbaus",
-    aenderung: "zwei Jahre frueher",
+    aenderung: "zwei Jahre früher",
     verhandlungspunkt:
-      "Verbindlichen Endtermin der Einschraenkung in den Vertrag aufnehmen, mit Rechtsfolge bei Verzug.",
+      "Verbindlichen Endtermin der Einschränkung in den Vertrag aufnehmen, mit Rechtsfolge bei Verzug.",
     greift: (a) => a.laufzeitJahre > 2,
     anwenden: (a, alt) => {
       a.laufzeitJahre = Math.max(1, a.laufzeitJahre - 2);
@@ -173,8 +173,8 @@ export const VARIANTEN: Variante[] = [
     parameter: "Baukostenzuschuss FCA",
     aenderung: "25 Prozent niedriger",
     verhandlungspunkt:
-      "Baukostenzuschuss an den tatsaechlich bereitgestellten Netzzugang koppeln, nicht an die volle Anschlussleistung.",
-    greift: (_a, _p) => true,
+      "Baukostenzuschuss an den tatsächlich bereitgestellten Netzzugang koppeln, nicht an die volle Anschlussleistung.",
+    greift: () => true,
     anwenden: (_a, alt) => {
       alt.fcaBaukostenzuschussEur *= 0.75;
     },
@@ -192,7 +192,7 @@ export interface SensitivitaetsEingabe {
   bezug: SzenarioSchluessel;
 }
 
-/** Kapitalwert des FCA-Szenarios unter einem geaenderten Angebot. */
+/** Kapitalwert des FCA-Szenarios unter einem geänderten Angebot. */
 function npvUnter(
   e: SensitivitaetsEingabe,
   angebot: FcaAngebot,
@@ -211,7 +211,7 @@ function npvUnter(
 
 /**
  * Wirkung einzelner Vertragsparameter auf den Kapitalwert. Jede Variante wird
- * einzeln geaendert, alles andere bleibt gleich. Absteigend sortiert ist das
+ * einzeln geändert, alles andere bleibt gleich. Absteigend sortiert ist das
  * die Verhandlungsagenda.
  */
 export function sensitivitaet(e: SensitivitaetsEingabe): SensitivitaetsPosten[] {

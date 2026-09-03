@@ -1,6 +1,6 @@
 /** Datenmodell des FCA Assessor. */
 
-/** Stundenreihe ueber ein Jahr, 8.760 Werte. */
+/** Stundenreihe über ein Jahr, 8.760 Werte. */
 export type Reihe = Float32Array<ArrayBufferLike>;
 
 export type AnlagenTyp = "bess" | "pv_freiflaeche" | "industrielle_last";
@@ -17,7 +17,7 @@ export interface Projekt {
   id: string;
   name: string;
   typ: AnlagenTyp;
-  /** Anlagenseitige Leistung. Bei Ueberbauung groesser als der Netzanschluss. */
+  /** Anlagenseitige Leistung. Bei Überbauung größer als der Netzanschluss. */
   installierteLeistungMW: number;
   /** Nur BESS. */
   speicherKapazitaetMWh?: number;
@@ -43,9 +43,9 @@ export interface Zeitfenster {
   /** 0 = Montag bis 6 = Sonntag. */
   tage: number[];
   vonStunde: number;
-  /** Ausschliesslich. 22 bedeutet bis 21:59. */
+  /** Ausschließlich. 22 bedeutet bis 21:59. */
   bisStunde: number;
-  /** Zulaessige Leistung innerhalb des Fensters. */
+  /** Zulässige Leistung innerhalb des Fensters. */
   limitMW: number;
 }
 
@@ -58,12 +58,12 @@ export interface FcaAngebot {
   maxEinspeiseleistungMW: number;
   maxEntnahmeleistungMW: number;
   zeitfenster: Zeitfenster[];
-  /** Referenzgroesse der dynamischen Regelung. */
+  /** Referenzgröße der dynamischen Regelung. */
   referenzreihe: Referenzreihe;
-  /** Ausloeseschwelle als Anteil der regionalen Spitzenerzeugung, 0 bis 1. */
+  /** Auslöseschwelle als Anteil der regionalen Spitzenerzeugung, 0 bis 1. */
   schwellwert: number;
   /** Nur volldynamisch: Anteil der Jahresstunden mit Engpass. */
-  engpassHaeufigkeitProzent: number;
+  engpassHäufigkeitProzent: number;
   /** Nur volldynamisch: Kopplung des Engpasses an die regionale Erzeugung, 0 bis 1. */
   engpassKorrelation: number;
   zugangsprinzip: Zugangsprinzip;
@@ -89,10 +89,10 @@ export interface Annahmen {
   opexProMWJahr: number;
   degradationProzentProJahr: number;
 
-  /** Erloesmodell der Einspeisung. */
+  /** Erlösmodell der Einspeisung. */
   verguetung: "markt" | "ppa";
   ppaPreisEurProMWh: number;
-  /** Abschlag auf den Spotpreis fuer Vermarktung und Profilrisiko. */
+  /** Abschlag auf den Spotpreis für Vermarktung und Profilrisiko. */
   marktwertfaktor: number;
   /** PV faehrt in Stunden mit negativem Preis herunter. */
   negativePreiseAbregeln: boolean;
@@ -110,7 +110,7 @@ export interface Annahmen {
   blindleistungCapexEurProMW: number;
   blindleistungVerlustProzent: number;
 
-  /** Verschaerfung des Engpasses fuer den P90-Lauf. */
+  /** Verschärfung des Engpasses für den P90-Lauf. */
   engpassStressfaktorP90: number;
   /** Engpasstiefe bei der Referenzanlagenregelung. */
   engpasstiefe: "gleitend" | "binaer";
@@ -118,7 +118,7 @@ export interface Annahmen {
 
 export interface JahresKennzahlen {
   jahr: Wetterjahr;
-  /** Einspeisung mit festem Anschluss, nach Ueberbauungskappung. */
+  /** Einspeisung mit festem Anschluss, nach Überbauungskappung. */
   einspeisungReferenzMWh: number;
   einspeisungFcaMWh: number;
   /** Entnahme, positiv. */
@@ -128,9 +128,9 @@ export interface JahresKennzahlen {
   abregelungMWh: number;
   abregelungProzent: number;
   abregelungStunden: number;
-  /** Verlust durch Ueberbauung, faellt auch beim festen Anschluss an. */
+  /** Verlust durch Überbauung, fällt auch beim festen Anschluss an. */
   ueberbauungMWh: number;
-  /** Zusatzverlust aus der Blindleistungsauflage, unabhaengig von der Kappung. */
+  /** Zusatzverlust aus der Blindleistungsauflage, unabhängig von der Kappung. */
   blindleistungVerlustMWh: number;
   erloesReferenzEur: number;
   erloesFcaEur: number;

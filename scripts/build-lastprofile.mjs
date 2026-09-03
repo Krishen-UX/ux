@@ -1,10 +1,10 @@
 /**
- * Erzeugt normierte Stundenlastprofile fuer industrielle Anschlussnehmer.
+ * Erzeugt normierte Stundenlastprofile für industrielle Anschlussnehmer.
  *
  * Grundlage sind die Strukturmerkmale der BDEW/VDEW-Standardlastprofile
- * (Gewerbe G, Tagestyp Werktag/Samstag/Sonntag, Jahreszeit Winter/Uebergang/
+ * (Gewerbe G, Tagestyp Werktag/Samstag/Sonntag, Jahreszeit Winter/Übergang/
  * Sommer). Die Profile werden analytisch nachgebildet, nicht aus der
- * BDEW-Tabelle uebernommen, damit sie ohne Fremddatei reproduzierbar sind.
+ * BDEW-Tabelle übernommen, damit sie ohne Fremddatei reproduzierbar sind.
  *
  * Aufruf:  node scripts/build-lastprofile.mjs
  */
@@ -17,7 +17,7 @@ const STUNDEN = 8760;
 
 /**
  * Wochentag je Tag im Raster der Zeitreihen, 0 = Montag. Der 29. Februar
- * entfaellt, damit das Raster zu den SMARD-Reihen passt.
+ * entfällt, damit das Raster zu den SMARD-Reihen passt.
  */
 function wochentagRaster(jahr) {
   const aus = new Uint8Array(365);
@@ -32,9 +32,9 @@ function wochentagRaster(jahr) {
   return aus;
 }
 
-/** Jahreszeit nach BDEW: Winter, Uebergang, Sommer. */
+/** Jahreszeit nach BDEW: Winter, Übergang, Sommer. */
 function jahreszeit(tagImJahr) {
-  // Winter 1.11. bis 20.3., Sommer 15.5. bis 14.9., sonst Uebergang.
+  // Winter 1.11. bis 20.3., Sommer 15.5. bis 14.9., sonst Übergang.
   if (tagImJahr < 79 || tagImJahr >= 304) return "winter";
   if (tagImJahr >= 134 && tagImJahr < 257) return "sommer";
   return "uebergang";
@@ -55,9 +55,9 @@ const PROFILE = {
     saison: { winter: 1.05, uebergang: 1.0, sommer: 0.94 },
   },
   prozesswaerme: {
-    label: "Elektrifizierte Prozesswaerme",
+    label: "Elektrifizierte Prozesswärme",
     beschreibung:
-      "Dreischichtbetrieb mit ausgepraegter Winterlast, typisch fuer Hochtemperatur- oder Trocknungsprozesse mit Waermebedarf.",
+      "Dreischichtbetrieb mit ausgeprägter Winterlast, typisch für Hochtemperatur- oder Trocknungsprozesse mit Wärmebedarf.",
     werktag: [
       0.88, 0.87, 0.86, 0.86, 0.88, 0.93, 0.98, 1.0, 1.0, 0.99, 0.98, 0.97, 0.95, 0.96, 0.98, 0.99,
       1.0, 0.99, 0.97, 0.95, 0.93, 0.92, 0.9, 0.89,
@@ -139,8 +139,8 @@ async function main() {
         abgerufenAm: new Date().toISOString().slice(0, 10),
         verarbeitung: [
           "Stundenfaktoren je Tagestyp analytisch gesetzt, angelehnt an BDEW-Gewerbeprofile",
-          "Tagestyp aus dem tatsaechlichen Wochentag des jeweiligen Kalenderjahrs im 365-Tage-Raster ohne 29. Februar, dadurch deckungsgleich mit den SMARD-Reihen",
-          "Jahreszeitfaktoren Winter, Uebergang, Sommer nach BDEW-Zeitraeumen",
+          "Tagestyp aus dem tatsächlichen Wochentag des jeweiligen Kalenderjahrs im 365-Tage-Raster ohne 29. Februar, dadurch deckungsgleich mit den SMARD-Reihen",
+          "Jahreszeitfaktoren Winter, Übergang, Sommer nach BDEW-Zeiträumen",
           "deterministische Tagesschwankung von plus minus 3 Prozent",
           "auf Spitzenlast 1,0 normiert",
           "Feiertage sind nicht abgebildet",

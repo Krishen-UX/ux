@@ -28,11 +28,16 @@ export interface AuswertungsEingabe {
   mitSensitivitaet?: boolean;
 }
 
-const ertragVon = (lauf: JahresLauf, projekt: Projekt) =>
-  projekt.typ === "industrielle_last" ? lauf.entnahmeFcaMWh : lauf.einspeisungFcaMWh;
+/**
+ * Rangfolge der Wetterjahre nach dem wirtschaftlichen Ergebnis, nicht nach der
+ * Arbeit. Ein energieschwaches Jahr mit hohen Preisen ist nicht der schlechte
+ * Fall, und beim Speicher ist die Arbeit ohnehin durch das Zyklenbudget
+ * begrenzt.
+ */
+const ergebnisVon = (lauf: JahresLauf) => lauf.erloesFcaEur + lauf.entschaedigungEur;
 
 /**
- * Vollstaendige Auswertung eines Angebots: drei Wetterjahre, drei Szenarien,
+ * Vollständige Auswertung eines Angebots: drei Wetterjahre, drei Szenarien,
  * Sensitivitaet der Vertragsparameter.
  */
 export function auswerten(e: AuswertungsEingabe): Auswertung {
@@ -40,12 +45,12 @@ export function auswerten(e: AuswertungsEingabe): Auswertung {
   const gemeinsam = { projekt, angebot, annahmen };
 
   const laeufe = WETTERJAHRE.map((jahr) => simuliereJahr({ ...gemeinsam, jahr }));
-  const sortiert = [...laeufe].sort((a, b) => ertragVon(a, projekt) - ertragVon(b, projekt));
+  const sortiert = [...laeufe].sort((a, b) => ergebnisVon(a) - ergebnisVon(b));
   const p50Lauf = sortiert[1];
-  const schwaechstes = sortiert[0];
+  const schwächstes = sortiert[0];
   const p90Lauf = simuliereJahr({
     ...gemeinsam,
-    jahr: schwaechstes.jahr as Wetterjahr,
+    jahr: schwächstes.jahr as Wetterjahr,
     stress: annahmen.engpassStressfaktorP90,
   });
 
@@ -66,7 +71,7 @@ export function auswerten(e: AuswertungsEingabe): Auswertung {
         annahmen,
         alternative,
         p50Jahr: p50Lauf.jahr,
-        p90Jahr: schwaechstes.jahr,
+        p90Jahr: schwächstes.jahr,
         basisNpvEur: szenarien[fcaBezug].npvEur,
         bezug: fcaBezug,
       })
@@ -91,27 +96,27 @@ function hinweiseZu(e: AuswertungsEingabe, lauf: JahresLauf): string[] {
   const maxSprung = (angebot.leistungsgradientProzentProMin / 100) * 60;
   if (maxSprung >= 2) {
     hinweise.push(
-      `Der Leistungsgradient von ${angebot.leistungsgradientProzentProMin} Prozent je Minute entspricht ${Math.round(maxSprung * 100)} Prozent je Stunde und ist bei Stundenaufloesung wirkungslos. Erst unterhalb von etwa 1,7 Prozent je Minute wird er im Modell sichtbar.`,
+      `Der Leistungsgradient von ${angebot.leistungsgradientProzentProMin} Prozent je Minute entspricht ${Math.round(maxSprung * 100)} Prozent je Stunde und ist bei Stundenauflösung wirkungslos. Erst unterhalb von etwa 1,7 Prozent je Minute wird er im Modell sichtbar.`,
     );
   }
   if (angebot.archetyp === "statisch_kappung" || angebot.archetyp === "zeitfenster") {
     hinweise.push(
-      "Bei einer vertraglich fixierten Grenze haengt die Kuerzung nicht vom Netzzustand ab. Das Zugangsprinzip und der P90-Stressfaktor bleiben ohne Wirkung.",
+      "Bei einer vertraglich fixierten Grenze hängt die Kürzung nicht vom Netzzustand ab. Das Zugangsprinzip und der P90-Stressfaktor bleiben ohne Wirkung.",
     );
   }
   if (annahmen.engpasstiefe === "binaer" && angebot.zugangsprinzip === "lifo") {
     hinweise.push(
-      "Bei binaerer Engpasstiefe trifft die Kuerzung alle Teilnehmer gleichzeitig, die Position in der Anschlussreihenfolge wirkt dann nicht. Fuer die Bewertung des LIFO-Prinzips die gleitende Engpasstiefe waehlen.",
+      "Bei binärer Engpasstiefe trifft die Kürzung alle Teilnehmer gleichzeitig, die Position in der Anschlussreihenfolge wirkt dann nicht. Für die Bewertung des LIFO-Prinzips die gleitende Engpasstiefe wählen.",
     );
   }
   if (projekt.installierteLeistungMW > projekt.netzanschlussLeistungMW && lauf.ueberbauungMWh > 0) {
     hinweise.push(
-      `Die Ueberbauung kostet unabhaengig vom FCA ${Math.round(lauf.ueberbauungMWh).toLocaleString("de-DE")} MWh im Jahr. Dieser Anteil faellt auch beim festen Anschluss an und ist in der Abregelung nicht enthalten.`,
+      `Die Ueberbauung kostet unabhängig vom FCA ${Math.round(lauf.ueberbauungMWh).toLocaleString("de-DE")} MWh im Jahr. Dieser Anteil fällt auch beim festen Anschluss an und ist in der Abregelung nicht enthalten.`,
     );
   }
   if (alternative.festerAnschlussVerfuegbarAbJahr === null) {
     hinweise.push(
-      "Ohne Termin fuer den festen Anschluss ist Szenario B nicht bewertbar und Szenario C laeuft auf die FCA-Laufzeit.",
+      "Ohne Termin für den festen Anschluss ist Szenario B nicht bewertbar und Szenario C läuft auf die FCA-Laufzeit.",
     );
   } else if (umstellungsJahr(angebot, alternative) > angebot.laufzeitJahre) {
     hinweise.push(

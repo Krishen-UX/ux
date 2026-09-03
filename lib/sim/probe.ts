@@ -6,7 +6,7 @@ import {
   PROJEKT_VORLAGE,
 } from "@/data/annahmen";
 
-/** Bausteine fuer Tests und fuer den Startzustand der Oberflaeche. */
+/** Bausteine für Tests und für den Startzustand der Oberfläche. */
 export function vorlage(typ: AnlagenTyp): {
   projekt: Projekt;
   angebot: FcaAngebot;

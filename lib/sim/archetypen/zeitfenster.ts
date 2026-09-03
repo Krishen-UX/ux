@@ -2,8 +2,8 @@ import type { LimitEingabe } from "./index";
 
 /**
  * Obergrenze gilt nur innerhalb der vereinbarten Fenster, sonst steht die
- * volle Anschlussleistung zur Verfuegung. Ueberlappende Fenster wirken
- * kumulativ, es gilt das jeweils schaerfste.
+ * volle Anschlussleistung zur Verfügung. Überlappende Fenster wirken
+ * kumulativ, es gilt das jeweils schärfste.
  */
 export function zeitfensterLimit({ h, angebot, netzanschlussMW, wochentag }: LimitEingabe): number {
   const tag = wochentag;

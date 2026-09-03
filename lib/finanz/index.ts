@@ -1,4 +1,4 @@
-/** Kapitalwert einer Zahlungsreihe. cashflows[0] faellt heute an. */
+/** Kapitalwert einer Zahlungsreihe. cashflows[0] fällt heute an. */
 export function npv(cashflows: number[], diskontsatzProzent: number): number {
   const r = diskontsatzProzent / 100;
   let summe = 0;
@@ -7,9 +7,9 @@ export function npv(cashflows: number[], diskontsatzProzent: number): number {
 }
 
 /**
- * Diskontierte Amortisation in Jahren ab heute. Zwischen den Stuetzjahren wird
+ * Diskontierte Amortisation in Jahren ab heute. Zwischen den Stützjahren wird
  * linear interpoliert. Null, wenn sich die Investition im Betrachtungszeitraum
- * nicht zurueckverdient.
+ * nicht zurückverdient.
  */
 export function amortisation(cashflows: number[], diskontsatzProzent: number): number | null {
   const r = diskontsatzProzent / 100;

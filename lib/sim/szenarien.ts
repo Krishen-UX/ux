@@ -18,7 +18,7 @@ export interface SzenarioEingabe {
   p90: JahresLauf;
 }
 
-/** Umstellungsjahr in Szenario C: frueher geht es nicht. */
+/** Umstellungsjahr in Szenario C: früher geht es nicht. */
 export const umstellungsJahr = (angebot: FcaAngebot, alternative: Alternative): number =>
   Math.max(angebot.laufzeitJahre, alternative.festerAnschlussVerfuegbarAbJahr ?? angebot.laufzeitJahre);
 
@@ -69,7 +69,7 @@ interface Reihen {
 }
 
 /**
- * Zahlungsreihe eines Szenarios. Jahr 0 ist heute, der Betrieb laeuft ueber
+ * Zahlungsreihe eines Szenarios. Jahr 0 ist heute, der Betrieb läuft über
  * die Betriebsjahre des Projekts ab dem jeweiligen Anschlussjahr.
  */
 function reihen(
@@ -188,7 +188,7 @@ export function baueSzenarien(e: SzenarioEingabe): {
   const a = baue(
     "A",
     "FCA dauerhaft",
-    "Anschluss sofort, die Einschraenkung bleibt ueber die gesamte Betriebsdauer.",
+    "Anschluss sofort, die Einschränkung bleibt über die gesamte Betriebsdauer.",
     {
       startJahr: 1,
       bkzStart: alternative.fcaBaukostenzuschussEur,
@@ -205,8 +205,8 @@ export function baueSzenarien(e: SzenarioEingabe): {
     "B",
     "Auf festen Anschluss warten",
     bVerfuegbar
-      ? `Kein Betrieb bis Jahr ${wartejahr}, danach ohne Einschraenkung.`
-      : "Es liegt kein Termin fuer einen festen Anschluss vor.",
+      ? `Kein Betrieb bis Jahr ${wartejahr}, danach ohne Einschränkung.`
+      : "Es liegt kein Termin für einen festen Anschluss vor.",
     {
       startJahr: Math.max(1, wartejahr ?? 1),
       bkzStart: alternative.festerAnschlussBaukostenzuschussEur ?? 0,
@@ -224,7 +224,7 @@ export function baueSzenarien(e: SzenarioEingabe): {
 
   const c = baue(
     "C",
-    "FCA als Bruecke",
+    "FCA als Brücke",
     `Anschluss sofort unter FCA, ab Jahr ${umstellung} fester Anschluss.`,
     {
       startJahr: 1,

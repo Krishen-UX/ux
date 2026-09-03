@@ -4,7 +4,7 @@ import { STUNDEN } from "./profile";
  * Wochentag je Stunde im Raster der Zeitreihen, 0 = Montag.
  *
  * Die Profile liegen auf einem Normaljahr aus 365 Tagen, der 29. Februar
- * entfaellt. Der Wochentag wird deshalb aus dem tatsaechlichen Kalender
+ * entfällt. Der Wochentag wird deshalb aus dem tatsächlichen Kalender
  * gezogen und nicht aus der Stundennummer gerechnet, sonst verschiebt sich das
  * Wochenende in Schaltjahren gegen die Preisreihe.
  */

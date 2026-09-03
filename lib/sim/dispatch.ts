@@ -22,11 +22,11 @@ const MAX_PAARE = 8;
  * Arbitragefahrplan eines Batteriespeichers am Day-Ahead-Markt.
  *
  * Vereinfachtes Verfahren mit perfekter Voraussicht innerhalb des Kalendertags:
- * es werden nacheinander die lohnendsten Paare aus Ladestunde und spaeterer
- * Entladestunde belegt, bis kein Paar mehr die Verschleisskosten deckt oder das
- * Zyklenbudget erschoepft ist. Die stuendlichen Spielraeume kommen von aussen,
+ * es werden nacheinander die lohnendsten Paare aus Ladestunde und späterer
+ * Entladestunde belegt, bis kein Paar mehr die Verschleißkosten deckt oder das
+ * Zyklenbudget erschoepft ist. Die stuendlichen Spielräume kommen von aussen,
  * dadurch wird derselbe Fahrplan sowohl frei als auch unter den Grenzen eines
- * FCA gerechnet und der Speicher weicht der Kuerzung so weit aus wie moeglich.
+ * FCA gerechnet und der Speicher weicht der Kürzung so weit aus wie möglich.
  */
 export function bessDispatch(
   preis: Reihe,

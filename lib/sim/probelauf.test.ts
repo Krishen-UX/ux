@@ -5,7 +5,7 @@ import type { AnlagenTyp } from "@/lib/typen";
 
 const eur = (x: number) => (x / 1e6).toFixed(2) + " Mio";
 
-describe("Plausibilitaet", () => {
+describe("Plausibilität", () => {
   it("liefert nachvollziehbare Kennzahlen je Anlagentyp", () => {
     for (const typ of ["pv_freiflaeche", "bess", "industrielle_last"] as AnlagenTyp[]) {
       const e = vorlage(typ);
