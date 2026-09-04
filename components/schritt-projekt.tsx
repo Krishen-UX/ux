@@ -63,7 +63,7 @@ export function SchrittProjekt({
       />
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       <div className="space-y-5">
-        <Abschnitt titel="Anlagentyp">
+        <Abschnitt titel="Anlagentyp" hinweis="Bestimmt, wie das Projekt seinen Erlös erzielt und welche Richtung des Netzanschlusses das FCA überhaupt einschränken kann. Ein Wechsel setzt alle Eingaben zurück.">
           <div className="grid gap-2 sm:grid-cols-3">
             {ANLAGENTYPEN.map((t) => (
               <button
@@ -87,7 +87,7 @@ export function SchrittProjekt({
           </p>
         </Abschnitt>
 
-        <Abschnitt titel="Anlage">
+        <Abschnitt titel="Anlage" hinweis="Technische Eckdaten. Aus Leistung, Standort und Anschlussleistung entsteht der Referenzfall, gegen den alles Weitere gemessen wird.">
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block space-y-1 sm:col-span-2">
               <span className="text-muted-foreground">Projektname</span>
@@ -145,6 +145,7 @@ export function SchrittProjekt({
             />
             <Zahlenfeld
               label="Inbetriebnahme"
+              hinweis={GLOSSAR.inbetriebnahme}
               wert={projekt.inbetriebnahmeJahr}
               setzen={(n) => aendern("inbetriebnahmeJahr", Math.round(n))}
               min={2026}
@@ -153,10 +154,11 @@ export function SchrittProjekt({
           </div>
         </Abschnitt>
 
-        <Abschnitt titel="Wirtschaftlichkeit">
+        <Abschnitt titel="Wirtschaftlichkeit" hinweis="Investition, laufende Kosten und Kapitalkosten. Diese Werte entscheiden über die Höhe der Kapitalwerte, nicht über die Abregelung.">
           <div className="grid gap-3 sm:grid-cols-2">
             <Zahlenfeld
               label="Investition je MW"
+              hinweis={GLOSSAR.investition}
               einheit="Tsd EUR"
               schritt={10_000}
               teiler={1_000}
@@ -166,6 +168,7 @@ export function SchrittProjekt({
             {projekt.typ === "bess" ? (
               <Zahlenfeld
                 label="Investition je MWh"
+                hinweis="Energieanteil der Investition, also die Batteriezellen. Zusammen mit dem Leistungsanteil ergibt sich die Gesamtinvestition."
                 einheit="Tsd EUR"
                 schritt={5_000}
                 teiler={1_000}
@@ -175,6 +178,7 @@ export function SchrittProjekt({
             ) : null}
             <Zahlenfeld
               label="Betriebskosten je MW und Jahr"
+              hinweis={GLOSSAR.betriebskosten}
               einheit="Tsd EUR"
               schritt={500}
               teiler={1_000}
@@ -183,6 +187,7 @@ export function SchrittProjekt({
             />
             <Zahlenfeld
               label="Betriebsdauer"
+              hinweis={GLOSSAR.betriebsdauer}
               einheit="Jahre"
               wert={projekt.betriebsjahre}
               setzen={(n) => aendern("betriebsjahre", Math.max(1, Math.round(n)))}
@@ -214,6 +219,11 @@ export function SchrittProjekt({
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Kennzahl
             label={istSpeicher ? "Jahreserlös" : istLast ? "Jahresbezug" : "Jahresertrag"}
+            hinweis={
+              istSpeicher
+                ? "Erlös aus Arbitrage am Day-Ahead-Markt an einem festen Anschluss, vor Betriebskosten und ohne Systemdienstleistungen."
+                : "Was das Projekt an einem festen Anschluss im mittleren Wetterjahr leisten würde. Referenz für alles Weitere."
+            }
             wert={istSpeicher ? fmtEur(lauf.erloesReferenzEur) : fmtMWh(ertrag)}
             zusatz={istSpeicher ? "fester Anschluss, ohne Auflagen" : "fester Anschluss"}
             ton="akzent"
@@ -234,7 +244,12 @@ export function SchrittProjekt({
                 : "keine Überbauung"
             }
           />
-          <Kennzahl label="Investition" wert={fmtEur(investition)} zusatz="ohne Baukostenzuschuss" />
+          <Kennzahl
+            label="Investition"
+            wert={fmtEur(investition)}
+            zusatz="ohne Baukostenzuschuss"
+            hinweis={GLOSSAR.investition}
+          />
         </div>
 
         <div className="mt-4">
@@ -248,6 +263,7 @@ export function SchrittProjekt({
               <Kennzahl
                 key={l.jahr}
                 label={`Wetterjahr ${l.jahr}`}
+                hinweis={GLOSSAR.wetterjahr}
                 wert={istSpeicher ? fmtEur(l.erloesReferenzEur) : fmtMWh(menge)}
                 zusatz={
                   istSpeicher

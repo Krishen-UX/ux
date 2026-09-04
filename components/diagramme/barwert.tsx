@@ -6,6 +6,7 @@ import type { Szenario, SzenarioSchluessel } from "@/lib/typen";
 import { barwertverlauf } from "@/lib/sim/diagramme";
 import { fmtEur, fmtZahl } from "@/lib/format";
 import { ACHSE, Diagramm, FARBEN, Kasten, Marke } from "./basis";
+import { GLOSSAR } from "@/lib/glossar";
 
 const STIL: Record<SzenarioSchluessel, { farbe: string; strich?: string }> = {
   A: { farbe: FARBEN.verlust },
@@ -41,6 +42,7 @@ export function BarwertDiagramm({
   return (
     <Diagramm
       titel="Kumulierter Barwert, Mio EUR"
+      hinweis={GLOSSAR.barwertverlauf}
       hoehe={hoehe}
       legende={
         <>

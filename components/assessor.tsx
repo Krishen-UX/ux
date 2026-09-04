@@ -101,7 +101,7 @@ export function Assessor() {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-[1600px] flex-1 px-4 py-4">
+      <main className="mx-auto w-full max-w-[1600px] flex-1 px-4 pt-4 pb-14">
         {schritt === "projekt" ? (
           <SchrittProjekt
             projekt={projekt}

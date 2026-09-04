@@ -297,17 +297,20 @@ export function Kennzahl({
 export function Abschnitt({
   titel,
   aktion,
+  hinweis,
   children,
 }: {
   titel: string;
   aktion?: ReactNode;
+  hinweis?: string;
   children: ReactNode;
 }) {
   return (
     <section className="space-y-2.5">
       <div className="flex items-center justify-between gap-2 border-b border-border pb-1">
-        <h3 className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+        <h3 className="flex items-center gap-1 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
           {titel}
+          {hinweis ? <Hinweis text={hinweis} /> : null}
         </h3>
         {aktion}
       </div>

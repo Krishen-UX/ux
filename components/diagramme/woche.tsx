@@ -7,6 +7,7 @@ import { schaerfsteWoche } from "@/lib/sim/diagramme";
 import { WOCHENTAG_KURZ, stundenLabel } from "@/lib/sim/kalender";
 import { fmtMW, fmtZahl } from "@/lib/format";
 import { ACHSE, Diagramm, FARBEN, Kasten, Marke } from "./basis";
+import { GLOSSAR } from "@/lib/glossar";
 
 /** Ausschnitt der Woche mit der stärksten Abregelung. */
 export function WochenDiagramm({
@@ -24,6 +25,7 @@ export function WochenDiagramm({
   return (
     <Diagramm
       titel="Woche mit der stärksten Abregelung, MW"
+      hinweis={GLOSSAR.wochenausschnitt}
       hoehe={hoehe}
       legende={
         <>

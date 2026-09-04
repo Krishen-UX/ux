@@ -48,7 +48,9 @@ haben, aber nicht zwingend mit Barwertrechnung, und umgekehrt. Deshalb:
 - Jeder Screen trägt oben zwei Sätze: was hier passiert und was man dafür
   braucht.
 - Fachbegriffe und Abkürzungen stehen im Tooltip, nicht im Fliesstext. Die
-  Sammlung liegt in `lib/glossar.ts`.
+  Sammlung liegt in `lib/glossar.ts`. Jede Feldbeschriftung, jede Kennzahl,
+  jede Abschnittsüberschrift und jeder Diagrammtitel trägt eine Erklärung,
+  zusammen 92 über die drei Screens.
 - Angaben, die **nicht** im Angebotsschreiben stehen, tragen einen Punkt in der
   Warnfarbe. Es sind je nach Archetyp drei bis fünf, und genau dort sitzt die
   Unsicherheit des Ergebnisses.

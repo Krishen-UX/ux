@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Auswahl, Regler, Schalter, Zahlenfeld } from "./felder";
+import { GLOSSAR } from "@/lib/glossar";
 
 /**
  * Alle Annahmen offen und änderbar. Ohne diesen Block kippt jedes Fachgespräch
@@ -41,6 +42,7 @@ export function AnnahmenBlock({
               <h4 className="text-[11px] font-semibold text-muted-foreground">Kapital</h4>
               <Zahlenfeld
                 label="Kalkulationszins"
+                hinweis={GLOSSAR.kalkulationszins}
                 einheit="%"
                 schritt={0.5}
                 wert={annahmen.diskontsatzProzent}
@@ -48,6 +50,7 @@ export function AnnahmenBlock({
               />
               <Zahlenfeld
                 label="Betriebskosten je MW und Jahr"
+                hinweis={GLOSSAR.betriebskosten}
                 einheit="Tsd EUR"
                 schritt={500}
                 teiler={1_000}
@@ -56,6 +59,7 @@ export function AnnahmenBlock({
               />
               <Zahlenfeld
                 label="Degradation je Jahr"
+                hinweis={GLOSSAR.degradation}
                 einheit="%"
                 schritt={0.1}
                 wert={annahmen.degradationProzentProJahr}
@@ -73,7 +77,7 @@ export function AnnahmenBlock({
                   einheit="EUR"
                   wert={annahmen.wertProMWhEur}
                   setzen={(n) => aendern("wertProMWhEur", n)}
-                  hinweis="Nutzen je bezogener MWh nach Abzug der Strombezugskosten."
+                  hinweis={GLOSSAR.deckungsbeitrag}
                 />
               ) : (
                 <>
@@ -90,6 +94,7 @@ export function AnnahmenBlock({
                   {annahmen.verguetung === "ppa" ? (
                     <Zahlenfeld
                       label="PPA-Preis"
+                      hinweis={GLOSSAR.ppa}
                       einheit="EUR/MWh"
                       wert={annahmen.ppaPreisEurProMWh}
                       setzen={(n) => aendern("ppaPreisEurProMWh", n)}
@@ -100,13 +105,14 @@ export function AnnahmenBlock({
                       schritt={0.01}
                       wert={annahmen.marktwertfaktor}
                       setzen={(n) => aendern("marktwertfaktor", n)}
-                      hinweis="Abschlag auf den Spotpreis für Direktvermarktung und Prognoserisiko. Die Kannibalisierung steckt bereits im Stundenprofil."
+                      hinweis={GLOSSAR.marktwertfaktor}
                     />
                   )}
                   <Schalter
                     label="Bei negativen Preisen herunterfahren"
                     an={annahmen.negativePreiseAbregeln}
                     setzen={(b) => aendern("negativePreiseAbregeln", b)}
+                    hinweis={GLOSSAR.negativePreise}
                   />
                 </>
               )}
@@ -114,24 +120,28 @@ export function AnnahmenBlock({
                 <>
                   <Zahlenfeld
                     label="Wirkungsgrad"
+                    hinweis={GLOSSAR.wirkungsgrad}
                     einheit="%"
                     wert={annahmen.wirkungsgradProzent}
                     setzen={(n) => aendern("wirkungsgradProzent", n)}
                   />
                   <Zahlenfeld
                     label="Zyklen je Tag"
+                    hinweis={GLOSSAR.zyklen}
                     schritt={0.1}
                     wert={annahmen.maxZyklenProTag}
                     setzen={(n) => aendern("maxZyklenProTag", n)}
                   />
                   <Zahlenfeld
                     label="Verschleiß je MWh"
+                    hinweis={GLOSSAR.verschleiss}
                     einheit="EUR"
                     wert={annahmen.verschleissEurProMWh}
                     setzen={(n) => aendern("verschleissEurProMWh", n)}
                   />
                   <Zahlenfeld
                     label="Systemdienstleistungen je MW und Jahr"
+                    hinweis={GLOSSAR.sdl}
                     einheit="Tsd EUR"
                     schritt={5_000}
                     teiler={1_000}
@@ -146,6 +156,7 @@ export function AnnahmenBlock({
               <h4 className="text-[11px] font-semibold text-muted-foreground">Netz und Risiko</h4>
               <Auswahl
                 label="Engpasstiefe"
+                hinweis={GLOSSAR.engpasstiefe}
                 wert={annahmen.engpasstiefe}
                 setzen={(w) => aendern("engpasstiefe", w)}
                 optionen={[
@@ -155,13 +166,13 @@ export function AnnahmenBlock({
               />
               <Regler
                 label="Engpass-Stressfaktor für P90"
+                hinweis={GLOSSAR.stressfaktor}
                 wert={annahmen.engpassStressfaktorP90}
                 setzen={(n) => aendern("engpassStressfaktorP90", n)}
                 min={1}
                 max={3}
                 schritt={0.1}
                 anzeige={(n) => `Faktor ${n.toFixed(1)}`}
-                hinweis="P90 ist das schwächste der drei Wetterjahre mit verschärftem Engpass. Kein Monte Carlo, sondern eine bewusst grobe Näherung."
               />
               <Auswahl
                 label="Nach Ende der FCA-Laufzeit"
@@ -175,6 +186,7 @@ export function AnnahmenBlock({
               />
               <Zahlenfeld
                 label="Blindleistung, Investition je MW"
+                hinweis={GLOSSAR.blindleistung}
                 einheit="Tsd EUR"
                 schritt={1_000}
                 teiler={1_000}
@@ -183,6 +195,7 @@ export function AnnahmenBlock({
               />
               <Zahlenfeld
                 label="Blindleistung, Wirkleistungsverlust"
+                hinweis="Anteil der Wirkleistung, der für die Blindleistungsbereitstellung verloren geht. Fällt in jeder Betriebsstunde an, nicht nur bei einer Kürzung."
                 einheit="%"
                 schritt={0.1}
                 wert={annahmen.blindleistungVerlustProzent}

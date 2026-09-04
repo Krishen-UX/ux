@@ -6,6 +6,7 @@ import type { JahresLauf, Projekt } from "@/lib/typen";
 import { dauerlinie } from "@/lib/sim/diagramme";
 import { fmtMW, fmtProzent, fmtZahl } from "@/lib/format";
 import { ACHSE, Diagramm, FARBEN, Kasten, Marke } from "./basis";
+import { GLOSSAR } from "@/lib/glossar";
 
 /**
  * Jahresdauerlinie. Die eingefärbte Fläche zwischen beiden Kurven ist die
@@ -25,6 +26,7 @@ export function DauerlinienDiagramm({
   return (
     <Diagramm
       titel={`Jahresdauerlinie ${lauf.jahr}, MW`}
+      hinweis={GLOSSAR.jahresdauerlinie}
       hoehe={hoehe}
       legende={
         <>

@@ -85,7 +85,7 @@ export function SchrittErgebnis({
         </Karte>
       </div>
 
-      <Karte titel="Bandbreite über die Wetterjahre">
+      <Karte titel="Bandbreite über die Wetterjahre" hinweis={GLOSSAR.bandbreite}>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
           <Kennzahl
             label={`${groesse.kurz} P50, mittleres Jahr`}
@@ -104,6 +104,7 @@ export function SchrittErgebnis({
           />
           <Kennzahl
             label="Abstand P50 zu P90"
+            hinweis="Wie viel Jahresergebnis zwischen mittlerem und schlechtem Fall liegt. Ein grosser Abstand heisst, das Ergebnis hängt stark am Wetter und am Netzzustand."
             wert={fmtProzent(abstand)}
             zusatz="weniger Jahresergebnis im schlechten Fall"
             ton="verlust"
@@ -111,12 +112,14 @@ export function SchrittErgebnis({
           />
           <Kennzahl
             label="Abregelung P50"
+            hinweis={GLOSSAR.abregelung}
             wert={fmtProzent(p50.abregelungProzent)}
             zusatz={`${fmtMWh(p50.abregelungMWh)} im Jahr`}
             gross
           />
           <Kennzahl
             label="Abregelung P90"
+            hinweis="Abregelung im schwächsten Wetterjahr mit verschärftem Engpass. Der Wert, mit dem eine Bank rechnet."
             wert={fmtProzent(p90.abregelungProzent)}
             zusatz={`${fmtMWh(p90.abregelungMWh)} im Jahr`}
             ton="verlust"
@@ -132,6 +135,7 @@ export function SchrittErgebnis({
 
       <Karte
         titel="Verhandlungsagenda"
+        hinweis={GLOSSAR.verhandlungsagenda}
         aktion={
           <span className="text-[11px] font-normal text-muted-foreground normal-case">
             Wirkung auf den Kapitalwert von Szenario {fcaSzenario}
@@ -152,6 +156,7 @@ export function SchrittErgebnis({
       {luecken.length > 0 ? (
         <Karte
           titel="Offene Punkte, die das Ergebnis tragen"
+          hinweis={GLOSSAR.offenePunkte}
           aktion={
             <span className="text-[11px] font-normal text-muted-foreground normal-case">
               {luecken.length} {luecken.length === 1 ? "Angabe" : "Angaben"} beruhen auf Schätzung

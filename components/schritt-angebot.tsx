@@ -82,7 +82,7 @@ export function SchrittAngebot({
       />
       <div className="grid gap-4 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
       <div className="space-y-5">
-        <Abschnitt titel="Archetyp des Angebots">
+        <Abschnitt titel="Archetyp des Angebots" hinweis={GLOSSAR.archetyp}>
           <div className="grid gap-2 sm:grid-cols-2">
             {ARCHETYPEN.map((a) => (
               <button
@@ -111,7 +111,7 @@ export function SchrittAngebot({
           ) : null}
         </Abschnitt>
 
-        <Abschnitt titel="Grenzen">
+        <Abschnitt titel="Grenzen" hinweis={GLOSSAR.grenzen}>
           {angebot.archetyp === "zeitfenster" ? (
             <ZeitfensterEditor
               fenster={angebot.zeitfenster}
@@ -196,7 +196,7 @@ export function SchrittAngebot({
           )}
         </Abschnitt>
 
-        <Abschnitt titel="Zugangsprinzip">
+        <Abschnitt titel="Zugangsprinzip" hinweis={GLOSSAR.zugangsprinzip}>
           <p className="text-[11px] text-pretty text-muted-foreground">
             Bei <Begriff name="lifo">LIFO</Begriff> trägt die letzte Position fast die gesamte
             Kürzung, bei <Begriff name="proRata">pro rata</Begriff> tragen alle gleich viel. Das ist
@@ -227,6 +227,7 @@ export function SchrittAngebot({
               />
               <Regler
                 label="Teilnehmer am Netzknoten"
+                hinweis="Wie viele flexible Anschlüsse sich den Netzknoten teilen. Je mehr Teilnehmer, desto feiner ist die Kürzung gestuft und desto stärker wirkt die Position."
                 herkunft="schaetzung"
                 wert={angebot.anzahlImStack}
                 setzen={(n) =>
@@ -250,9 +251,10 @@ export function SchrittAngebot({
           ) : null}
         </Abschnitt>
 
-        <Abschnitt titel="Entschädigung und Auflagen">
+        <Abschnitt titel="Entschädigung und Auflagen" hinweis={GLOSSAR.auflagen}>
           <Auswahl
             label="Entschädigung für abgeregelte Arbeit"
+            hinweis="Ob und wie die nicht eingespeiste Arbeit ersetzt wird. In deutschen Angeboten steht hier meist nichts, was sie zu einem der einfacheren Verhandlungspunkte macht."
             wert={angebot.entschaedigung}
             setzen={(w) => aendern("entschaedigung", w)}
             optionen={[
@@ -295,7 +297,7 @@ export function SchrittAngebot({
           />
         </Abschnitt>
 
-        <Abschnitt titel="Laufzeit und Alternative">
+        <Abschnitt titel="Laufzeit und Alternative" hinweis={GLOSSAR.laufzeitBlock}>
           <p className="text-[11px] text-pretty text-muted-foreground">
             Die beiden Jahreszahlen sind nicht dieselbe Angabe. Die Laufzeit steht im Vertrag, der
             Netzausbau ist eine Prognose des Netzbetreibers. Sie können auseinanderfallen.
@@ -391,12 +393,14 @@ export function SchrittAngebot({
             />
             <Kennzahl
               label="Betroffene Stunden"
+              hinweis={GLOSSAR.betroffeneStunden}
               wert={fmtStunden(lauf.abregelungStunden)}
               zusatz={`${fmtProzent((lauf.abregelungStunden / 8760) * 100, 1)} des Jahres`}
               gross
             />
             <Kennzahl
               label={istLast ? "Bezug unter FCA" : "Ertrag unter FCA"}
+              hinweis="Was nach der Einschränkung übrig bleibt, im mittleren Wetterjahr. Daneben steht der Wert am festen Anschluss."
               wert={fmtMWh(istLast ? lauf.entnahmeFcaMWh : lauf.einspeisungFcaMWh)}
               zusatz={`statt ${fmtMWh(istLast ? lauf.entnahmeReferenzMWh : lauf.einspeisungReferenzMWh)}`}
               ton="akzent"
@@ -404,6 +408,7 @@ export function SchrittAngebot({
             />
             <Kennzahl
               label="Erlösverlust im Jahr 1"
+              hinweis={GLOSSAR.erloesverlust}
               wert={fmtEur(erloesverlust)}
               zusatz={
                 lauf.entschaedigungEur > 0
@@ -430,7 +435,7 @@ export function SchrittAngebot({
           <WochenDiagramm lauf={lauf} projekt={projekt} hoehe={220} />
         </Karte>
 
-        <Karte titel="Modellannahme zur Engpasstiefe">
+        <Karte titel="Modellannahme zur Engpasstiefe" hinweis={GLOSSAR.engpasstiefe}>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <Auswahl
               wert={annahmen.engpasstiefe}

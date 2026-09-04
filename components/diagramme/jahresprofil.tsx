@@ -7,6 +7,7 @@ import { tageswerte } from "@/lib/sim/diagramme";
 import { MONATE } from "@/lib/sim/kalender";
 import { fmtEur, fmtMWh, fmtZahl } from "@/lib/format";
 import { ACHSE, Diagramm, FARBEN, Kasten } from "./basis";
+import { GLOSSAR } from "@/lib/glossar";
 
 /**
  * Vorschau im Projektformular. Bei Erzeugung und Last zeigt die Tagesarbeit den
@@ -42,6 +43,7 @@ export function JahresprofilDiagramm({
 
   return (
     <Diagramm
+      hinweis={GLOSSAR.tagesvorschau}
       titel={
         zeigeErloes
           ? `Tageserloes aus Arbitrage im Wetterjahr ${lauf.jahr}, Tsd EUR`

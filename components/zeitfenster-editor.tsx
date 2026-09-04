@@ -23,6 +23,10 @@ export function ZeitfensterEditor({
 
   return (
     <div className="space-y-2.5">
+      <p className="text-[11px] text-pretty text-muted-foreground">
+        Innerhalb eines Fensters gilt die Grenze, ausserhalb steht die volle Anschlussleistung zur
+        Verfügung. Überlappende Fenster wirken zusammen, es gilt das jeweils schärfste.
+      </p>
       {fenster.map((f, i) => (
         <div key={i} className="space-y-2 rounded-md border border-border p-2.5">
           <div className="flex items-center justify-between gap-2">
@@ -60,6 +64,7 @@ export function ZeitfensterEditor({
           <div className="grid gap-2.5 sm:grid-cols-3">
             <Regler
               label="ab"
+              hinweis="Erste Stunde, in der die Grenze gilt. Ein Fenster von 17 bis 20 Uhr umfasst die Stunden 17, 18 und 19."
               wert={f.vonStunde}
               setzen={(n) => aendern(i, { vonStunde: n })}
               min={0}
@@ -68,6 +73,7 @@ export function ZeitfensterEditor({
             />
             <Regler
               label="bis"
+              hinweis="Erste Stunde, in der die Grenze nicht mehr gilt. Liegt sie vor dem Startwert, läuft das Fenster über Mitternacht."
               wert={f.bisStunde}
               setzen={(n) => aendern(i, { bisStunde: n })}
               min={1}
@@ -76,6 +82,7 @@ export function ZeitfensterEditor({
             />
             <Regler
               label="Grenze"
+              hinweis="Zulässige Leistung innerhalb dieses Fensters. Ausserhalb gilt die volle Anschlussleistung."
               wert={f.limitMW}
               setzen={(n) => aendern(i, { limitMW: n })}
               min={0}

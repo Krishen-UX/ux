@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { ResponsiveContainer } from "recharts";
+import { Hinweis } from "../felder";
 
 /** Farben der Diagramme, abgeleitet aus den Design-Tokens. */
 export const FARBEN = {
@@ -24,18 +25,21 @@ export function Diagramm({
   titel,
   legende,
   hoehe = 180,
+  hinweis,
   children,
 }: {
   titel: string;
   legende?: ReactNode;
   hoehe?: number;
+  hinweis?: string;
   children: React.ReactElement;
 }) {
   return (
     <figure className="space-y-1">
       <figcaption className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <span className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+        <span className="flex items-center gap-1 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
           {titel}
+          {hinweis ? <Hinweis text={hinweis} /> : null}
         </span>
         {legende ? <span className="flex items-center gap-3 text-[11px]">{legende}</span> : null}
       </figcaption>

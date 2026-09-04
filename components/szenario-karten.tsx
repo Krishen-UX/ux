@@ -2,10 +2,17 @@
 
 import type { Auswertung, Projekt, SzenarioSchluessel } from "@/lib/typen";
 import { fmtEur, fmtJahre, fmtMWh, fmtProzent, fmtStunden, fmtZahl } from "@/lib/format";
-import { Kennzahl } from "./felder";
+import { Hinweis, Kennzahl } from "./felder";
+import { GLOSSAR } from "@/lib/glossar";
 import { cn } from "@/lib/utils";
 
 const REIHENFOLGE: SzenarioSchluessel[] = ["A", "B", "C"];
+
+const SZENARIO_HINWEIS: Record<SzenarioSchluessel, string> = {
+  A: GLOSSAR.szenarioA,
+  B: GLOSSAR.szenarioB,
+  C: GLOSSAR.szenarioC,
+};
 
 export function SzenarioKarten({
   auswertung,
@@ -38,13 +45,17 @@ export function SzenarioKarten({
               >
                 {s}
               </span>
-              <h4 className="font-semibold">{z.titel}</h4>
+              <h4 className="flex items-center gap-1 font-semibold">
+                {z.titel}
+                <Hinweis text={SZENARIO_HINWEIS[s]} />
+              </h4>
             </header>
             <p className="mt-1 min-h-8 text-[11px] text-pretty text-muted-foreground">{z.kurz}</p>
 
             <div className="mt-2 border-t border-border pt-2">
               <Kennzahl
                 label="Kapitalwert"
+                hinweis={GLOSSAR.kapitalwert}
                 wert={fmtEur(z.npvEur)}
                 zusatz={`P90 ${fmtEur(z.npvP90Eur)}`}
                 ton={gewinnt ? "akzent" : "neutral"}
@@ -56,9 +67,11 @@ export function SzenarioKarten({
               <Kennzahl
                 label={istLast ? "Bezug im Jahr 1" : "Ertrag im Jahr 1"}
                 wert={fmtMWh(z.ertragJahr1MWh)}
+                hinweis="Arbeit im ersten Betriebsjahr des Szenarios. Bei Szenario B beginnt der Betrieb erst mit dem Netzausbau."
               />
               <Kennzahl
                 label="Abregelung"
+                hinweis={GLOSSAR.abregelung}
                 wert={z.abregelungProzent > 0 ? fmtProzent(z.abregelungProzent) : "keine"}
                 zusatz={
                   z.abregelungStundenProJahr > 0
@@ -67,9 +80,14 @@ export function SzenarioKarten({
                 }
                 ton={z.abregelungProzent > 0 ? "verlust" : "neutral"}
               />
-              <Kennzahl label="Amortisation" wert={fmtJahre(z.amortisationJahre)} />
+              <Kennzahl
+                label="Amortisation"
+                wert={fmtJahre(z.amortisationJahre)}
+                hinweis={GLOSSAR.amortisation}
+              />
               <Kennzahl
                 label={istLast ? "Anschlussjahr" : "Vollkosten"}
+                hinweis={istLast ? GLOSSAR.anschlussjahr : GLOSSAR.lcoe}
                 wert={
                   istLast
                     ? z.startJahr === 1
