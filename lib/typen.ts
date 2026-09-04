@@ -74,11 +74,16 @@ export interface FcaAngebot {
   leistungsgradientProzentProMin: number;
   blindleistungsAuflage: boolean;
   systemdienstleistungenEingeschraenkt: boolean;
-  /** Jahre bis zum zugesagten Netzausbau. */
+  /** Vertragslaufzeit des FCA. Steht im Angebot. */
   laufzeitJahre: number;
 }
 
 export interface Alternative {
+  /**
+   * Prognose des Netzbetreibers, ab wann ein fester Anschluss verfügbar wäre.
+   * Nicht dasselbe wie die FCA-Laufzeit: der Vertrag kann früher enden als der
+   * Netzausbau fertig wird, und er kann länger binden als der Engpass besteht.
+   */
   festerAnschlussVerfuegbarAbJahr: number | null;
   festerAnschlussBaukostenzuschussEur: number | null;
   fcaBaukostenzuschussEur: number;
@@ -112,6 +117,11 @@ export interface Annahmen {
 
   /** Verschärfung des Engpasses für den P90-Lauf. */
   engpassStressfaktorP90: number;
+  /**
+   * Was zwischen dem Ende der FCA-Laufzeit und dem Netzausbau passiert, falls
+   * der Vertrag früher ausläuft.
+   */
+  nachLaufzeitende: "verlaengerung" | "kein_zugang";
   /** Engpasstiefe bei der Referenzanlagenregelung. */
   engpasstiefe: "gleitend" | "binaer";
 }

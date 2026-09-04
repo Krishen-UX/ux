@@ -111,16 +111,16 @@ function hinweiseZu(e: AuswertungsEingabe, lauf: JahresLauf): string[] {
   }
   if (projekt.installierteLeistungMW > projekt.netzanschlussLeistungMW && lauf.ueberbauungMWh > 0) {
     hinweise.push(
-      `Die Ueberbauung kostet unabhängig vom FCA ${Math.round(lauf.ueberbauungMWh).toLocaleString("de-DE")} MWh im Jahr. Dieser Anteil fällt auch beim festen Anschluss an und ist in der Abregelung nicht enthalten.`,
+      `Die Überbauung kostet unabhängig vom FCA ${Math.round(lauf.ueberbauungMWh).toLocaleString("de-DE")} MWh im Jahr. Dieser Anteil fällt auch beim festen Anschluss an und ist in der Abregelung nicht enthalten.`,
     );
   }
   if (alternative.festerAnschlussVerfuegbarAbJahr === null) {
     hinweise.push(
-      "Ohne Termin für den festen Anschluss ist Szenario B nicht bewertbar und Szenario C läuft auf die FCA-Laufzeit.",
+      "Ohne Termin für den Netzausbau ist Szenario B nicht bewertbar. Szenario C stellt dann ersatzweise zum Ende der FCA-Laufzeit um, was optimistisch ist.",
     );
   } else if (umstellungsJahr(angebot, alternative) > angebot.laufzeitJahre) {
     hinweise.push(
-      `Der Netzausbau kommt spaeter als die FCA-Laufzeit. Szenario C stellt deshalb erst im Jahr ${umstellungsJahr(angebot, alternative)} um.`,
+      `Der Netzausbau kommt später als die FCA-Laufzeit. Zwischen Jahr ${angebot.laufzeitJahre} und Jahr ${umstellungsJahr(angebot, alternative)} ist der Netzzugang vertraglich nicht geregelt.`,
     );
   }
   return hinweise;

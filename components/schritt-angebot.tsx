@@ -10,7 +10,10 @@ import type {
 } from "@/lib/typen";
 import { ARCHETYP_TEXT } from "@/lib/sim/archetypen";
 import { fmtEur, fmtMW, fmtMWh, fmtProzent, fmtStunden } from "@/lib/format";
-import { Abschnitt, Auswahl, Hinweis, Kennzahl, Regler, Schalter, Zahlenfeld } from "./felder";
+import { Abschnitt, Auswahl, Begriff, Hinweis, Kennzahl, Regler, Schalter, Zahlenfeld } from "./felder";
+import { SchrittKopf } from "./schritt-kopf";
+import { luecke } from "@/lib/sim/szenarien";
+import { GLOSSAR } from "@/lib/glossar";
 import { ZeitfensterEditor } from "./zeitfenster-editor";
 import { DauerlinienDiagramm } from "./diagramme/dauerlinie";
 import { WochenDiagramm } from "./diagramme/woche";
@@ -55,8 +58,29 @@ export function SchrittAngebot({
     lauf.erloesReferenzEur - lauf.erloesFcaEur - lauf.entschaedigungEur;
   const text = ARCHETYP_TEXT[angebot.archetyp];
 
+  const vertragsluecke = luecke(angebot, alternative);
+
   return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
+    <div className="space-y-3">
+      <SchrittKopf
+        nummer={2}
+        titel="FCA-Angebot"
+        legende
+        was={
+          <>
+            Übertrage hier, was im Schreiben deines Netzbetreibers steht. Jede Änderung rechnet
+            sofort durch, rechts stehen die Folgen für Arbeit und Erlös. Das Ergebnis vergleicht
+            immer gegen einen festen Anschluss, nicht gegen die installierte Leistung.
+          </>
+        }
+        gebraucht={
+          <>
+            Gebraucht wird das Angebotsschreiben. Ordne es zuerst einem der vier Archetypen zu, dann
+            trage seine Parameter ein.
+          </>
+        }
+      />
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
       <div className="space-y-5">
         <Abschnitt titel="Archetyp des Angebots">
           <div className="grid gap-2 sm:grid-cols-2">
@@ -147,6 +171,7 @@ export function SchrittAngebot({
                 <>
                   <Regler
                     label="Engpasshäufigkeit"
+                    herkunft="schaetzung"
                     wert={angebot.engpassHäufigkeitProzent}
                     setzen={(n) => aendern("engpassHäufigkeitProzent", n)}
                     min={0}
@@ -157,6 +182,7 @@ export function SchrittAngebot({
                   />
                   <Regler
                     label="Kopplung an die regionale Erzeugung"
+                    herkunft="schaetzung"
                     wert={Math.round(angebot.engpassKorrelation * 100)}
                     setzen={(n) => aendern("engpassKorrelation", n / 100)}
                     min={0}
@@ -171,7 +197,14 @@ export function SchrittAngebot({
         </Abschnitt>
 
         <Abschnitt titel="Zugangsprinzip">
+          <p className="text-[11px] text-pretty text-muted-foreground">
+            Bei <Begriff name="lifo">LIFO</Begriff> trägt die letzte Position fast die gesamte
+            Kürzung, bei <Begriff name="proRata">pro rata</Begriff> tragen alle gleich viel. Das ist
+            der grösste einzelne Hebel im Vertrag.
+          </p>
           <Auswahl
+            label="Verteilung der Kürzung am Netzknoten"
+            hinweis={GLOSSAR.zugangsprinzip}
             wert={angebot.zugangsprinzip}
             setzen={(w) => aendern("zugangsprinzip", w)}
             optionen={[
@@ -183,6 +216,7 @@ export function SchrittAngebot({
             <div className="space-y-2.5 rounded-md border border-akzent/30 bg-akzent-schwach/50 p-2.5">
               <Regler
                 label="Position in der Anschlussreihenfolge"
+                herkunft="schaetzung"
                 wert={angebot.positionImStack}
                 setzen={(n) => aendern("positionImStack", n)}
                 min={1}
@@ -193,6 +227,7 @@ export function SchrittAngebot({
               />
               <Regler
                 label="Teilnehmer am Netzknoten"
+                herkunft="schaetzung"
                 wert={angebot.anzahlImStack}
                 setzen={(n) =>
                   setAngebot({
@@ -244,41 +279,46 @@ export function SchrittAngebot({
             max={30}
             schritt={0.5}
             anzeige={(n) => `${n} % je Minute`}
-            hinweis="Bei Stundenauflösung wirkt der Gradient erst unterhalb von etwa 1,7 Prozent je Minute. Darüber ist der Effekt im Modell null."
+            hinweis={`${GLOSSAR.leistungsgradient} Bei Stundenauflösung wirkt er erst unterhalb von etwa 1,7 Prozent je Minute, darüber ist der Effekt im Modell null.`}
           />
           <Schalter
             label="Blindleistungsauflage"
             an={angebot.blindleistungsAuflage}
             setzen={(b) => aendern("blindleistungsAuflage", b)}
-            hinweis="Zusätzliche Investition je MW und ein kleiner Wirkleistungsverlust. Beide Werte stehen im Annahmenblock."
+            hinweis={`${GLOSSAR.blindleistung} Beide Werte stehen im Annahmenblock.`}
           />
           <Schalter
             label="Systemdienstleistungen eingeschränkt"
             an={angebot.systemdienstleistungenEingeschraenkt}
             setzen={(b) => aendern("systemdienstleistungenEingeschraenkt", b)}
-            hinweis="Sperrt die Teilnahme an Regelleistungsmärkten. Bei Batteriespeichern ist das oft der teuerste Punkt des ganzen Vertrags."
+            hinweis={`${GLOSSAR.sdl} Sperrt die Teilnahme an Regelleistungsmärkten.`}
           />
         </Abschnitt>
 
         <Abschnitt titel="Laufzeit und Alternative">
+          <p className="text-[11px] text-pretty text-muted-foreground">
+            Die beiden Jahreszahlen sind nicht dieselbe Angabe. Die Laufzeit steht im Vertrag, der
+            Netzausbau ist eine Prognose des Netzbetreibers. Sie können auseinanderfallen.
+          </p>
           <div className="grid gap-3 sm:grid-cols-2">
             <Zahlenfeld
               label="FCA-Laufzeit"
               einheit="Jahre"
               wert={angebot.laufzeitJahre}
               setzen={(n) => aendern("laufzeitJahre", Math.max(1, Math.round(n)))}
-              hinweis="Ab wann der Netzbetreiber den Netzausbau zusagt."
+              hinweis="Vertragslaufzeit der flexiblen Anschlussvereinbarung. Steht im Angebotsschreiben. Sie sagt nichts darüber aus, wann der Netzausbau fertig ist."
             />
             <Zahlenfeld
-              label="Fester Anschluss ab Jahr"
+              label="Netzausbau fertig ab Jahr"
               wert={alternative.festerAnschlussVerfuegbarAbJahr ?? 0}
+              herkunft="schaetzung"
               setzen={(n) =>
                 setAlternative({
                   ...alternative,
                   festerAnschlussVerfuegbarAbJahr: n <= 0 ? null : Math.round(n),
                 })
               }
-              hinweis="Null bedeutet, dass kein Termin vorliegt. Szenario B ist dann nicht bewertbar."
+              hinweis="Ab wann ein fester Anschluss verfügbar wäre. Meist eine unverbindliche Planungsaussage, nicht Teil des Vertrags. Null bedeutet, dass kein Termin vorliegt, dann ist Szenario B nicht bewertbar."
             />
             <Zahlenfeld
               label="Baukostenzuschuss FCA"
@@ -287,18 +327,54 @@ export function SchrittAngebot({
               teiler={1_000}
               wert={alternative.fcaBaukostenzuschussEur}
               setzen={(n) => setAlternative({ ...alternative, fcaBaukostenzuschussEur: n })}
+              hinweis="Einmalige Zahlung für die Bereitstellung der Anschlusskapazität unter dem FCA."
             />
             <Zahlenfeld
               label="Baukostenzuschuss fest"
               einheit="Tsd EUR"
               schritt={50_000}
               teiler={1_000}
+              herkunft="schaetzung"
               wert={alternative.festerAnschlussBaukostenzuschussEur ?? 0}
               setzen={(n) =>
                 setAlternative({ ...alternative, festerAnschlussBaukostenzuschussEur: n })
               }
+              hinweis="Was ein fester Anschluss kosten würde. Braucht ein zweites Angebot vom Netzbetreiber, sonst lässt sich das Warten nicht gegenrechnen."
             />
           </div>
+
+          {vertragsluecke ? (
+            <div className="space-y-2 rounded-md border border-mittel/40 bg-mittel/8 p-2.5">
+              <p className="flex gap-1.5 text-[11px] text-pretty">
+                <TriangleAlert className="mt-px size-3.5 shrink-0 text-mittel" />
+                <span>
+                  Der Vertrag endet im Jahr {vertragsluecke.von}, der Netzausbau kommt erst im Jahr{" "}
+                  {vertragsluecke.bis}. Für {vertragsluecke.bis - vertragsluecke.von}{" "}
+                  {vertragsluecke.bis - vertragsluecke.von === 1 ? "Jahr" : "Jahre"} ist der
+                  Netzzugang vertraglich nicht geregelt.
+                </span>
+              </p>
+              <Auswahl
+                label="Annahme für diese Jahre"
+                wert={annahmen.nachLaufzeitende}
+                setzen={(w) => setAnnahmen({ ...annahmen, nachLaufzeitende: w })}
+                optionen={[
+                  { wert: "verlaengerung", text: "FCA wird zu gleichen Bedingungen verlängert" },
+                  { wert: "kein_zugang", text: "Kein Netzzugang bis zum Netzausbau" },
+                ]}
+                hinweis="Der zweite Fall ist der ungünstige. Die Differenz der Kapitalwerte von Szenario C ist genau das, was ein verbindlicher Endtermin im Vertrag wert wäre."
+              />
+            </div>
+          ) : null}
+
+          {alternative.festerAnschlussVerfuegbarAbJahr !== null &&
+          alternative.festerAnschlussVerfuegbarAbJahr < angebot.laufzeitJahre ? (
+            <p className="text-[11px] text-pretty text-muted-foreground">
+              Der Vertrag bindet länger, als der Engpass voraussichtlich besteht. Das Modell nimmt
+              an, dass die Einschränkung mit dem Netzausbau endet. Bei einer statischen Kappung kann
+              der Vertrag darüber hinaus binden, ein Umstellungsrecht gehört dann in die Verhandlung.
+            </p>
+          ) : null}
         </Abschnitt>
       </div>
 
@@ -307,6 +383,7 @@ export function SchrittAngebot({
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Kennzahl
               label="Abregelung"
+              hinweis={GLOSSAR.abregelung}
               wert={fmtProzent(lauf.abregelungProzent)}
               zusatz={`${fmtMWh(lauf.abregelungMWh)} im Jahr`}
               ton="verlust"
@@ -369,6 +446,7 @@ export function SchrittAngebot({
             </p>
           </div>
         </Karte>
+      </div>
       </div>
     </div>
   );

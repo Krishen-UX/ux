@@ -30,7 +30,7 @@ export function SensitivitaetsBalken({
   }
 
   return (
-    <ol className="space-y-2.5">
+    <ol className="space-y-2.5 print:space-y-1.5">
       {sichtbar.map((p, i) => {
         const positiv = p.deltaNpvEur >= 0;
         const breite = (Math.abs(p.deltaNpvEur) / spitze) * 100;
@@ -63,7 +63,7 @@ export function SensitivitaetsBalken({
               />
             </div>
             {mitText ? (
-              <p className="ml-5.5 text-[11px] text-pretty text-muted-foreground">
+              <p className="ml-5.5 text-[11px] text-pretty text-muted-foreground print:text-[10px]">
                 {p.verhandlungspunkt}
               </p>
             ) : null}

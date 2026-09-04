@@ -5,6 +5,8 @@ import { ANLAGENTYPEN, BUNDESLAENDER, regelzoneVon } from "@/data/annahmen";
 import { LASTPROFILE } from "@/lib/sim/profile";
 import { fmtEur, fmtMWh, fmtProzent, fmtStunden, fmtZahl } from "@/lib/format";
 import { Abschnitt, Auswahl, Kennzahl, Zahlenfeld } from "./felder";
+import { SchrittKopf } from "./schritt-kopf";
+import { GLOSSAR } from "@/lib/glossar";
 import { JahresprofilDiagramm } from "./diagramme/jahresprofil";
 import { Karte } from "./karte";
 import { cn } from "@/lib/utils";
@@ -41,7 +43,25 @@ export function SchrittProjekt({
       : 0);
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+    <div className="space-y-3">
+      <SchrittKopf
+        nummer={1}
+        titel="Projekt"
+        was={
+          <>
+            Beschreibe die Anlage und ihre Wirtschaftlichkeit. Daraus entsteht der Referenzfall: was
+            das Projekt an einem festen Anschluss ohne jede Einschränkung leisten würde. Alles
+            Weitere wird gegen diesen Fall gemessen.
+          </>
+        }
+        gebraucht={
+          <>
+            Leistung, Standort und die Investitionsannahmen aus deiner Projektkalkulation. Die
+            Zeitreihen für Erzeugung und Preise bringt das Werkzeug mit.
+          </>
+        }
+      />
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       <div className="space-y-5">
         <Abschnitt titel="Anlagentyp">
           <div className="grid gap-2 sm:grid-cols-3">
@@ -175,7 +195,7 @@ export function SchrittProjekt({
               schritt={0.5}
               wert={annahmen.diskontsatzProzent}
               setzen={(n) => setAnnahmen({ ...annahmen, diskontsatzProzent: n })}
-              hinweis="Realer Zinssatz nach Steuern. Alle Kapitalwerte sind auf heute abgezinst."
+              hinweis={GLOSSAR.kalkulationszins}
             />
             {istLast ? (
               <Zahlenfeld
@@ -183,7 +203,7 @@ export function SchrittProjekt({
                 einheit="EUR"
                 wert={annahmen.wertProMWhEur}
                 setzen={(n) => setAnnahmen({ ...annahmen, wertProMWhEur: n })}
-                hinweis="Nutzen je bezogener MWh nach Abzug der Strombezugskosten, etwa die ersparten Kosten des Altsystems."
+                hinweis={GLOSSAR.deckungsbeitrag}
               />
             ) : null}
           </div>
@@ -202,10 +222,12 @@ export function SchrittProjekt({
             label="Benutzungsstunden"
             wert={fmtStunden(benutzungsstunden)}
             zusatz={istSpeicher ? `${fmtMWh(ertrag)} Entladung` : "je MW Anschluss"}
+            hinweis={GLOSSAR.vollbenutzungsstunden}
           />
           <Kennzahl
             label="Regelzone"
             wert={regelzoneVon(projekt.bundesland)}
+            hinweis={GLOSSAR.regelzone}
             zusatz={
               ueberbauung > 0.5
                 ? `Ueberbauung plus ${fmtProzent(ueberbauung, 0)}`
@@ -241,6 +263,7 @@ export function SchrittProjekt({
           die Kapitalwerte, das schwächste mit verschärftem Engpass den P90-Fall.
         </p>
       </Karte>
+      </div>
     </div>
   );
 }

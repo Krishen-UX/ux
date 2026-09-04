@@ -8,6 +8,7 @@ import { LASTPROFILE } from "@/lib/sim/profile";
 import { umstellungsJahr } from "@/lib/sim/szenarien";
 import { fmtEur, fmtJahre, fmtMW, fmtMWh, fmtProzent, fmtStunden, fmtZahl } from "@/lib/format";
 import { ergebnisgroesse } from "@/lib/kennzahlen";
+import { datenluecken } from "@/lib/datenluecken";
 import { empfehlung } from "./empfehlung";
 import { SensitivitaetsBalken } from "./diagramme/sensitivitaet";
 import { cn } from "@/lib/utils";
@@ -55,6 +56,10 @@ export function Faktenblatt({
   const istLast = projekt.typ === "industrielle_last";
   const istSpeicher = projekt.typ === "bess";
   const groesse = ergebnisgroesse(projekt);
+  const alleLuecken = datenluecken(angebot, alternative, projekt);
+  // Das Faktenblatt ist auf eine Seite festgelegt, deshalb harte Obergrenze.
+  const luecken = alleLuecken.slice(0, 4);
+  const weitereLuecken = alleLuecken.length - luecken.length;
   const gewinner = auswertung.szenarien[auswertung.gewinner];
   const heute = new Date().toLocaleDateString("de-DE", {
     day: "2-digit",
@@ -174,9 +179,14 @@ export function Faktenblatt({
                 .join(", ") || "keine"
             }
           />
+          <Zeile k="Vertragslaufzeit FCA" v={`${angebot.laufzeitJahre} Jahre`} />
           <Zeile
-            k="Laufzeit"
-            v={`${angebot.laufzeitJahre} Jahre, fester Anschluss ab Jahr ${alternative.festerAnschlussVerfuegbarAbJahr ?? "offen"}`}
+            k="Netzausbau fertig ab"
+            v={
+              alternative.festerAnschlussVerfuegbarAbJahr === null
+                ? "kein Termin genannt"
+                : `Jahr ${alternative.festerAnschlussVerfuegbarAbJahr}`
+            }
           />
         </Block>
 
@@ -229,8 +239,34 @@ export function Faktenblatt({
         <h3 className="mb-2 border-b border-foreground/25 pb-0.5 text-[10px] font-bold tracking-wider uppercase">
           Punkte für die Nachverhandlung, nach Wirkung auf den Kapitalwert
         </h3>
-        <SensitivitaetsBalken posten={auswertung.sensitivitaet} anzahl={5} />
+        <SensitivitaetsBalken posten={auswertung.sensitivitaet} anzahl={4} />
       </section>
+
+      {luecken.length > 0 ? (
+        <section className="mt-4 seitenumbruch-vermeiden">
+          <h3 className="mb-1.5 border-b border-foreground/25 pb-0.5 text-[10px] font-bold tracking-wider uppercase">
+            Angaben, um die wir bitten, weil sie das Ergebnis tragen
+          </h3>
+          <ol className="grid gap-x-6 gap-y-1 sm:grid-cols-2">
+            {luecken.map((l, i) => (
+              <li
+                key={l.schluessel}
+                className="seitenumbruch-vermeiden flex gap-1.5 text-[10px] text-pretty"
+              >
+                <span className="ziffern shrink-0 text-muted-foreground">{i + 1}</span>
+                <span>
+                  <span className="font-medium">{l.angabe}.</span> {l.frage}
+                </span>
+              </li>
+            ))}
+          </ol>
+          {weitereLuecken > 0 ? (
+            <p className="mt-1 text-[10px] text-muted-foreground">
+              Dazu {weitereLuecken} weitere Punkte, siehe Ergebnisansicht.
+            </p>
+          ) : null}
+        </section>
+      ) : null}
 
       <footer className="mt-4 border-t border-border pt-2 text-[9px] leading-relaxed text-pretty text-muted-foreground">
         Berechnung über 8.760 Stunden je Wetterjahr auf Basis der Ist-Reihen für Photovoltaik,

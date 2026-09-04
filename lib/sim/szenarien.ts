@@ -18,9 +18,30 @@ export interface SzenarioEingabe {
   p90: JahresLauf;
 }
 
-/** Umstellungsjahr in Szenario C: früher geht es nicht. */
+/**
+ * Jahr, ab dem in Szenario C der feste Anschluss steht.
+ *
+ * Massgeblich ist der Netzausbau, nicht die Vertragslaufzeit. Der Engpass
+ * verschwindet mit dem Ausbau, nicht mit dem Ablauf des Vertrags. Liegt kein
+ * Termin vor, bleibt nur die Laufzeit als Anhaltspunkt.
+ */
 export const umstellungsJahr = (angebot: FcaAngebot, alternative: Alternative): number =>
-  Math.max(angebot.laufzeitJahre, alternative.festerAnschlussVerfuegbarAbJahr ?? angebot.laufzeitJahre);
+  alternative.festerAnschlussVerfuegbarAbJahr ?? angebot.laufzeitJahre;
+
+/**
+ * Jahre zwischen dem Ende der FCA-Laufzeit und dem Netzausbau. In dieser Zeit
+ * ist vertraglich nichts geregelt, das ist eine der teuersten Luecken im
+ * Angebot. Leeres Ergebnis, wenn der Vertrag lange genug laeuft.
+ */
+export function luecke(
+  angebot: FcaAngebot,
+  alternative: Alternative,
+): { von: number; bis: number } | null {
+  const umstellung = umstellungsJahr(angebot, alternative);
+  return umstellung > angebot.laufzeitJahre
+    ? { von: angebot.laufzeitJahre, bis: umstellung }
+    : null;
+}
 
 interface Bausteine {
   investitionBasis: number;
@@ -82,6 +103,8 @@ function reihen(
     umstellung: number | null;
     nachzahlung: number;
     horizont: number;
+    /** Jahre ohne vertraglich gesicherten Netzzugang. */
+    luecke: { von: number; bis: number } | null;
   },
 ): Reihen {
   const { projekt } = e;
@@ -104,10 +127,15 @@ function reihen(
     const alterung = Math.pow(b.degradation, i);
     const nachUmstellung = optionen.umstellung !== null && kalenderjahr >= optionen.umstellung;
     const unterFca = optionen.mitFca && !nachUmstellung;
+    // Zwischen Vertragsende und Netzausbau steht kein Netzzugang zu.
+    const inLuecke =
+      optionen.luecke !== null &&
+      kalenderjahr >= optionen.luecke.von &&
+      kalenderjahr < optionen.luecke.bis;
 
-    const erloes = unterFca ? b.erloesFca : b.erloesReferenz;
-    const sdl = unterFca ? b.sdlFcaJahr : b.sdlVollJahr;
-    const menge = unterFca ? b.ertragFcaMWh : b.ertragReferenzMWh;
+    const erloes = inLuecke ? 0 : unterFca ? b.erloesFca : b.erloesReferenz;
+    const sdl = inLuecke ? 0 : unterFca ? b.sdlFcaJahr : b.sdlVollJahr;
+    const menge = inLuecke ? 0 : unterFca ? b.ertragFcaMWh : b.ertragReferenzMWh;
 
     cashflows[kalenderjahr] += erloes * alterung + sdl - b.opexJahr;
     kosten[kalenderjahr] += b.opexJahr;
@@ -147,6 +175,7 @@ export function baueSzenarien(e: SzenarioEingabe): {
     0,
     (alternative.festerAnschlussBaukostenzuschussEur ?? 0) - alternative.fcaBaukostenzuschussEur,
   );
+  const vertragsluecke = annahmen.nachLaufzeitende === "kein_zugang" ? luecke(angebot, alternative) : null;
 
   const gemessen = projekt.typ === "industrielle_last";
 
@@ -196,6 +225,7 @@ export function baueSzenarien(e: SzenarioEingabe): {
       umstellung: null,
       nachzahlung: 0,
       horizont,
+      luecke: null,
     },
     p50,
   );
@@ -214,6 +244,7 @@ export function baueSzenarien(e: SzenarioEingabe): {
       umstellung: null,
       nachzahlung: 0,
       horizont,
+      luecke: null,
     },
     p50,
     bVerfuegbar,
@@ -225,7 +256,9 @@ export function baueSzenarien(e: SzenarioEingabe): {
   const c = baue(
     "C",
     "FCA als Brücke",
-    `Anschluss sofort unter FCA, ab Jahr ${umstellung} fester Anschluss.`,
+    vertragsluecke
+      ? `Anschluss sofort unter FCA, ab Jahr ${umstellung} fester Anschluss. Ab Jahr ${vertragsluecke.von} ohne gesicherten Netzzugang.`
+      : `Anschluss sofort unter FCA, ab Jahr ${umstellung} fester Anschluss.`,
     {
       startJahr: 1,
       bkzStart: alternative.fcaBaukostenzuschussEur,
@@ -233,6 +266,7 @@ export function baueSzenarien(e: SzenarioEingabe): {
       umstellung,
       nachzahlung,
       horizont,
+      luecke: vertragsluecke,
     },
     p50,
   );

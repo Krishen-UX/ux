@@ -107,6 +107,7 @@ export const ANNAHMEN_VORLAGE: Record<AnlagenTyp, Annahmen> = {
     blindleistungVerlustProzent: 0.8,
     engpassStressfaktorP90: 1.5,
     engpasstiefe: "gleitend",
+    nachLaufzeitende: "verlaengerung",
   },
   pv_freiflaeche: {
     diskontsatzProzent: 6,
@@ -125,6 +126,7 @@ export const ANNAHMEN_VORLAGE: Record<AnlagenTyp, Annahmen> = {
     blindleistungVerlustProzent: 0.8,
     engpassStressfaktorP90: 1.5,
     engpasstiefe: "gleitend",
+    nachLaufzeitende: "verlaengerung",
   },
   industrielle_last: {
     diskontsatzProzent: 6.5,
@@ -143,6 +145,7 @@ export const ANNAHMEN_VORLAGE: Record<AnlagenTyp, Annahmen> = {
     blindleistungVerlustProzent: 0.8,
     engpassStressfaktorP90: 1.5,
     engpasstiefe: "gleitend",
+    nachLaufzeitende: "verlaengerung",
   },
 };
 

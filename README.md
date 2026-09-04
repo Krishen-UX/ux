@@ -40,6 +40,22 @@ Ein Projekt, Deutschland, Mittel- und Hochspannung, drei Anlagentypen
 4. **Faktenblatt** eine Seite über die Druckansicht des Browsers, als Anlage für
    die Rückmeldung an den Netzbetreiber.
 
+### Erklärbarkeit
+
+Der Prototyp wird Menschen vorgelegt, die täglich mit Netzanschlüssen zu tun
+haben, aber nicht zwingend mit Barwertrechnung, und umgekehrt. Deshalb:
+
+- Jeder Screen trägt oben zwei Sätze: was hier passiert und was man dafür
+  braucht.
+- Fachbegriffe und Abkürzungen stehen im Tooltip, nicht im Fliesstext. Die
+  Sammlung liegt in `lib/glossar.ts`.
+- Angaben, die **nicht** im Angebotsschreiben stehen, tragen einen Punkt in der
+  Warnfarbe. Es sind je nach Archetyp drei bis fünf, und genau dort sitzt die
+  Unsicherheit des Ergebnisses.
+- Aus diesen Angaben entsteht auf dem Ergebnisscreen und auf dem Faktenblatt ein
+  Fragenkatalog, den man dem Netzbetreiber zurückgeben kann. Das Faktenblatt ist
+  damit Bewertung und Datenanforderung in einem.
+
 ### Die drei Szenarien
 
 | Szenario | Beschreibung |
@@ -50,6 +66,14 @@ Ein Projekt, Deutschland, Mittel- und Hochspannung, drei Anlagentypen
 
 Szenario C ist in der Praxis oft die richtige Antwort und wird selten gerechnet.
 Es ist der Aufhänger für die Gespräche.
+
+**Vertragslaufzeit und Netzausbau sind zwei verschiedene Angaben.** Die Laufzeit
+steht im Vertrag, der Termin des Netzausbaus ist eine meist unverbindliche
+Planungsaussage. Sie fallen regelmässig auseinander. Endet der Vertrag früher,
+entsteht eine Lücke, in der vertraglich nichts geregelt ist. Das Werkzeug weist
+sie aus und lässt zwei Annahmen zu: Verlängerung zu gleichen Bedingungen oder
+kein Netzzugang. Die Differenz der beiden Kapitalwerte ist das, was ein
+verbindlicher Endtermin im Vertrag wert wäre.
 
 ### Die vier Archetypen
 

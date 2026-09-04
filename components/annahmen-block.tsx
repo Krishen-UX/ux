@@ -163,6 +163,16 @@ export function AnnahmenBlock({
                 anzeige={(n) => `Faktor ${n.toFixed(1)}`}
                 hinweis="P90 ist das schwächste der drei Wetterjahre mit verschärftem Engpass. Kein Monte Carlo, sondern eine bewusst grobe Näherung."
               />
+              <Auswahl
+                label="Nach Ende der FCA-Laufzeit"
+                wert={annahmen.nachLaufzeitende}
+                setzen={(w) => aendern("nachLaufzeitende", w)}
+                optionen={[
+                  { wert: "verlaengerung", text: "Verlängerung zu gleichen Bedingungen" },
+                  { wert: "kein_zugang", text: "Kein Netzzugang bis zum Netzausbau" },
+                ]}
+                hinweis="Wirkt nur, wenn der Vertrag früher endet als der Netzausbau fertig wird. Betrifft ausschliesslich Szenario C."
+              />
               <Zahlenfeld
                 label="Blindleistung, Investition je MW"
                 einheit="Tsd EUR"
