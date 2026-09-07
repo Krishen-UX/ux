@@ -1,0 +1,14 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "title": "Ablauf", "x": 0, "y": 0, "w": 1440, "h": 980 },
+    { "file": "Start.dc.html", "title": "Screen 1, Start", "x": 0, "y": 1100, "w": 1440, "h": 900 },
+    { "file": "Pruefen.dc.html", "title": "Screen 2, Prüfen", "x": 1560, "y": 1100, "w": 1440, "h": 1000 },
+    { "file": "Ergebnis.dc.html", "title": "Screen 3, Ergebnis", "x": 3120, "y": 1100, "w": 1440, "h": 1000 },
+    { "file": "Muster.dc.html", "title": "Muster", "x": 0, "y": 2220, "w": 1440, "h": 1080 }
+  ],
+  "annotations": [
+    { "id": "kern", "x": 1560, "y": 2220, "w": 380, "text": "Der eigentliche Umbau steckt in Screen 2.\n\nHeute: leeres Formular mit 19 Bedienelementen.\nNeu: eine Liste von Vorschlägen, jeder mit der Stelle im Schreiben, aus der er stammt.\n\nBestätigen geht durch Nichtstun." },
+    { "id": "offen", "x": 1990, "y": 2220, "w": 380, "text": "Offene Frage an dich:\n\nDie Spezifikation hat das Auslesen bewusst aus Runde eins genommen, weil ein halb funktionierender Extraktor das Interview dominiert.\n\nDieser Entwurf setzt es voraus. Beides ist vertretbar, aber es ist eine Entscheidung." }
+  ],
+  "launch": { "view": "canvas" }
+}

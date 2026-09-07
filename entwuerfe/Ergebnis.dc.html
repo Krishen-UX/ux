@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 13px; line-height: 1.4; color: oklch(0.145 0 0); }
+    a { color: oklch(0.5 0.088 216); } a:hover { color: oklch(0.36 0.07 216); }
+    .zif { font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 1000px; background: oklch(1 0 0); display: flex; flex-direction: column; box-sizing: border-box">
+
+  <div style="display: flex; align-items: center; gap: 16px; padding: 8px 16px; border-bottom: 1px solid oklch(0.905 0.005 240); flex-shrink: 0">
+    <div style="display: flex; align-items: baseline; gap: 8px">
+      <span style="font-size: 15px; font-weight: 600; letter-spacing: -0.01em">FCA Assessor</span>
+      <span style="font-size: 11px; color: oklch(0.505 0.012 240)">Flexible Netzanschlüsse bewerten</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 2px">
+      <div style="display: flex; align-items: center; gap: 6px; border-radius: 6px; padding: 4px 10px; color: oklch(0.505 0.012 240)"><span class="zif" style="font-size: 11px; opacity: 0.7">1</span>Start</div>
+      <div style="display: flex; align-items: center; gap: 6px; border-radius: 6px; padding: 4px 10px; color: oklch(0.505 0.012 240)"><span class="zif" style="font-size: 11px; opacity: 0.7">2</span>Prüfen</div>
+      <div style="display: flex; align-items: center; gap: 6px; border-radius: 6px; padding: 4px 10px; background: oklch(0.5 0.088 216); color: oklch(0.99 0.004 216)"><span class="zif" style="font-size: 11px; opacity: 0.7">3</span>Ergebnis</div>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1; display: flex; justify-content: center; padding: 24px; overflow: hidden">
+    <div style="width: 1180px; display: flex; flex-direction: column; gap: 18px">
+
+      <div style="border-left: 3px solid oklch(0.52 0.098 158); background: oklch(0.52 0.098 158 / 0.07); border-radius: 6px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 24px">
+        <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: oklch(0.52 0.098 158)"></span>
+            Klare Empfehlung
+            <span style="font-weight: 400; text-transform: none; letter-spacing: 0; color: oklch(0.505 0.012 240)">Szenario C, FCA als Brücke</span>
+          </div>
+          <div style="font-size: 22px; font-weight: 600; letter-spacing: -0.02em; text-wrap: pretty">Annehmen und den festen Anschluss nachziehen bringt 2,3 Mio EUR mehr als die nächstbeste Variante.</div>
+          <div style="color: oklch(0.505 0.012 240); text-wrap: pretty">Der frühere Betriebsstart wiegt die Abregelung von 1,7 Prozent auf. BESS Umspannwerk Nord startet sofort.</div>
+        </div>
+        <div style="flex-shrink: 0; display: flex; align-items: center; gap: 8px; border: 1px solid oklch(0.66 0.125 76); border-radius: 999px; padding: 5px 12px; background: oklch(1 0 0)">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: oklch(0.66 0.125 76); flex-shrink: 0"></span>
+          <span class="zif" style="font-size: 11px; font-weight: 600">2 Angaben geschätzt</span>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+        <div style="border: 1px solid oklch(0.905 0.005 240); border-radius: 6px; padding: 11px 14px; display: flex; flex-direction: column; gap: 4px">
+          <div style="display: flex; align-items: baseline; gap: 7px">
+            <span class="zif" style="width: 17px; height: 17px; border-radius: 3px; background: oklch(0.968 0.003 240); color: oklch(0.505 0.012 240); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0">A</span>
+            <span style="font-weight: 600">FCA dauerhaft</span>
+          </div>
+          <div class="zif" style="font-size: 19px; font-weight: 600">11,3 Mio EUR</div>
+          <div class="zif" style="font-size: 11px; color: oklch(0.505 0.012 240)">P90 3,9 Mio, Amortisation 9,2 Jahre</div>
+        </div>
+        <div style="border: 1px solid oklch(0.905 0.005 240); border-radius: 6px; padding: 11px 14px; display: flex; flex-direction: column; gap: 4px">
+          <div style="display: flex; align-items: baseline; gap: 7px">
+            <span class="zif" style="width: 17px; height: 17px; border-radius: 3px; background: oklch(0.968 0.003 240); color: oklch(0.505 0.012 240); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0">B</span>
+            <span style="font-weight: 600">Auf festen Anschluss warten</span>
+          </div>
+          <div class="zif" style="font-size: 19px; font-weight: 600">20,4 Mio EUR</div>
+          <div class="zif" style="font-size: 11px; color: oklch(0.505 0.012 240)">P90 17,4 Mio, Betrieb ab Jahr 8</div>
+        </div>
+        <div style="border: 1px solid oklch(0.5 0.088 216); background: oklch(0.93 0.024 216 / 0.5); border-radius: 6px; padding: 11px 14px; display: flex; flex-direction: column; gap: 4px">
+          <div style="display: flex; align-items: baseline; gap: 7px">
+            <span class="zif" style="width: 17px; height: 17px; border-radius: 3px; background: oklch(0.5 0.088 216); color: oklch(0.99 0.004 216); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0">C</span>
+            <span style="font-weight: 600">FCA als Brücke</span>
+          </div>
+          <div class="zif" style="font-size: 19px; font-weight: 600; color: oklch(0.5 0.088 216)">22,7 Mio EUR</div>
+          <div class="zif" style="font-size: 11px; color: oklch(0.505 0.012 240)">P90 15,7 Mio, Amortisation 8,1 Jahre</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; border-bottom: 1px solid oklch(0.905 0.005 240); padding-bottom: 5px">
+          <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.505 0.012 240)">Darüber solltest du sprechen</span>
+          <span style="font-size: 11px; color: oklch(0.505 0.012 240)">Wirkung auf den Kapitalwert, absteigend</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px">
+
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+              <span style="display: flex; align-items: baseline; gap: 8px; min-width: 0">
+                <span class="zif" style="width: 14px; flex-shrink: 0; font-size: 11px; color: oklch(0.505 0.012 240)">1</span>
+                <span style="font-weight: 600">Systemdienstleistungen freigeben</span>
+                <span style="font-size: 11px; color: oklch(0.505 0.012 240)">Sperre berührt den Engpass nicht</span>
+              </span>
+              <span class="zif" style="font-weight: 600; color: oklch(0.5 0.088 216); flex-shrink: 0">+8,2 Mio EUR</span>
+            </div>
+            <div style="margin-left: 22px; height: 5px; border-radius: 2px; background: oklch(0.968 0.003 240)"><div style="width: 100%; height: 100%; border-radius: 2px; background: oklch(0.5 0.088 216)"></div></div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+              <span style="display: flex; align-items: baseline; gap: 8px; min-width: 0">
+                <span class="zif" style="width: 14px; flex-shrink: 0; font-size: 11px; color: oklch(0.505 0.012 240)">2</span>
+                <span style="font-weight: 600">Verbindlichen Endtermin vereinbaren</span>
+                <span style="font-size: 11px; color: oklch(0.505 0.012 240)">mit Rechtsfolge bei Verzug</span>
+              </span>
+              <span class="zif" style="font-weight: 600; color: oklch(0.5 0.088 216); flex-shrink: 0">+2,8 Mio EUR</span>
+            </div>
+            <div style="margin-left: 22px; height: 5px; border-radius: 2px; background: oklch(0.968 0.003 240)"><div style="width: 34%; height: 100%; border-radius: 2px; background: oklch(0.5 0.088 216)"></div></div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+              <span style="display: flex; align-items: baseline; gap: 8px; min-width: 0">
+                <span class="zif" style="width: 14px; flex-shrink: 0; font-size: 11px; color: oklch(0.505 0.012 240)">3</span>
+                <span style="font-weight: 600">Position im Stack festschreiben</span>
+                <span style="font-size: 11px; color: oklch(0.505 0.012 240)">zwei Plätze weiter vorn, ersatzweise pro rata</span>
+              </span>
+              <span class="zif" style="font-weight: 600; color: oklch(0.5 0.088 216); flex-shrink: 0">+1,3 Mio EUR</span>
+            </div>
+            <div style="margin-left: 22px; height: 5px; border-radius: 2px; background: oklch(0.968 0.003 240)"><div style="width: 16%; height: 100%; border-radius: 2px; background: oklch(0.5 0.088 216)"></div></div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+              <span style="display: flex; align-items: baseline; gap: 8px; min-width: 0">
+                <span class="zif" style="width: 14px; flex-shrink: 0; font-size: 11px; color: oklch(0.505 0.012 240)">4</span>
+                <span style="font-weight: 600">Blindleistungsauflage streichen</span>
+                <span style="font-size: 11px; color: oklch(0.505 0.012 240)">oder gesondert vergüten</span>
+              </span>
+              <span class="zif" style="font-weight: 600; color: oklch(0.5 0.088 216); flex-shrink: 0">+803 Tsd EUR</span>
+            </div>
+            <div style="margin-left: 22px; height: 5px; border-radius: 2px; background: oklch(0.968 0.003 240)"><div style="width: 10%; height: 100%; border-radius: 2px; background: oklch(0.5 0.088 216)"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid oklch(0.66 0.125 76); border-radius: 6px; padding: 12px 14px; display: flex; align-items: flex-start; gap: 12px">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="oklch(0.66 0.125 76)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px"><circle cx="12" cy="12" r="9"></circle><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
+        <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+          <div style="font-weight: 600">Zwei Angaben fehlen noch, sie bewegen 6,1 Mio EUR</div>
+          <div style="color: oklch(0.505 0.012 240)">Termin des Netzausbaus und Baukostenzuschuss beim festen Anschluss. Beide sind als Frage formuliert und stehen auf dem Faktenblatt.</div>
+        </div>
+        <div style="flex-shrink: 0; align-self: center; border: 1px solid oklch(0.895 0.006 240); border-radius: 6px; padding: 6px 12px; font-weight: 600">Fragen ansehen</div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid oklch(0.905 0.005 240); padding-top: 16px">
+        <div style="display: flex; align-items: center; gap: 8px; background: oklch(0.5 0.088 216); color: oklch(0.99 0.004 216); border-radius: 6px; padding: 9px 16px; font-weight: 600">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18v-6h12v6"></path><path d="M6 9V3h12v6"></path><rect x="3" y="9" width="18" height="9" rx="2"></rect></svg>
+          Faktenblatt drucken
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; border: 1px solid oklch(0.895 0.006 240); border-radius: 6px; padding: 9px 16px; font-weight: 600">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m2 7 10 6 10-6"></path></svg>
+          Rückfrage an den Netzbetreiber
+        </div>
+        <div style="margin-left: auto; display: flex; align-items: center; gap: 8px; color: oklch(0.5 0.088 216)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+          <span style="border-bottom: 1px solid oklch(0.5 0.088 216)">Rechenweg, Diagramme und 29 Annahmen</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

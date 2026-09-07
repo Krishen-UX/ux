@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 13px; line-height: 1.4; color: oklch(0.145 0 0); }
+    a { color: oklch(0.5 0.088 216); } a:hover { color: oklch(0.36 0.07 216); }
+    .zif { font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+    .wert { border-bottom: 1px dashed oklch(0.505 0.012 240); padding-bottom: 1px; cursor: text; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 900px; background: oklch(1 0 0); display: flex; flex-direction: column; box-sizing: border-box">
+
+  <div style="display: flex; align-items: center; gap: 16px; padding: 8px 16px; border-bottom: 1px solid oklch(0.905 0.005 240); flex-shrink: 0">
+    <div style="display: flex; align-items: baseline; gap: 8px">
+      <span style="font-size: 15px; font-weight: 600; letter-spacing: -0.01em">FCA Assessor</span>
+      <span style="font-size: 11px; color: oklch(0.505 0.012 240)">Flexible Netzanschlüsse bewerten</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 2px">
+      <div style="display: flex; align-items: center; gap: 6px; border-radius: 6px; padding: 4px 10px; background: oklch(0.5 0.088 216); color: oklch(0.99 0.004 216)"><span class="zif" style="font-size: 11px; opacity: 0.7">1</span>Start</div>
+      <div style="display: flex; align-items: center; gap: 6px; border-radius: 6px; padding: 4px 10px; color: oklch(0.505 0.012 240)"><span class="zif" style="font-size: 11px; opacity: 0.7">2</span>Prüfen</div>
+      <div style="display: flex; align-items: center; gap: 6px; border-radius: 6px; padding: 4px 10px; color: oklch(0.505 0.012 240)"><span class="zif" style="font-size: 11px; opacity: 0.7">3</span>Ergebnis</div>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1; display: flex; justify-content: center; padding: 56px 24px; overflow: hidden">
+    <div style="width: 760px; display: flex; flex-direction: column; gap: 28px">
+
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <h1 style="margin: 0; font-size: 26px; font-weight: 600; letter-spacing: -0.02em">Angebot bewerten</h1>
+        <p style="margin: 0; color: oklch(0.505 0.012 240); text-wrap: pretty">Zwei Dinge brauchen wir. Alles Weitere ist vorbelegt und lässt sich später ändern.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; align-items: baseline; gap: 8px">
+          <span class="zif" style="width: 18px; height: 18px; border-radius: 4px; background: oklch(0.968 0.003 240); color: oklch(0.505 0.012 240); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0">1</span>
+          <span style="font-size: 15px; font-weight: 600">Was baust du?</span>
+        </div>
+
+        <div style="display: flex; gap: 8px">
+          <div style="flex-grow: 1; border: 1px solid oklch(0.5 0.088 216); background: oklch(0.93 0.024 216); border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px">
+            <div style="font-weight: 600">Batteriespeicher</div>
+            <div style="font-size: 11px; color: oklch(0.36 0.07 216)">Arbitrage und Systemdienstleistungen</div>
+          </div>
+          <div style="flex-grow: 1; border: 1px solid oklch(0.905 0.005 240); border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px">
+            <div style="font-weight: 600">PV Freifläche</div>
+            <div style="font-size: 11px; color: oklch(0.505 0.012 240)">Direktvermarktung oder PPA</div>
+          </div>
+          <div style="flex-grow: 1; border: 1px solid oklch(0.905 0.005 240); border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px">
+            <div style="font-weight: 600">Industrielle Last</div>
+            <div style="font-size: 11px; color: oklch(0.505 0.012 240)">Elektrifizierung</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid oklch(0.905 0.005 240); border-radius: 6px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; font-size: 15px">
+            <span style="color: oklch(0.505 0.012 240)">mit</span>
+            <span class="zif wert" style="font-weight: 600">50</span><span style="color: oklch(0.505 0.012 240)">MW</span>
+            <span style="color: oklch(0.505 0.012 240)">und</span>
+            <span class="zif wert" style="font-weight: 600">100</span><span style="color: oklch(0.505 0.012 240)">MWh in</span>
+            <span class="wert" style="font-weight: 600">Brandenburg</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: oklch(0.505 0.012 240); border-top: 1px solid oklch(0.905 0.005 240); padding-top: 9px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="oklch(0.52 0.098 158)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0"><path d="M20 6 9 17l-5-5"></path></svg>
+            <span>Daraus folgen Regelzone 50Hertz, Erzeugungs- und Preisprofil sowie <span style="border-bottom: 1px dashed oklch(0.505 0.012 240)">12 Kostenannahmen</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; align-items: baseline; gap: 8px">
+          <span class="zif" style="width: 18px; height: 18px; border-radius: 4px; background: oklch(0.968 0.003 240); color: oklch(0.505 0.012 240); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0">2</span>
+          <span style="font-size: 15px; font-weight: 600">Was hat der Netzbetreiber angeboten?</span>
+        </div>
+
+        <div style="border: 1.5px dashed oklch(0.5 0.088 216); background: oklch(0.93 0.024 216); border-radius: 6px; padding: 36px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="oklch(0.5 0.088 216)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"></path><path d="m7 8 5-5 5 5"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>
+          <div style="font-size: 15px; font-weight: 600; color: oklch(0.36 0.07 216)">Angebotsschreiben hier ablegen</div>
+          <div style="color: oklch(0.36 0.07 216); text-align: center; max-width: 460px; text-wrap: pretty">PDF, Foto der Seiten oder eingefügter Text. Wir lesen Archetyp, Grenzen, Zugangsprinzip, Fristen und Auflagen heraus und belegen jede Angabe mit ihrer Fundstelle.</div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; color: oklch(0.505 0.012 240)">
+          <span>Noch kein Angebot?</span>
+          <span style="border-bottom: 1px solid oklch(0.5 0.088 216); color: oklch(0.5 0.088 216)">Angebot selbst beschreiben</span>
+          <span style="font-size: 11px">Vier Fragen, eine nach der anderen.</span>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid oklch(0.905 0.005 240); padding-top: 18px">
+        <div style="display: flex; align-items: center; gap: 8px; color: oklch(0.505 0.012 240); font-size: 11px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span>Das Schreiben bleibt im Browser und wird nicht gespeichert</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; background: oklch(0.5 0.088 216); color: oklch(0.99 0.004 216); border-radius: 6px; padding: 8px 16px; font-weight: 600">
+          Angebot auslesen
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

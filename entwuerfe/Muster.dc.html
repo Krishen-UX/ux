@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 13px; line-height: 1.4; color: oklch(0.145 0 0); }
+    a { color: oklch(0.5 0.088 216); } a:hover { color: oklch(0.36 0.07 216); }
+    .zif { font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+    .karte { border: 1px solid oklch(0.905 0.005 240); border-radius: 6px; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: oklch(1 0 0); }
+    .kt { font-weight: 600; font-size: 15px; letter-spacing: -0.01em; }
+    .ks { color: oklch(0.505 0.012 240); }
+    .marke { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.505 0.012 240); }
+    .buehne { background: oklch(0.99 0.002 240); border: 1px solid oklch(0.905 0.005 240); border-radius: 4px; padding: 12px; display: flex; flex-direction: column; gap: 7px; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 1080px; background: oklch(0.99 0.002 240); padding: 36px 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px">
+
+  <div style="display: flex; flex-direction: column; gap: 5px">
+    <div class="marke">Muster</div>
+    <h1 style="margin: 0; font-size: 26px; font-weight: 600; letter-spacing: -0.02em">Sechs Muster, die die Formulare ersetzen</h1>
+    <p style="margin: 0; max-width: 820px; color: oklch(0.505 0.012 240); text-wrap: pretty">Jedes ersetzt eine konkrete Stelle im heutigen Ablauf. Links steht, was heute dort steht, rechts, was an seine Stelle tritt.</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+
+    <div class="karte">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <div class="kt">1 &nbsp;Wert statt Feld</div>
+        <div class="ks">Ersetzt 12 beschriftete Eingabefelder im Projektschritt</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <div class="marke" style="color: oklch(0.6 0.144 42)">heute</div>
+          <div class="buehne" style="gap: 9px">
+            <div style="display: flex; flex-direction: column; gap: 3px">
+              <span style="font-size: 11px; color: oklch(0.505 0.012 240)">Installierte Leistung</span>
+              <div style="border: 1px solid oklch(0.895 0.006 240); border-radius: 6px; height: 28px; display: flex; align-items: center; justify-content: flex-end; padding: 0 8px; background: oklch(1 0 0)"><span class="zif" style="font-weight: 600">50</span><span style="font-size: 11px; color: oklch(0.505 0.012 240); margin-left: 5px">MW</span></div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 3px">
+              <span style="font-size: 11px; color: oklch(0.505 0.012 240)">Speicherkapazität</span>
+              <div style="border: 1px solid oklch(0.895 0.006 240); border-radius: 6px; height: 28px; display: flex; align-items: center; justify-content: flex-end; padding: 0 8px; background: oklch(1 0 0)"><span class="zif" style="font-weight: 600">100</span><span style="font-size: 11px; color: oklch(0.505 0.012 240); margin-left: 5px">MWh</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <div class="marke" style="color: oklch(0.5 0.088 216)">neu</div>
+          <div class="buehne" style="justify-content: center; min-height: 92px">
+            <div style="font-size: 15px; line-height: 1.6">
+              <span style="color: oklch(0.505 0.012 240)">Batteriespeicher mit</span>
+              <span class="zif" style="font-weight: 600; border-bottom: 1px dashed oklch(0.505 0.012 240)">50</span>
+              <span style="color: oklch(0.505 0.012 240)">MW und</span>
+              <span class="zif" style="font-weight: 600; border-bottom: 1px dashed oklch(0.5 0.088 216); background: oklch(0.93 0.024 216); padding: 1px 3px">100</span>
+              <span style="color: oklch(0.505 0.012 240)">MWh</span>
+            </div>
+            <div style="font-size: 11px; color: oklch(0.505 0.012 240)">Der Satz ist die Eingabe. Anklicken, tippen, fertig.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="karte">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <div class="kt">2 &nbsp;Beleg statt Behauptung</div>
+        <div class="ks">Macht aus einer ausgelesenen Zahl eine überprüfbare Zahl</div>
+      </div>
+      <div class="buehne" style="gap: 9px">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+          <span style="display: flex; align-items: center; gap: 8px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="oklch(0.52 0.098 158)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+            <span style="color: oklch(0.505 0.012 240)">Garantierte Leistung</span>
+          </span>
+          <span class="zif" style="font-weight: 600; border-bottom: 1px dashed oklch(0.505 0.012 240)">15 MW von 50 MW</span>
+        </div>
+        <div style="font-size: 11px; color: oklch(0.505 0.012 240); border-left: 2px solid oklch(0.905 0.005 240); padding-left: 8px">„... stehen Ihnen mindestens 15 MW dauerhaft zur Verfügung ..." Seite 3, Ziffer 4.3</div>
+        <div style="font-size: 11px; color: oklch(0.505 0.012 240)">Ohne Fundstelle bleibt jede automatische Auslesung eine Behauptung. Mit ihr wird das Prüfen zum Überfliegen.</div>
+      </div>
+    </div>
+
+    <div class="karte">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <div class="kt">3 &nbsp;Diagramm als Regler</div>
+        <div class="ks">Ersetzt den Regler „Garantierte Leistung während der Kürzung"</div>
+      </div>
+      <div class="buehne" style="gap: 8px">
+        <svg width="100%" height="104" viewBox="0 0 480 104" preserveAspectRatio="none">
+          <path d="M0 16 L58 16 L62 58 L74 88 L480 96 L480 104 L0 104 Z" fill="oklch(0.5 0.088 216)" fill-opacity="0.9"></path>
+          <path d="M0 8 L58 8 L58 16 L0 16 Z" fill="oklch(0.6 0.144 42)" fill-opacity="0.9"></path>
+          <line x1="0" y1="16" x2="480" y2="16" stroke="oklch(0.145 0 0)" stroke-width="1.5" stroke-dasharray="5 3"></line>
+          <circle cx="240" cy="16" r="7" fill="oklch(1 0 0)" stroke="oklch(0.145 0 0)" stroke-width="1.5"></circle>
+          <path d="M236 13 L240 9 L244 13 M236 19 L240 23 L244 19" stroke="oklch(0.145 0 0)" stroke-width="1.3" fill="none" stroke-linecap="round"></path>
+        </svg>
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+          <span style="font-size: 11px; color: oklch(0.505 0.012 240)">Grenze ziehen, die Fläche darüber ist der Verlust</span>
+          <span class="zif" style="font-weight: 600">15 MW, 903 MWh im Jahr</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="karte">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <div class="kt">4 &nbsp;Eine Frage statt eines Abschnitts</div>
+        <div class="ks">Ersetzt den Abschnitt Zugangsprinzip mit drei Bedienelementen</div>
+      </div>
+      <div class="buehne" style="gap: 10px">
+        <div style="font-size: 15px; font-weight: 600; text-wrap: pretty">Wie viele flexible Anschlüsse hängen am selben Netzknoten, und an welcher Stelle steht ihr?</div>
+        <div style="display: flex; gap: 7px; flex-wrap: wrap">
+          <div style="border: 1px solid oklch(0.905 0.005 240); border-radius: 999px; padding: 5px 12px; background: oklch(1 0 0)">Wir waren die Ersten</div>
+          <div style="border: 1px solid oklch(0.5 0.088 216); background: oklch(0.93 0.024 216); border-radius: 999px; padding: 5px 12px; font-weight: 600">Mittendrin</div>
+          <div style="border: 1px solid oklch(0.905 0.005 240); border-radius: 999px; padding: 5px 12px; background: oklch(1 0 0)">Wir sind die Letzten</div>
+          <div style="border: 1px solid oklch(0.905 0.005 240); border-radius: 999px; padding: 5px 12px; background: oklch(1 0 0); color: oklch(0.505 0.012 240)">Weiss ich nicht</div>
+        </div>
+        <div style="font-size: 11px; color: oklch(0.505 0.012 240)">„Weiss ich nicht" ist eine gültige Antwort. Sie setzt den Marktüblichkeitswert und schreibt die Frage auf das Faktenblatt.</div>
+      </div>
+    </div>
+
+    <div class="karte">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <div class="kt">5 &nbsp;Vorbelegt und eingeklappt</div>
+        <div class="ks">Ersetzt 17 dauerhaft sichtbare Felder im Annahmenblock</div>
+      </div>
+      <div class="buehne" style="gap: 9px">
+        <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; background: oklch(1 0 0); border: 1px solid oklch(0.905 0.005 240); border-radius: 6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="oklch(0.5 0.088 216)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0"><path d="m9 18 6-6-6-6"></path></svg>
+          <span style="flex-grow: 1"><span class="zif" style="font-weight: 600">29 Annahmen</span> vorbelegt</span>
+          <span style="font-size: 11px; color: oklch(0.505 0.012 240)">Zins 7,0 %, Investition 120 Tsd je MW, Wirkungsgrad 86 %</span>
+        </div>
+        <div style="font-size: 11px; color: oklch(0.505 0.012 240); text-wrap: pretty">Sichtbar bleibt, dass es sie gibt und womit gerechnet wird. Wer widersprechen will, klappt auf. Wer nicht, wird nicht aufgehalten.</div>
+        <div style="display: flex; align-items: center; gap: 7px; font-size: 11px; color: oklch(0.66 0.125 76)">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.66 0.125 76); flex-shrink: 0"></span>
+          <span style="color: oklch(0.505 0.012 240)">Weicht eine Annahme stark vom Üblichen ab, meldet sie sich von selbst</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="karte">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <div class="kt">6 &nbsp;Die Lücke wird zum Ausgang</div>
+        <div class="ks">Ersetzt vier Felder, für die es keine Antwort gibt</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <div class="marke" style="color: oklch(0.6 0.144 42)">heute</div>
+          <div class="buehne" style="justify-content: center; min-height: 82px; gap: 4px">
+            <span style="font-size: 11px; color: oklch(0.505 0.012 240)">Engpasshäufigkeit</span>
+            <div style="height: 4px; border-radius: 2px; background: oklch(0.968 0.003 240)"><div style="width: 22%; height: 100%; border-radius: 2px; background: oklch(0.5 0.088 216)"></div></div>
+            <span style="font-size: 11px; color: oklch(0.6 0.144 42)">Der Nutzer rät und erfährt es nie</span>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <div class="marke" style="color: oklch(0.5 0.088 216)">neu</div>
+          <div class="buehne" style="justify-content: center; min-height: 82px; gap: 5px">
+            <span style="font-weight: 600; text-wrap: pretty">In wie vielen Stunden war der Netzknoten zuletzt überlastet?</span>
+            <span style="font-size: 11px; color: oklch(0.5 0.088 216)">geht als Frage 1 von 2 aufs Faktenblatt</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
