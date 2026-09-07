@@ -54,12 +54,12 @@ export function engpasstiefe(
   }
 
   // volldynamisch: synthetisches Engpassprofil des Netzknotens.
-  const anteil = Math.min(0.6, Math.max(0, (angebot.engpassHäufigkeitProzent * stress) / 100));
+  const anteil = Math.min(0.6, Math.max(0, (angebot.engpassHaeufigkeitProzent * stress) / 100));
   const anzahl = Math.round(anteil * STUNDEN);
   if (anzahl === 0) return aus;
 
   const k = Math.min(1, Math.max(0, angebot.engpassKorrelation));
-  const zufall = rauschen(Math.round(angebot.engpassHäufigkeitProzent * 1000) + jahr * 31 + 7);
+  const zufall = rauschen(Math.round(angebot.engpassHaeufigkeitProzent * 1000) + jahr * 31 + 7);
   const zufallsreihe = new Float32Array(STUNDEN);
   for (let h = 0; h < STUNDEN; h++) zufallsreihe[h] = zufall();
 

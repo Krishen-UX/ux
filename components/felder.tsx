@@ -94,13 +94,20 @@ function Beschriftung({
   wert?: ReactNode;
   herkunft?: Herkunft;
 }) {
+  // Ohne Beschriftung und ohne Wert bleibt nichts zu zeigen. Das kommt vor,
+  // wenn Feld und Wert schon in der Kopfzeile einer Prüfkarte stehen.
+  if (!text && wert === undefined) return null;
   return (
     <div className="flex items-baseline justify-between gap-2">
-      <span className="flex items-center gap-1 text-muted-foreground">
-        <HerkunftsPunkt herkunft={herkunft} />
-        {text}
-        {hinweis ? <Hinweis text={hinweis} /> : null}
-      </span>
+      {text ? (
+        <span className="flex items-center gap-1 text-muted-foreground">
+          <HerkunftsPunkt herkunft={herkunft} />
+          {text}
+          {hinweis ? <Hinweis text={hinweis} /> : null}
+        </span>
+      ) : (
+        <span />
+      )}
       {wert !== undefined ? (
         <span className="ziffern font-medium tabular-nums">{wert}</span>
       ) : null}

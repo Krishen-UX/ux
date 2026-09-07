@@ -146,7 +146,7 @@ export function Faktenblatt({
           {angebot.archetyp === "volldynamisch" ? (
             <Zeile
               k="Engpassannahme"
-              v={`${fmtProzent(angebot.engpassHäufigkeitProzent, 1)} der Stunden, Kopplung ${Math.round(angebot.engpassKorrelation * 100)} Prozent`}
+              v={`${fmtProzent(angebot.engpassHaeufigkeitProzent, 1)} der Stunden, Kopplung ${Math.round(angebot.engpassKorrelation * 100)} Prozent`}
             />
           ) : null}
           <Zeile

@@ -69,7 +69,7 @@ export const VARIANTEN: Variante[] = [
     },
   },
   {
-    schluessel: "auslöser",
+    schluessel: "ausloeser",
     parameter: "Auslöser der Kürzung",
     aenderung: "Schwelle zehn Punkte höher",
     verhandlungspunkt:
@@ -80,14 +80,14 @@ export const VARIANTEN: Variante[] = [
     },
   },
   {
-    schluessel: "häufigkeit",
+    schluessel: "haeufigkeit",
     parameter: "Angenommene Engpasshäufigkeit",
     aenderung: "drei Punkte niedriger",
     verhandlungspunkt:
       "Engpassprognose des Netzbetreibers offenlegen lassen und eine Obergrenze der Kürzungsstunden vereinbaren.",
     greift: (a) => a.archetyp === "volldynamisch",
     anwenden: (a) => {
-      a.engpassHäufigkeitProzent = Math.max(0, a.engpassHäufigkeitProzent - 3);
+      a.engpassHaeufigkeitProzent = Math.max(0, a.engpassHaeufigkeitProzent - 3);
     },
   },
   {
@@ -118,7 +118,7 @@ export const VARIANTEN: Variante[] = [
     },
   },
   {
-    schluessel: "entschädigung",
+    schluessel: "entschaedigung",
     parameter: "Entschädigung",
     aenderung: "40 Euro je abgeregelter MWh",
     verhandlungspunkt:

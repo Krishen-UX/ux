@@ -2,12 +2,6 @@
 
 import type { Annahmen, Projekt } from "@/lib/typen";
 import { QUELLEN } from "@/lib/sim/profile";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Auswahl, Regler, Schalter, Zahlenfeld } from "./felder";
 import { GLOSSAR } from "@/lib/glossar";
 
@@ -17,29 +11,62 @@ import { GLOSSAR } from "@/lib/glossar";
  */
 export function AnnahmenBlock({
   projekt,
+  setProjekt,
   annahmen,
   setAnnahmen,
   hinweise,
 }: {
   projekt: Projekt;
+  setProjekt: (p: Projekt) => void;
   annahmen: Annahmen;
   setAnnahmen: (a: Annahmen) => void;
   hinweise: string[];
 }) {
   const aendern = <K extends keyof Annahmen>(feld: K, wert: Annahmen[K]) =>
     setAnnahmen({ ...annahmen, [feld]: wert });
+  const projektAendern = <K extends keyof Projekt>(feld: K, wert: Projekt[K]) =>
+    setProjekt({ ...projekt, [feld]: wert });
   const istLast = projekt.typ === "industrielle_last";
 
   return (
-    <Accordion className="w-full">
-      <AccordionItem value="annahmen">
-        <AccordionTrigger className="text-[11px] font-semibold tracking-wide uppercase">
-          Annahmen und Modellgrenzen
-        </AccordionTrigger>
-        <AccordionContent>
+    <div>
           <div className="grid gap-5 pt-1 md:grid-cols-3">
             <section className="space-y-3">
-              <h4 className="text-[11px] font-semibold text-muted-foreground">Kapital</h4>
+              <h4 className="text-[11px] font-semibold text-muted-foreground">Projekt und Kapital</h4>
+              <Zahlenfeld
+                label="Netzanschlussleistung"
+                einheit="MW"
+                wert={projekt.netzanschlussLeistungMW}
+                setzen={(n) => projektAendern("netzanschlussLeistungMW", Math.max(0.1, n))}
+                hinweis="Die Leistung, die bei einem festen Anschluss dauerhaft zur Verfügung stünde. Referenz für die Bewertung des FCA."
+              />
+              <Zahlenfeld
+                label="Investition je MW"
+                einheit="Tsd EUR"
+                schritt={10_000}
+                teiler={1_000}
+                wert={projekt.capexProMW}
+                setzen={(n) => projektAendern("capexProMW", Math.max(0, n))}
+                hinweis={GLOSSAR.investition}
+              />
+              {projekt.typ === "bess" ? (
+                <Zahlenfeld
+                  label="Investition je MWh"
+                  einheit="Tsd EUR"
+                  schritt={5_000}
+                  teiler={1_000}
+                  wert={projekt.capexProMWhSpeicher ?? 0}
+                  setzen={(n) => projektAendern("capexProMWhSpeicher", Math.max(0, n))}
+                  hinweis="Energieanteil der Investition, also die Batteriezellen."
+                />
+              ) : null}
+              <Zahlenfeld
+                label="Betriebsdauer"
+                einheit="Jahre"
+                wert={projekt.betriebsjahre}
+                setzen={(n) => projektAendern("betriebsjahre", Math.max(1, Math.round(n)))}
+                hinweis={GLOSSAR.betriebsdauer}
+              />
               <Zahlenfeld
                 label="Kalkulationszins"
                 hinweis={GLOSSAR.kalkulationszins}
@@ -239,8 +266,6 @@ export function AnnahmenBlock({
               Erzeugung parametrisiert. Die Ergebnisse ersetzen keine Netzberechnung.
             </p>
           </div>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    </div>
   );
 }

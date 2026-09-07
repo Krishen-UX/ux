@@ -32,13 +32,40 @@ node scripts/build-lastprofile.mjs                  # Lastprofile Industrie
 Ein Projekt, Deutschland, Mittel- und Hochspannung, drei Anlagentypen
 (Batteriespeicher, PV Freifläche, industrielle Last) und vier FCA-Archetypen.
 
-1. **Projekt** Anlagentyp und acht Felder, daneben sofort das Jahresprofil.
-2. **FCA-Angebot** Archetyp und seine Parameter. Jede Änderung rechnet ohne Knopf
-   durch, ein Reglerzug liegt bei rund 55 Millisekunden.
-3. **Ergebnis** Empfehlung, drei Szenarien als Kapitalwert, Zeitreihen,
-   Sensitivität der Vertragsparameter, offener Annahmenblock.
-4. **Faktenblatt** eine Seite über die Druckansicht des Browsers, als Anlage für
-   die Rückmeldung an den Netzbetreiber.
+Drei Schritte, weil der Engpass nicht die Rechnung ist, sondern die Übertragung
+eines Dokuments, das der Anschlussbegehrende bereits hat.
+
+1. **Start** Anlagentyp, Leistung und Ort, dazu das Angebotsschreiben. Drei
+   Angaben statt zwölf, alles Weitere ist vorbelegt.
+2. **Prüfen** Die ausgelesenen Angaben stehen als Liste da, jede mit der Stelle
+   im Schreiben, aus der sie stammt. Bestätigen geht durch Nichtstun, oben liegt
+   nur, was wirklich jemanden braucht. Jede Korrektur rechnet ohne Knopf durch,
+   ein Reglerzug liegt bei rund 55 Millisekunden.
+3. **Ergebnis** Empfehlung, drei Szenarien als Kapitalwert, die
+   Verhandlungsagenda direkt darunter, offene Punkte als Fragenkatalog.
+   Diagramme und Annahmen liegen eingeklappt darunter.
+
+Faktenblatt und der Entwurf der Rückmeldung an den Netzbetreiber sind Ausgaben
+des Ergebnisses, keine eigenen Schritte.
+
+### Das Auslesen ist simuliert
+
+Der Prototyp liest kein Dokument. Die Dateiauswahl enthält vier erfundene
+Angebotsschreiben, je eines für einen Archetyp, und die Fundstellen sind
+hinterlegt. Die Werte kommen aus dem laufenden Zustand, korrigiert der Nutzer
+eine Angabe, ändert sich der Wert und die Fundstelle bleibt. Das genügt, um die
+Interaktion zu prüfen, und steht in der Oberfläche an drei Stellen dabei.
+
+Wer ohne Schreiben startet, bekommt dieselbe Liste ohne Zitate. Die Werte sind
+dann markttypisch vorbelegt statt belegt.
+
+### Was das gebracht hat
+
+| | vorher | jetzt |
+|---|---|---|
+| Bedienelemente bis zum Ergebnis | 31 | 3 Angaben und 4 Korrekturen |
+| Schritte | 4 | 3 |
+| Angaben ohne Quelle im Angebot | 4, als Formularfeld getarnt | 4, als Frage an den Netzbetreiber |
 
 ### Erklärbarkeit
 

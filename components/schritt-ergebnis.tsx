@@ -1,140 +1,116 @@
 "use client";
 
+import { useState } from "react";
+import { Mail, Printer } from "lucide-react";
 import type { Alternative, Annahmen, Auswertung, FcaAngebot, Projekt } from "@/lib/typen";
-import { fmtEur, fmtMWh, fmtProzent } from "@/lib/format";
+import { fmtEur, fmtJahre, fmtMWh, fmtProzent } from "@/lib/format";
 import { ergebnisgroesse, jahresergebnis } from "@/lib/kennzahlen";
+import { datenluecken } from "@/lib/datenluecken";
+import { GLOSSAR } from "@/lib/glossar";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { EmpfehlungsBanner } from "./empfehlung";
-import { SzenarioKarten } from "./szenario-karten";
 import { AnnahmenBlock } from "./annahmen-block";
 import { DauerlinienDiagramm } from "./diagramme/dauerlinie";
 import { WochenDiagramm } from "./diagramme/woche";
 import { BarwertDiagramm } from "./diagramme/barwert";
 import { SensitivitaetsBalken } from "./diagramme/sensitivitaet";
+import { Rueckfrage } from "./rueckfrage";
 import { Kennzahl } from "./felder";
 import { Karte } from "./karte";
-import { SchrittKopf } from "./schritt-kopf";
-import { GLOSSAR } from "@/lib/glossar";
-import { datenluecken } from "@/lib/datenluecken";
+import { cn } from "@/lib/utils";
+
+const SZENARIO_HINWEIS = {
+  A: GLOSSAR.szenarioA,
+  B: GLOSSAR.szenarioB,
+  C: GLOSSAR.szenarioC,
+} as const;
 
 export function SchrittErgebnis({
   projekt,
+  setProjekt,
   angebot,
   annahmen,
   setAnnahmen,
   alternative,
   auswertung,
+  zumFaktenblatt,
 }: {
   projekt: Projekt;
+  setProjekt: (p: Projekt) => void;
   angebot: FcaAngebot;
   annahmen: Annahmen;
   setAnnahmen: (a: Annahmen) => void;
   alternative: Alternative;
   auswertung: Auswertung;
+  zumFaktenblatt: () => void;
 }) {
+  const [zeigeRueckfrage, setZeigeRueckfrage] = useState(false);
   const p50 = auswertung.p50Lauf;
   const p90 = auswertung.p90Lauf;
   const groesse = ergebnisgroesse(projekt);
+  const luecken = datenluecken(angebot, alternative, projekt);
   const abstand =
     ((jahresergebnis(p50) - jahresergebnis(p90)) / Math.max(1, Math.abs(jahresergebnis(p50)))) * 100;
-  const fcaSzenario =
-    auswertung.szenarien.C.npvEur >= auswertung.szenarien.A.npvEur ? "C" : "A";
-
-  const luecken = datenluecken(angebot, alternative, projekt);
+  const fcaSzenario = auswertung.szenarien.C.npvEur >= auswertung.szenarien.A.npvEur ? "C" : "A";
 
   return (
     <div className="space-y-4">
-      <SchrittKopf
-        nummer={3}
-        titel="Ergebnis"
-        was={
-          <>
-            Drei Wege nebeneinander, jeweils als Kapitalwert über die Betriebsdauer. Darunter, welche
-            Vertragsparameter den Kapitalwert am stärksten bewegen. Das ist die Reihenfolge, in der
-            du mit dem Netzbetreiber sprechen solltest.
-          </>
-        }
-        gebraucht={
-          <>
-            Alle Annahmen stehen unten offen und sind änderbar. Wenn eine Zahl nicht zu deiner
-            Kalkulation passt, ändere sie dort, statt dem Ergebnis zu misstrauen.
-          </>
-        }
+      <EmpfehlungsBanner
+        auswertung={auswertung}
+        projekt={projekt}
+        geschaetzt={luecken.length}
       />
-      <EmpfehlungsBanner auswertung={auswertung} projekt={projekt} />
 
-      <SzenarioKarten auswertung={auswertung} projekt={projekt} />
-
-      <div className="grid gap-3 lg:grid-cols-3">
-        <Karte className="lg:col-span-2">
-          <div className="grid gap-4 md:grid-cols-2">
-            <DauerlinienDiagramm lauf={p50} projekt={projekt} hoehe={200} />
-            <WochenDiagramm lauf={p50} projekt={projekt} hoehe={200} />
-          </div>
-        </Karte>
-
-        <Karte>
-          <BarwertDiagramm
-            szenarien={auswertung.szenarien}
-            diskontsatzProzent={annahmen.diskontsatzProzent}
-            hoehe={200}
-          />
-          <p className="mt-1 text-[11px] text-pretty text-muted-foreground">
-            Der Schnittpunkt mit der Nulllinie ist die diskontierte Amortisation. Szenario B startet
-            später und fällt deshalb zuerst zurück.
-          </p>
-        </Karte>
+      <div className="grid gap-2.5 md:grid-cols-3">
+        {(["A", "B", "C"] as const).map((s) => {
+          const z = auswertung.szenarien[s];
+          const gewinnt = auswertung.gewinner === s;
+          return (
+            <article
+              key={s}
+              className={cn(
+                "flex flex-col gap-1 rounded-md border p-3",
+                gewinnt ? "border-akzent bg-akzent-schwach/40" : "border-border",
+                !z.verfuegbar && "opacity-55",
+              )}
+              title={SZENARIO_HINWEIS[s]}
+            >
+              <header className="flex items-baseline gap-2">
+                <span
+                  className={cn(
+                    "ziffern flex size-[17px] items-center justify-center rounded-[3px] text-[10px] font-bold",
+                    gewinnt ? "bg-akzent text-primary-foreground" : "bg-muted text-muted-foreground",
+                  )}
+                >
+                  {s}
+                </span>
+                <h4 className="font-semibold">{z.titel}</h4>
+              </header>
+              <div
+                className={cn(
+                  "ziffern text-[19px] font-semibold tabular-nums",
+                  gewinnt && "text-akzent",
+                )}
+              >
+                {z.verfuegbar ? fmtEur(z.npvEur) : "nicht bewertbar"}
+              </div>
+              <div className="ziffern text-[11px] text-muted-foreground">
+                {z.verfuegbar
+                  ? `P90 ${fmtEur(z.npvP90Eur)}, Amortisation ${fmtJahre(z.amortisationJahre)}`
+                  : (z.hinweis ?? "")}
+              </div>
+            </article>
+          );
+        })}
       </div>
 
-      <Karte titel="Bandbreite über die Wetterjahre" hinweis={GLOSSAR.bandbreite}>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
-          <Kennzahl
-            label={`${groesse.kurz} P50, mittleres Jahr`}
-            wert={groesse.formatiere(groesse.wert(p50))}
-            zusatz={`Wetterjahr ${p50.jahr}`}
-            ton="akzent"
-            gross
-            hinweis={GLOSSAR.p50}
-          />
-          <Kennzahl
-            label={`${groesse.kurz} P90, Näherung`}
-            wert={groesse.formatiere(groesse.wert(p90))}
-            zusatz={`Wetterjahr ${p90.jahr}, Engpass mal ${annahmen.engpassStressfaktorP90.toFixed(1)}`}
-            gross
-            hinweis={GLOSSAR.p90}
-          />
-          <Kennzahl
-            label="Abstand P50 zu P90"
-            hinweis="Wie viel Jahresergebnis zwischen mittlerem und schlechtem Fall liegt. Ein grosser Abstand heisst, das Ergebnis hängt stark am Wetter und am Netzzustand."
-            wert={fmtProzent(abstand)}
-            zusatz="weniger Jahresergebnis im schlechten Fall"
-            ton="verlust"
-            gross
-          />
-          <Kennzahl
-            label="Abregelung P50"
-            hinweis={GLOSSAR.abregelung}
-            wert={fmtProzent(p50.abregelungProzent)}
-            zusatz={`${fmtMWh(p50.abregelungMWh)} im Jahr`}
-            gross
-          />
-          <Kennzahl
-            label="Abregelung P90"
-            hinweis="Abregelung im schwächsten Wetterjahr mit verschärftem Engpass. Der Wert, mit dem eine Bank rechnet."
-            wert={fmtProzent(p90.abregelungProzent)}
-            zusatz={`${fmtMWh(p90.abregelungMWh)} im Jahr`}
-            ton="verlust"
-            gross
-          />
-        </div>
-        <p className="mt-2 text-[11px] text-pretty text-muted-foreground">
-          P90 ist hier kein Monte Carlo, sondern das schwächste der drei hinterlegten Wetterjahre
-          mit verschärftem Engpassprofil. Bewusst vereinfacht, der Stressfaktor steht im
-          Annahmenblock.
-        </p>
-      </Karte>
-
       <Karte
-        titel="Verhandlungsagenda"
+        titel="Darüber solltest du sprechen"
         hinweis={GLOSSAR.verhandlungsagenda}
         aktion={
           <span className="text-[11px] font-normal text-muted-foreground normal-case">
@@ -142,15 +118,7 @@ export function SchrittErgebnis({
           </span>
         }
       >
-        <SensitivitaetsBalken posten={auswertung.sensitivitaet} anzahl={6} />
-        {auswertung.sensitivitaet.length > 0 ? (
-          <p className="mt-3 border-t border-border pt-2 text-[11px] text-pretty text-muted-foreground">
-            Jede Zeile ändert genau einen Vertragsparameter, alles andere bleibt gleich. Die oberste
-            Zeile ist der teuerste Punkt des Angebots, also der erste Punkt für das Gespräch mit
-            dem Netzbetreiber. Baukostenzuschuss FCA aktuell {fmtEur(alternative.fcaBaukostenzuschussEur)},
-            Archetyp {angebot.archetyp.replace(/_/g, " ")}.
-          </p>
-        ) : null}
+        <SensitivitaetsBalken posten={auswertung.sensitivitaet} anzahl={5} />
       </Karte>
 
       {luecken.length > 0 ? (
@@ -159,11 +127,12 @@ export function SchrittErgebnis({
           hinweis={GLOSSAR.offenePunkte}
           aktion={
             <span className="text-[11px] font-normal text-muted-foreground normal-case">
-              {luecken.length} {luecken.length === 1 ? "Angabe" : "Angaben"} beruhen auf Schätzung
+              {luecken.length} {luecken.length === 1 ? "Angabe beruht" : "Angaben beruhen"} auf
+              Schätzung
             </span>
           }
         >
-          <ol className="space-y-2.5">
+          <ol className="space-y-2">
             {luecken.map((l, i) => (
               <li key={l.schluessel} className="flex gap-2">
                 <span className="ziffern mt-0.5 w-4 shrink-0 text-[11px] text-muted-foreground">
@@ -171,27 +140,116 @@ export function SchrittErgebnis({
                 </span>
                 <div className="min-w-0 space-y-0.5">
                   <div className="font-medium">{l.angabe}</div>
-                  <p className="text-pretty">{l.frage}</p>
-                  <p className="text-[11px] text-pretty text-muted-foreground">{l.wirkung}</p>
+                  <p className="text-pretty text-muted-foreground">{l.frage}</p>
                 </div>
               </li>
             ))}
           </ol>
-          <p className="mt-3 border-t border-border pt-2 text-[11px] text-pretty text-muted-foreground">
-            Diese Angaben stehen in der Regel nicht im Angebotsschreiben. Solange sie geschätzt sind,
-            ist die Bandbreite zwischen P50 und P90 die belastbarere Aussage als der einzelne
-            Kapitalwert. Die Liste steht auch auf dem Faktenblatt und lässt sich als Fragenkatalog
-            zurückgeben.
-          </p>
         </Karte>
       ) : null}
 
-      <AnnahmenBlock
-        projekt={projekt}
-        annahmen={annahmen}
-        setAnnahmen={setAnnahmen}
-        hinweise={auswertung.hinweise}
-      />
+      <div className="flex flex-wrap items-center gap-2.5 border-t border-border pt-4">
+        <button
+          type="button"
+          onClick={zumFaktenblatt}
+          className="flex items-center gap-2 rounded-md bg-akzent px-4 py-2 font-semibold text-primary-foreground hover:bg-accent-foreground"
+        >
+          <Printer className="size-3.5" />
+          Faktenblatt
+        </button>
+        <button
+          type="button"
+          onClick={() => setZeigeRueckfrage((z) => !z)}
+          className={cn(
+            "flex items-center gap-2 rounded-md border border-input px-4 py-2 font-semibold hover:bg-muted",
+            zeigeRueckfrage && "bg-muted",
+          )}
+        >
+          <Mail className="size-3.5" />
+          Rückfrage an den Netzbetreiber
+        </button>
+      </div>
+
+      {zeigeRueckfrage ? (
+        <Rueckfrage
+          projekt={projekt}
+          angebot={angebot}
+          alternative={alternative}
+          luecken={luecken}
+          posten={auswertung.sensitivitaet}
+        />
+      ) : null}
+
+      <Accordion className="w-full">
+        <AccordionItem value="details">
+          <AccordionTrigger className="text-[11px] font-semibold tracking-wide uppercase">
+            Rechenweg und Diagramme
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="grid gap-4 pt-1 lg:grid-cols-3">
+              <DauerlinienDiagramm lauf={p50} projekt={projekt} hoehe={190} />
+              <WochenDiagramm lauf={p50} projekt={projekt} hoehe={190} />
+              <div>
+                <BarwertDiagramm
+                  szenarien={auswertung.szenarien}
+                  diskontsatzProzent={annahmen.diskontsatzProzent}
+                  hoehe={190}
+                />
+              </div>
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-4 border-t border-border pt-3 sm:grid-cols-5">
+              <Kennzahl
+                label={`${groesse.kurz} P50`}
+                wert={groesse.formatiere(groesse.wert(p50))}
+                zusatz={`Wetterjahr ${p50.jahr}`}
+                ton="akzent"
+                hinweis={GLOSSAR.p50}
+              />
+              <Kennzahl
+                label={`${groesse.kurz} P90`}
+                wert={groesse.formatiere(groesse.wert(p90))}
+                zusatz={`Wetterjahr ${p90.jahr}, Engpass mal ${annahmen.engpassStressfaktorP90.toFixed(1)}`}
+                hinweis={GLOSSAR.p90}
+              />
+              <Kennzahl
+                label="Abstand P50 zu P90"
+                wert={fmtProzent(abstand)}
+                zusatz="weniger Jahresergebnis im schlechten Fall"
+                ton="verlust"
+                hinweis={GLOSSAR.bandbreite}
+              />
+              <Kennzahl
+                label="Abregelung P50"
+                wert={fmtProzent(p50.abregelungProzent)}
+                zusatz={`${fmtMWh(p50.abregelungMWh)} im Jahr`}
+                hinweis={GLOSSAR.abregelung}
+              />
+              <Kennzahl
+                label="Abregelung P90"
+                wert={fmtProzent(p90.abregelungProzent)}
+                zusatz={`${fmtMWh(p90.abregelungMWh)} im Jahr`}
+                ton="verlust"
+                hinweis="Abregelung im schwächsten Wetterjahr mit verschärftem Engpass."
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="annahmen">
+          <AccordionTrigger className="text-[11px] font-semibold tracking-wide uppercase">
+            Annahmen und Modellgrenzen
+          </AccordionTrigger>
+          <AccordionContent>
+            <AnnahmenBlock
+              projekt={projekt}
+              setProjekt={setProjekt}
+              annahmen={annahmen}
+              setAnnahmen={setAnnahmen}
+              hinweise={auswertung.hinweise}
+            />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 }

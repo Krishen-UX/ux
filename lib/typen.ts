@@ -63,7 +63,7 @@ export interface FcaAngebot {
   /** Auslöseschwelle als Anteil der regionalen Spitzenerzeugung, 0 bis 1. */
   schwellwert: number;
   /** Nur volldynamisch: Anteil der Jahresstunden mit Engpass. */
-  engpassHäufigkeitProzent: number;
+  engpassHaeufigkeitProzent: number;
   /** Nur volldynamisch: Kopplung des Engpasses an die regionale Erzeugung, 0 bis 1. */
   engpassKorrelation: number;
   zugangsprinzip: Zugangsprinzip;

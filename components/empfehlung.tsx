@@ -66,9 +66,12 @@ const TON: Record<Ampel, { rand: string; flaeche: string; punkt: string; label: 
 export function EmpfehlungsBanner({
   auswertung,
   projekt,
+  geschaetzt = 0,
 }: {
   auswertung: Auswertung;
   projekt: Projekt;
+  /** Anzahl der Angaben, die nicht aus dem Angebot stammen. */
+  geschaetzt?: number;
 }) {
   const e = empfehlung(auswertung, projekt);
   const ton = TON[e.ampel];
@@ -89,9 +92,17 @@ export function EmpfehlungsBanner({
           Szenario {auswertung.gewinner}, {gewinner.titel}
         </span>
       </div>
-      <p className="mt-1.5 max-w-4xl text-lg leading-tight font-semibold text-pretty sm:text-xl">
-        {e.satz}
-      </p>
+      <div className="mt-1.5 flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+        <p className="max-w-4xl text-lg leading-tight font-semibold text-pretty sm:text-xl">
+          {e.satz}
+        </p>
+        {geschaetzt > 0 ? (
+          <span className="ziffern flex shrink-0 items-center gap-2 rounded-full border border-mittel bg-background px-3 py-1 text-[11px] font-semibold">
+            <span className="size-[7px] shrink-0 rounded-full bg-mittel" />
+            {geschaetzt} {geschaetzt === 1 ? "Angabe" : "Angaben"} geschätzt
+          </span>
+        ) : null}
+      </div>
       <p className="mt-1.5 max-w-3xl text-pretty text-muted-foreground">{e.begruendung}</p>
     </section>
   );
