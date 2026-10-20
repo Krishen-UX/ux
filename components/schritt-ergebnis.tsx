@@ -42,7 +42,7 @@ export function SchrittErgebnis({
   const luecken = datenluecken(angebot, alternative, projekt);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-8">
       <SchrittKopf
         nummer={3}
         titel="Ergebnis"
@@ -64,9 +64,9 @@ export function SchrittErgebnis({
 
       <SzenarioKarten auswertung={auswertung} projekt={projekt} />
 
-      <div className="grid gap-3 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3">
         <Karte className="lg:col-span-2">
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-8 md:grid-cols-2">
             <DauerlinienDiagramm lauf={p50} projekt={projekt} hoehe={200} />
             <WochenDiagramm lauf={p50} projekt={projekt} hoehe={200} />
           </div>
@@ -78,7 +78,7 @@ export function SchrittErgebnis({
             diskontsatzProzent={annahmen.diskontsatzProzent}
             hoehe={200}
           />
-          <p className="mt-1 text-[11px] text-pretty text-muted-foreground">
+          <p className="mt-3 text-xs text-pretty text-helper">
             Der Schnittpunkt mit der Nulllinie ist die diskontierte Amortisation. Szenario B startet
             später und fällt deshalb zuerst zurück.
           </p>
@@ -86,7 +86,7 @@ export function SchrittErgebnis({
       </div>
 
       <Karte titel="Bandbreite über die Wetterjahre" hinweis={GLOSSAR.bandbreite}>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-5">
           <Kennzahl
             label={`${groesse.kurz} P50, mittleres Jahr`}
             wert={groesse.formatiere(groesse.wert(p50))}
@@ -126,7 +126,7 @@ export function SchrittErgebnis({
             gross
           />
         </div>
-        <p className="mt-2 text-[11px] text-pretty text-muted-foreground">
+        <p className="mt-6 text-xs text-pretty text-helper">
           P90 ist hier kein Monte Carlo, sondern das schwächste der drei hinterlegten Wetterjahre
           mit verschärftem Engpassprofil. Bewusst vereinfacht, der Stressfaktor steht im
           Annahmenblock.
@@ -137,14 +137,14 @@ export function SchrittErgebnis({
         titel="Verhandlungsagenda"
         hinweis={GLOSSAR.verhandlungsagenda}
         aktion={
-          <span className="text-[11px] font-normal text-muted-foreground normal-case">
+          <span className="text-xs text-muted-foreground">
             Wirkung auf den Kapitalwert von Szenario {fcaSzenario}
           </span>
         }
       >
         <SensitivitaetsBalken posten={auswertung.sensitivitaet} anzahl={6} />
         {auswertung.sensitivitaet.length > 0 ? (
-          <p className="mt-3 border-t border-border pt-2 text-[11px] text-pretty text-muted-foreground">
+          <p className="mt-6 border-t border-border-subtle pt-3 text-xs text-pretty text-helper">
             Jede Zeile ändert genau einen Vertragsparameter, alles andere bleibt gleich. Die oberste
             Zeile ist der teuerste Punkt des Angebots, also der erste Punkt für das Gespräch mit
             dem Netzbetreiber. Baukostenzuschuss FCA aktuell {fmtEur(alternative.fcaBaukostenzuschussEur)},
@@ -158,26 +158,26 @@ export function SchrittErgebnis({
           titel="Offene Punkte, die das Ergebnis tragen"
           hinweis={GLOSSAR.offenePunkte}
           aktion={
-            <span className="text-[11px] font-normal text-muted-foreground normal-case">
+            <span className="inline-flex h-6 items-center rounded-full bg-[#fcf4d6] px-2 text-xs text-[#684e00]">
               {luecken.length} {luecken.length === 1 ? "Angabe" : "Angaben"} beruhen auf Schätzung
             </span>
           }
         >
-          <ol className="space-y-2.5">
+          <ol className="divide-y divide-border-subtle">
             {luecken.map((l, i) => (
-              <li key={l.schluessel} className="flex gap-2">
-                <span className="ziffern mt-0.5 w-4 shrink-0 text-[11px] text-muted-foreground">
+              <li key={l.schluessel} className="flex gap-4 py-4 first:pt-0">
+                <span className="ziffern w-5 shrink-0 text-sm text-muted-foreground">
                   {i + 1}
                 </span>
-                <div className="min-w-0 space-y-0.5">
-                  <div className="font-medium">{l.angabe}</div>
+                <div className="min-w-0 space-y-1">
+                  <div className="font-semibold">{l.angabe}</div>
                   <p className="text-pretty">{l.frage}</p>
-                  <p className="text-[11px] text-pretty text-muted-foreground">{l.wirkung}</p>
+                  <p className="text-xs text-pretty text-helper">{l.wirkung}</p>
                 </div>
               </li>
             ))}
           </ol>
-          <p className="mt-3 border-t border-border pt-2 text-[11px] text-pretty text-muted-foreground">
+          <p className="mt-2 border-t border-border-subtle pt-3 text-xs text-pretty text-helper">
             Diese Angaben stehen in der Regel nicht im Angebotsschreiben. Solange sie geschätzt sind,
             ist die Bandbreite zwischen P50 und P90 die belastbarere Aussage als der einzelne
             Kapitalwert. Die Liste steht auch auf dem Faktenblatt und lässt sich als Fragenkatalog

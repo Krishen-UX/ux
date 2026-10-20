@@ -30,7 +30,7 @@ export function SensitivitaetsBalken({
   }
 
   return (
-    <ol className="space-y-2.5 print:space-y-1.5">
+    <ol className="space-y-4 print:space-y-1.5">
       {sichtbar.map((p, i) => {
         const positiv = p.deltaNpvEur >= 0;
         const breite = (Math.abs(p.deltaNpvEur) / spitze) * 100;
@@ -38,11 +38,11 @@ export function SensitivitaetsBalken({
           <li key={p.schluessel} className="seitenumbruch-vermeiden space-y-1">
             <div className="flex items-baseline justify-between gap-3">
               <span className="flex min-w-0 items-baseline gap-1.5">
-                <span className="ziffern w-4 shrink-0 text-[11px] text-muted-foreground">
+                <span className="ziffern w-4 shrink-0 text-xs text-muted-foreground">
                   {i + 1}
                 </span>
-                <span className="truncate font-medium">{p.parameter}</span>
-                <span className="shrink-0 truncate text-[11px] text-muted-foreground">
+                <span className="truncate">{p.parameter}</span>
+                <span className="shrink-0 truncate text-xs text-muted-foreground">
                   {p.aenderung}
                 </span>
               </span>
@@ -53,9 +53,9 @@ export function SensitivitaetsBalken({
                 {fmtEurVorzeichen(p.deltaNpvEur)}
               </span>
             </div>
-            <div className="ml-5.5 h-1.5 rounded-[2px] bg-muted">
+            <div className="ml-5.5 h-2 bg-layer-selected">
               <div
-                className="h-full rounded-[2px]"
+                className="h-full"
                 style={{
                   width: `${breite}%`,
                   background: positiv ? FARBEN.akzent : FARBEN.verlust,
@@ -63,7 +63,7 @@ export function SensitivitaetsBalken({
               />
             </div>
             {mitText ? (
-              <p className="ml-5.5 text-[11px] text-pretty text-muted-foreground print:text-[10px]">
+              <p className="ml-5.5 text-xs text-pretty text-helper print:text-[10px]">
                 {p.verhandlungspunkt}
               </p>
             ) : null}

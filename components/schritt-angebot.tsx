@@ -1,6 +1,6 @@
 "use client";
 
-import { TriangleAlert } from "lucide-react";
+import { WarningAltFilled } from "@carbon/icons-react";
 import type {
   Alternative,
   Annahmen,
@@ -10,7 +10,17 @@ import type {
 } from "@/lib/typen";
 import { ARCHETYP_TEXT } from "@/lib/sim/archetypen";
 import { fmtEur, fmtMW, fmtMWh, fmtProzent, fmtStunden } from "@/lib/format";
-import { Abschnitt, Auswahl, Begriff, Hinweis, Kennzahl, Regler, Schalter, Zahlenfeld } from "./felder";
+import {
+  Abschnitt,
+  Auswahl,
+  Begriff,
+  Hinweis,
+  Kennzahl,
+  Regler,
+  Schalter,
+  WahlKachel,
+  Zahlenfeld,
+} from "./felder";
 import { SchrittKopf } from "./schritt-kopf";
 import { luecke } from "@/lib/sim/szenarien";
 import { GLOSSAR } from "@/lib/glossar";
@@ -18,7 +28,6 @@ import { ZeitfensterEditor } from "./zeitfenster-editor";
 import { DauerlinienDiagramm } from "./diagramme/dauerlinie";
 import { WochenDiagramm } from "./diagramme/woche";
 import { Karte } from "./karte";
-import { cn } from "@/lib/utils";
 
 const ARCHETYPEN: FcaAngebot["archetyp"][] = [
   "statisch_kappung",
@@ -61,7 +70,7 @@ export function SchrittAngebot({
   const vertragsluecke = luecke(angebot, alternative);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-8">
       <SchrittKopf
         nummer={2}
         titel="FCA-Angebot"
@@ -80,32 +89,23 @@ export function SchrittAngebot({
           </>
         }
       />
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
-      <div className="space-y-5">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,440px)_minmax(0,1fr)]">
+      <div className="space-y-10">
         <Abschnitt titel="Archetyp des Angebots" hinweis={GLOSSAR.archetyp}>
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div role="radiogroup" aria-label="Archetyp" className="grid gap-2 sm:grid-cols-2">
             {ARCHETYPEN.map((a) => (
-              <button
+              <WahlKachel
                 key={a}
-                type="button"
-                onClick={() => aendern("archetyp", a)}
-                className={cn(
-                  "rounded-md border p-2 text-left transition-colors",
-                  angebot.archetyp === a
-                    ? "border-akzent bg-akzent-schwach"
-                    : "border-border hover:border-akzent/40 hover:bg-muted/60",
-                )}
-              >
-                <div className="font-semibold">{ARCHETYP_TEXT[a].titel}</div>
-                <div className="mt-0.5 text-[11px] text-pretty text-muted-foreground">
-                  {ARCHETYP_TEXT[a].kurz}
-                </div>
-              </button>
+                titel={ARCHETYP_TEXT[a].titel}
+                text={ARCHETYP_TEXT[a].kurz}
+                gewaehlt={angebot.archetyp === a}
+                waehlen={() => aendern("archetyp", a)}
+              />
             ))}
           </div>
           {text.hinweis ? (
-            <p className="flex gap-1.5 rounded-md bg-muted/70 p-2 text-[11px] text-pretty text-muted-foreground">
-              <TriangleAlert className="mt-px size-3.5 shrink-0 text-mittel" />
+            <p className="flex gap-3 border border-mittel/40 border-l-[3px] border-l-mittel bg-hinweis-mittel px-4 py-3 text-sm text-pretty">
+              <WarningAltFilled className="mt-px size-5 shrink-0 text-mittel" />
               {text.hinweis}
             </p>
           ) : null}
@@ -197,7 +197,7 @@ export function SchrittAngebot({
         </Abschnitt>
 
         <Abschnitt titel="Zugangsprinzip" hinweis={GLOSSAR.zugangsprinzip}>
-          <p className="text-[11px] text-pretty text-muted-foreground">
+          <p className="text-xs text-pretty text-helper">
             Bei <Begriff name="lifo">LIFO</Begriff> trägt die letzte Position fast die gesamte
             Kürzung, bei <Begriff name="proRata">pro rata</Begriff> tragen alle gleich viel. Das ist
             der grösste einzelne Hebel im Vertrag.
@@ -213,7 +213,7 @@ export function SchrittAngebot({
             ]}
           />
           {angebot.zugangsprinzip === "lifo" ? (
-            <div className="space-y-2.5 rounded-md border border-akzent/30 bg-akzent-schwach/50 p-2.5">
+            <div className="space-y-6 border-l-2 border-primary bg-card p-4">
               <Regler
                 label="Position in der Anschlussreihenfolge"
                 herkunft="schaetzung"
@@ -244,7 +244,7 @@ export function SchrittAngebot({
             </div>
           ) : null}
           {!dynamisch ? (
-            <p className="text-[11px] text-pretty text-muted-foreground">
+            <p className="text-xs text-pretty text-helper">
               Bei einer vertraglich fixierten Grenze steht die Kürzung bereits fest. Das
               Zugangsprinzip wirkt erst bei den dynamischen Archetypen.
             </p>
@@ -298,11 +298,11 @@ export function SchrittAngebot({
         </Abschnitt>
 
         <Abschnitt titel="Laufzeit und Alternative" hinweis={GLOSSAR.laufzeitBlock}>
-          <p className="text-[11px] text-pretty text-muted-foreground">
+          <p className="text-xs text-pretty text-helper">
             Die beiden Jahreszahlen sind nicht dieselbe Angabe. Die Laufzeit steht im Vertrag, der
             Netzausbau ist eine Prognose des Netzbetreibers. Sie können auseinanderfallen.
           </p>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-x-4 gap-y-6 sm:grid-cols-2">
             <Zahlenfeld
               label="FCA-Laufzeit"
               einheit="Jahre"
@@ -346,9 +346,9 @@ export function SchrittAngebot({
           </div>
 
           {vertragsluecke ? (
-            <div className="space-y-2 rounded-md border border-mittel/40 bg-mittel/8 p-2.5">
-              <p className="flex gap-1.5 text-[11px] text-pretty">
-                <TriangleAlert className="mt-px size-3.5 shrink-0 text-mittel" />
+            <div className="space-y-4 border border-mittel/40 border-l-[3px] border-l-mittel bg-hinweis-mittel px-4 py-3 [--field:#ffffff]">
+              <p className="flex gap-3 text-sm text-pretty">
+                <WarningAltFilled className="mt-px size-5 shrink-0 text-mittel" />
                 <span>
                   Der Vertrag endet im Jahr {vertragsluecke.von}, der Netzausbau kommt erst im Jahr{" "}
                   {vertragsluecke.bis}. Für {vertragsluecke.bis - vertragsluecke.von}{" "}
@@ -371,7 +371,7 @@ export function SchrittAngebot({
 
           {alternative.festerAnschlussVerfuegbarAbJahr !== null &&
           alternative.festerAnschlussVerfuegbarAbJahr < angebot.laufzeitJahre ? (
-            <p className="text-[11px] text-pretty text-muted-foreground">
+            <p className="text-xs text-pretty text-helper">
               Der Vertrag bindet länger, als der Engpass voraussichtlich besteht. Das Modell nimmt
               an, dass die Einschränkung mit dem Netzausbau endet. Bei einer statischen Kappung kann
               der Vertrag darüber hinaus binden, ein Umstellungsrecht gehört dann in die Verhandlung.
@@ -380,9 +380,9 @@ export function SchrittAngebot({
         </Abschnitt>
       </div>
 
-      <div className="space-y-3 lg:sticky lg:top-16 lg:h-fit">
+      <div className="space-y-4 lg:sticky lg:top-36 lg:h-fit">
         <Karte>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-4">
             <Kennzahl
               label="Abregelung"
               hinweis={GLOSSAR.abregelung}
@@ -420,7 +420,7 @@ export function SchrittAngebot({
             />
           </div>
           {lauf.blindleistungVerlustMWh > 0.5 ? (
-            <p className="mt-2 flex items-center gap-1 text-[11px] text-muted-foreground">
+            <p className="mt-4 flex items-center gap-1 text-xs text-helper">
               Dazu {fmtMWh(lauf.blindleistungVerlustMWh)} Wirkleistungsverlust aus der
               Blindleistungsauflage.
               <Hinweis text="Dieser Verlust fällt in jeder Betriebsstunde an, nicht nur bei einer Kürzung, und ist in der Abregelungsquote nicht enthalten." />
@@ -436,7 +436,7 @@ export function SchrittAngebot({
         </Karte>
 
         <Karte titel="Modellannahme zur Engpasstiefe" hinweis={GLOSSAR.engpasstiefe}>
-          <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             <Auswahl
               wert={annahmen.engpasstiefe}
               setzen={(w) => setAnnahmen({ ...annahmen, engpasstiefe: w })}
@@ -445,7 +445,7 @@ export function SchrittAngebot({
                 { wert: "binaer", text: "binaer, Kürzung greift ganz oder gar nicht" },
               ]}
             />
-            <p className="max-w-[24rem] text-[11px] text-pretty text-muted-foreground">
+            <p className="max-w-[24rem] text-xs text-pretty text-helper">
               Nur bei gleitender Tiefe kann das Zugangsprinzip überhaupt wirken. Bei binärer
               Schaltung trifft die Kürzung alle Teilnehmer gleichzeitig.
             </p>

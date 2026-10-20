@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { WarningAltFilled } from "@carbon/icons-react";
 
 /**
  * Kurze Einordnung über jedem Screen. Ein Satz, was hier passiert, ein Satz,
@@ -18,18 +19,16 @@ export function SchrittKopf({
   legende?: boolean;
 }) {
   return (
-    <header className="nicht-drucken space-y-1 border-b border-border pb-2">
-      <div className="flex items-baseline gap-2">
-        <span className="ziffern text-[11px] text-muted-foreground">Schritt {nummer} von 4</span>
-        <h2 className="text-[13px] font-semibold">{titel}</h2>
-      </div>
-      <p className="max-w-3xl text-pretty text-muted-foreground">{was}</p>
+    <header className="nicht-drucken pb-2">
+      <p className="ziffern text-xs text-muted-foreground">Schritt {nummer} von 4</p>
+      <h2 className="mt-1 text-2xl font-normal">{titel}</h2>
+      <p className="mt-3 max-w-3xl text-base leading-6 text-pretty text-foreground">{was}</p>
       {gebraucht ? (
-        <p className="max-w-3xl text-[11px] text-pretty text-muted-foreground">{gebraucht}</p>
+        <p className="mt-2 max-w-3xl text-sm text-pretty text-muted-foreground">{gebraucht}</p>
       ) : null}
       {legende ? (
-        <p className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-          <span className="size-1.5 shrink-0 rounded-full bg-mittel" />
+        <p className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+          <WarningAltFilled className="size-4 shrink-0 text-mittel" />
           steht meist nicht im Angebotsschreiben, beim Netzbetreiber erfragen
         </p>
       ) : null}

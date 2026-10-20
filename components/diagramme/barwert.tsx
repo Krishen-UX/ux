@@ -53,7 +53,7 @@ export function BarwertDiagramm({
       }
     >
       <LineChart data={daten} margin={{ top: 4, right: 6, bottom: 0, left: 4 }}>
-        <CartesianGrid stroke="var(--border)" strokeOpacity={0.5} vertical={false} />
+        <CartesianGrid stroke={FARBEN.raster} strokeDasharray="2 2" vertical={false} />
         <XAxis dataKey="jahr" tickFormatter={(v) => `${v}`} {...ACHSE} />
         <YAxis width={34} tickFormatter={(v) => fmtZahl(Number(v) / 1e6, 0)} {...ACHSE} />
         <ReferenceLine y={0} stroke={FARBEN.achse} strokeWidth={1} />

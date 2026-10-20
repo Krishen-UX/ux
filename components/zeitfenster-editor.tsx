@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, X } from "lucide-react";
+import { Add, Close } from "@carbon/icons-react";
 import type { Projekt, Zeitfenster } from "@/lib/typen";
 import { WOCHENTAG_KURZ } from "@/lib/sim/kalender";
 import { Button } from "@/components/ui/button";
@@ -22,17 +22,18 @@ export function ZeitfensterEditor({
     setzen(fenster.map((f, j) => (i === j ? { ...f, ...teil } : f)));
 
   return (
-    <div className="space-y-2.5">
-      <p className="text-[11px] text-pretty text-muted-foreground">
+    <div className="space-y-4">
+      <p className="text-xs text-pretty text-helper">
         Innerhalb eines Fensters gilt die Grenze, ausserhalb steht die volle Anschlussleistung zur
         Verfügung. Überlappende Fenster wirken zusammen, es gilt das jeweils schärfste.
       </p>
       {fenster.map((f, i) => (
-        <div key={i} className="space-y-2 rounded-md border border-border p-2.5">
+        <div key={i} className="space-y-6 bg-card p-4">
           <div className="flex items-center justify-between gap-2">
             <ToggleGroup
               size="sm"
               variant="outline"
+              spacing={0}
               value={f.tage.map(String)}
               onValueChange={(werte) => {
                 const tage = (werte as string[]).map(Number).sort((a, b) => a - b);
@@ -43,7 +44,7 @@ export function ZeitfensterEditor({
                 <ToggleGroupItem
                   key={nr}
                   value={String(nr)}
-                  className="w-8 px-0 text-[11px] aria-pressed:border-akzent aria-pressed:bg-akzent aria-pressed:text-primary-foreground"
+                  className="w-10 px-0"
                 >
                   {tag}
                 </ToggleGroupItem>
@@ -56,12 +57,12 @@ export function ZeitfensterEditor({
                 aria-label="Fenster entfernen"
                 onClick={() => setzen(fenster.filter((_, j) => j !== i))}
               >
-                <X className="size-3.5" />
+                <Close />
               </Button>
             ) : null}
           </div>
 
-          <div className="grid gap-2.5 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-3">
             <Regler
               label="ab"
               hinweis="Erste Stunde, in der die Grenze gilt. Ein Fenster von 17 bis 20 Uhr umfasst die Stunden 17, 18 und 19."
@@ -95,7 +96,7 @@ export function ZeitfensterEditor({
       ))}
 
       <Button
-        variant="outline"
+        variant="ghost"
         size="sm"
         onClick={() =>
           setzen([
@@ -104,8 +105,8 @@ export function ZeitfensterEditor({
           ])
         }
       >
-        <Plus className="size-3.5" />
         Fenster hinzufügen
+        <Add />
       </Button>
     </div>
   );

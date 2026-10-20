@@ -47,7 +47,7 @@ export function WochenDiagramm({
         />
         <YAxis width={34} tickFormatter={(v) => fmtZahl(Number(v), 0)} {...ACHSE} />
         {tagesgrenzen.slice(1).map((h) => (
-          <ReferenceLine key={h} x={h} stroke="var(--border)" strokeOpacity={0.8} />
+          <ReferenceLine key={h} x={h} stroke={FARBEN.raster} />
         ))}
         <Tooltip
           cursor={{ stroke: FARBEN.achse, strokeWidth: 1 }}

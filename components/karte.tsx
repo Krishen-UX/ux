@@ -2,7 +2,9 @@ import type { ReactNode } from "react";
 import { Hinweis } from "./felder";
 import { cn } from "@/lib/utils";
 
-/** Schlichter Rahmen für Inhaltsblöcke, bewusst ohne Schatten und Rundungen. */
+/**
+ * Carbon-Kachel auf Layer 01. Felder darin liegen eine Ebene höher und werden weiss.
+ */
 export function Karte({
   children,
   className,
@@ -17,10 +19,10 @@ export function Karte({
   hinweis?: string;
 }) {
   return (
-    <section className={cn("rounded-md border border-border bg-card p-3", className)}>
+    <section className={cn("bg-card p-4 [--field:#ffffff]", className)}>
       {titel ? (
-        <div className="mb-2.5 flex items-center justify-between gap-2 border-b border-border pb-1">
-          <h3 className="flex items-center gap-1 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+          <h3 className="flex items-center gap-1.5 text-base font-semibold">
             {titel}
             {hinweis ? <Hinweis text={hinweis} /> : null}
           </h3>

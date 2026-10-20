@@ -10,13 +10,14 @@ export const FARBEN = {
   akzentSchwach: "var(--akzent-schwach)",
   verlust: "var(--verlust)",
   verlustSchwach: "var(--verlust-schwach)",
-  linie: "oklch(0.72 0.01 240)",
-  achse: "oklch(0.55 0.012 240)",
+  linie: "#8d8d8d",
+  achse: "#525252",
+  raster: "#c6c6c6",
 };
 
 export const ACHSE = {
   stroke: "transparent",
-  tick: { fill: FARBEN.achse, fontSize: 10 },
+  tick: { fill: FARBEN.achse, fontSize: 12 },
   tickLine: false,
   axisLine: false,
 } as const;
@@ -35,13 +36,13 @@ export function Diagramm({
   children: React.ReactElement;
 }) {
   return (
-    <figure className="space-y-1">
-      <figcaption className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <span className="flex items-center gap-1 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+    <figure className="space-y-3">
+      <figcaption className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <span className="flex items-center gap-1.5 text-sm font-semibold">
           {titel}
           {hinweis ? <Hinweis text={hinweis} /> : null}
         </span>
-        {legende ? <span className="flex items-center gap-3 text-[11px]">{legende}</span> : null}
+        {legende ? <span className="flex items-center gap-4 text-xs">{legende}</span> : null}
       </figcaption>
       <div style={{ height: hoehe }}>
         <ResponsiveContainer width="100%" height="100%">
@@ -55,7 +56,7 @@ export function Diagramm({
 export function Marke({ farbe, text }: { farbe: string; text: string }) {
   return (
     <span className="flex items-center gap-1.5 text-muted-foreground">
-      <span className="size-2 rounded-[2px]" style={{ background: farbe }} />
+      <span className="size-3" style={{ background: farbe }} />
       {text}
     </span>
   );
@@ -63,7 +64,7 @@ export function Marke({ farbe, text }: { farbe: string; text: string }) {
 
 export function Kasten({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-md border border-border/70 bg-background px-2 py-1.5 text-[11px] shadow-sm">
+    <div className="border-l-4 border-primary bg-background px-3 py-2 text-xs shadow-[0_2px_6px_rgba(0,0,0,0.3)]">
       {children}
     </div>
   );

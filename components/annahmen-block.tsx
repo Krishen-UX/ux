@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { Auswahl, Regler, Schalter, Zahlenfeld } from "./felder";
 import { GLOSSAR } from "@/lib/glossar";
+import { WarningAltFilled } from "@carbon/icons-react";
 
 /**
  * Alle Annahmen offen und änderbar. Ohne diesen Block kippt jedes Fachgespräch
@@ -33,13 +34,13 @@ export function AnnahmenBlock({
   return (
     <Accordion className="w-full">
       <AccordionItem value="annahmen">
-        <AccordionTrigger className="text-[11px] font-semibold tracking-wide uppercase">
+        <AccordionTrigger className="text-base font-semibold">
           Annahmen und Modellgrenzen
         </AccordionTrigger>
         <AccordionContent>
-          <div className="grid gap-5 pt-1 md:grid-cols-3">
-            <section className="space-y-3">
-              <h4 className="text-[11px] font-semibold text-muted-foreground">Kapital</h4>
+          <div className="grid gap-x-8 gap-y-10 pt-2 md:grid-cols-3">
+            <section className="space-y-6">
+              <h4 className="text-sm font-semibold">Kapital</h4>
               <Zahlenfeld
                 label="Kalkulationszins"
                 hinweis={GLOSSAR.kalkulationszins}
@@ -67,8 +68,8 @@ export function AnnahmenBlock({
               />
             </section>
 
-            <section className="space-y-3">
-              <h4 className="text-[11px] font-semibold text-muted-foreground">
+            <section className="space-y-6">
+              <h4 className="text-sm font-semibold">
                 {istLast ? "Nutzen" : "Erlöse"}
               </h4>
               {istLast ? (
@@ -152,8 +153,8 @@ export function AnnahmenBlock({
               ) : null}
             </section>
 
-            <section className="space-y-3">
-              <h4 className="text-[11px] font-semibold text-muted-foreground">Netz und Risiko</h4>
+            <section className="space-y-6">
+              <h4 className="text-sm font-semibold">Netz und Risiko</h4>
               <Auswahl
                 label="Engpasstiefe"
                 hinweis={GLOSSAR.engpasstiefe}
@@ -205,27 +206,27 @@ export function AnnahmenBlock({
           </div>
 
           {hinweise.length > 0 ? (
-            <ul className="mt-4 space-y-1.5 border-t border-border pt-3">
+            <ul className="mt-8 space-y-2 border-t border-border-subtle pt-4">
               {hinweise.map((h) => (
-                <li key={h} className="flex gap-2 text-[11px] text-pretty text-muted-foreground">
-                  <span className="mt-1.5 size-1 shrink-0 rounded-full bg-mittel" />
+                <li key={h} className="flex gap-2 text-xs text-pretty text-muted-foreground">
+                  <WarningAltFilled className="size-4 shrink-0 text-mittel" />
                   {h}
                 </li>
               ))}
             </ul>
           ) : null}
 
-          <div className="mt-4 border-t border-border pt-3">
-            <h4 className="text-[11px] font-semibold text-muted-foreground">Herkunft der Zahlen</h4>
-            <div className="mt-2 grid gap-3 md:grid-cols-2">
+          <div className="mt-8 border-t border-border-subtle pt-4">
+            <h4 className="text-sm font-semibold">Herkunft der Zahlen</h4>
+            <div className="mt-3 grid gap-6 md:grid-cols-2">
               {QUELLEN.map((q) => (
                 <div key={q.reihe} className="space-y-0.5">
-                  <div className="font-medium">{q.reihe}</div>
-                  <div className="text-[11px] text-muted-foreground">
+                  <div className="font-semibold">{q.reihe}</div>
+                  <div className="text-xs text-muted-foreground">
                     {q.quelle}, {q.lizenz}, Jahre {q.jahre.join(", ")}, abgerufen am{" "}
                     {q.abgerufenAm}
                   </div>
-                  <ul className="ml-3.5 list-disc text-[11px] text-pretty text-muted-foreground">
+                  <ul className="ml-3.5 list-disc text-xs text-pretty text-muted-foreground">
                     {q.verarbeitung.map((v) => (
                       <li key={v}>{v}</li>
                     ))}
@@ -233,7 +234,7 @@ export function AnnahmenBlock({
                 </div>
               ))}
             </div>
-            <p className="mt-3 text-[11px] text-pretty text-muted-foreground">
+            <p className="mt-3 text-xs text-pretty text-muted-foreground">
               Die Simulation rechnet 8.760 Stunden je Wetterjahr ohne Lastfluss und ohne Netzmodell.
               Engpassprofile sind synthetisch und über Häufigkeit und Kopplung an die regionale
               Erzeugung parametrisiert. Die Ergebnisse ersetzen keine Netzberechnung.

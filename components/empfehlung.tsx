@@ -1,5 +1,7 @@
 "use client";
 
+import type { ComponentType } from "react";
+import { CheckmarkFilled, ErrorFilled, WarningAltFilled } from "@carbon/icons-react";
 import type { Auswertung, Projekt } from "@/lib/typen";
 import { fmtEur, fmtProzent } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -42,23 +44,29 @@ export function empfehlung(auswertung: Auswertung, projekt: Projekt): Empfehlung
   return { ampel, satz, begruendung, vorsprungAnteil: anteil };
 }
 
-const TON: Record<Ampel, { rand: string; flaeche: string; punkt: string; label: string }> = {
+const TON: Record<
+  Ampel,
+  { rand: string; flaeche: string; symbol: ComponentType<{ className?: string }>; farbe: string; label: string }
+> = {
   gut: {
-    rand: "border-gut/30",
-    flaeche: "bg-gut/8",
-    punkt: "bg-gut",
+    rand: "border-gut/40 border-l-gut",
+    flaeche: "bg-hinweis-gut",
+    symbol: CheckmarkFilled,
+    farbe: "text-gut",
     label: "Klare Empfehlung",
   },
   mittel: {
-    rand: "border-mittel/40",
-    flaeche: "bg-mittel/10",
-    punkt: "bg-mittel",
+    rand: "border-mittel/40 border-l-mittel",
+    flaeche: "bg-hinweis-mittel",
+    symbol: WarningAltFilled,
+    farbe: "text-mittel",
     label: "Knappe Entscheidung",
   },
   schlecht: {
-    rand: "border-schlecht/30",
-    flaeche: "bg-schlecht/8",
-    punkt: "bg-schlecht",
+    rand: "border-schlecht/40 border-l-schlecht",
+    flaeche: "bg-hinweis-schlecht",
+    symbol: ErrorFilled,
+    farbe: "text-schlecht",
     label: "Angebot nachverhandeln",
   },
 };
@@ -73,26 +81,28 @@ export function EmpfehlungsBanner({
   const e = empfehlung(auswertung, projekt);
   const ton = TON[e.ampel];
   const gewinner = auswertung.szenarien[auswertung.gewinner];
+  const Symbol = ton.symbol;
 
   return (
     <section
+      role="status"
       className={cn(
-        "seitenumbruch-vermeiden rounded-md border-l-[3px] px-4 py-3.5",
+        "seitenumbruch-vermeiden flex gap-4 border border-l-[3px] px-4 py-5",
         ton.rand,
         ton.flaeche,
       )}
     >
-      <div className="flex items-center gap-2 text-[11px] font-semibold tracking-wide uppercase">
-        <span className={cn("size-2 rounded-full", ton.punkt)} />
-        {ton.label}
-        <span className="font-normal text-muted-foreground normal-case">
-          Szenario {auswertung.gewinner}, {gewinner.titel}
-        </span>
+      <Symbol className={cn("mt-0.5 size-5 shrink-0", ton.farbe)} />
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+          <span className="font-semibold">{ton.label}</span>
+          <span className="text-muted-foreground">
+            Szenario {auswertung.gewinner}, {gewinner.titel}
+          </span>
+        </div>
+        <p className="mt-2 max-w-4xl text-xl font-normal text-pretty sm:text-2xl">{e.satz}</p>
+        <p className="mt-2 max-w-3xl text-sm text-pretty text-muted-foreground">{e.begruendung}</p>
       </div>
-      <p className="mt-1.5 max-w-4xl text-lg leading-tight font-semibold text-pretty sm:text-xl">
-        {e.satz}
-      </p>
-      <p className="mt-1.5 max-w-3xl text-pretty text-muted-foreground">{e.begruendung}</p>
     </section>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Info } from "lucide-react";
+import { Add, CheckmarkFilled, Information, Subtract, WarningAltFilled } from "@carbon/icons-react";
 import type { ReactNode } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -32,7 +32,7 @@ function HerkunftsPunkt({ herkunft }: { herkunft?: Herkunft }) {
       <TooltipTrigger
         render={<button type="button" aria-label="Herkunft der Angabe" className="shrink-0" />}
       >
-        <span className="block size-1.5 rounded-full bg-mittel" />
+        <WarningAltFilled className="size-4 text-mittel" />
       </TooltipTrigger>
       <TooltipContent className="max-w-72 text-pretty">{HERKUNFT_TEXT}</TooltipContent>
     </Tooltip>
@@ -53,7 +53,7 @@ export function Begriff({
         render={
           <button
             type="button"
-            className="cursor-help underline decoration-dotted underline-offset-2 hover:text-foreground"
+            className="cursor-help border-b border-dotted border-current hover:text-foreground"
           />
         }
       >
@@ -72,11 +72,11 @@ export function Hinweis({ text }: { text: string }) {
           <button
             type="button"
             aria-label="Erläuterung"
-            className="text-muted-foreground/60 hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground focus-visible:outline-1 focus-visible:outline-ring"
           />
         }
       >
-        <Info className="size-3.5" />
+        <Information className="size-4" />
       </TooltipTrigger>
       <TooltipContent className="max-w-72 text-pretty">{text}</TooltipContent>
     </Tooltip>
@@ -95,14 +95,14 @@ function Beschriftung({
   herkunft?: Herkunft;
 }) {
   return (
-    <div className="flex items-baseline justify-between gap-2">
+    <div className="flex items-center justify-between gap-2 text-xs">
       <span className="flex items-center gap-1 text-muted-foreground">
         <HerkunftsPunkt herkunft={herkunft} />
         {text}
         {hinweis ? <Hinweis text={hinweis} /> : null}
       </span>
       {wert !== undefined ? (
-        <span className="ziffern font-medium tabular-nums">{wert}</span>
+        <span className="ziffern text-sm text-foreground tabular-nums">{wert}</span>
       ) : null}
     </div>
   );
@@ -132,13 +132,20 @@ export function Zahlenfeld({
   /** Große Beträge in Tausend anzeigen, damit die Ziffernfolge lesbar bleibt. */
   teiler?: number;
 }) {
+  const anzeigeWert = Math.round((wert / teiler) * 1000) / 1000;
+  const stufe = (richtung: 1 | -1) => {
+    let n = wert + richtung * schritt;
+    if (min !== undefined) n = Math.max(min, n);
+    if (max !== undefined) n = Math.min(max, n);
+    setzen(Math.round(n * 1e6) / 1e6);
+  };
   return (
-    <label className="block space-y-1">
+    <label className="block space-y-2">
       <Beschriftung text={label} hinweis={hinweis} herkunft={herkunft} />
-      <div className="flex items-center rounded-md border border-input bg-background focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/25">
+      <div className="flex h-10 items-center border-b border-border-strong bg-field transition-colors duration-[70ms] focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-ring hover:bg-field-hover">
         <input
           type="number"
-          value={Number.isFinite(wert) ? Math.round((wert / teiler) * 1000) / 1000 : ""}
+          value={Number.isFinite(wert) ? anzeigeWert : ""}
           step={schritt / teiler}
           min={min === undefined ? undefined : min / teiler}
           max={max === undefined ? undefined : max / teiler}
@@ -146,11 +153,33 @@ export function Zahlenfeld({
             const n = e.target.valueAsNumber;
             setzen(Number.isNaN(n) ? 0 : n * teiler);
           }}
-          className="ziffern h-8 w-full bg-transparent px-2 text-right font-medium outline-none"
+          className="ziffern h-full w-full min-w-0 bg-transparent pl-4 text-sm outline-none"
         />
         {einheit ? (
-          <span className="shrink-0 pr-2 pl-1 text-[11px] text-muted-foreground">{einheit}</span>
+          <span className="shrink-0 pr-2 pl-1 text-xs text-helper">{einheit}</span>
         ) : null}
+        {/* Stufentasten wie im Carbon Number Input, per Tastatur reichen die Pfeiltasten. */}
+        <span className="flex h-full shrink-0 items-center">
+          <button
+            type="button"
+            tabIndex={-1}
+            aria-label={`${label} verringern`}
+            onClick={() => stufe(-1)}
+            className="flex h-full w-10 items-center justify-center transition-colors duration-[70ms] outline-none hover:bg-layer-selected"
+          >
+            <Subtract className="size-4" />
+          </button>
+          <span className="h-4 w-px bg-border-subtle" />
+          <button
+            type="button"
+            tabIndex={-1}
+            aria-label={`${label} erhöhen`}
+            onClick={() => stufe(1)}
+            className="flex h-full w-10 items-center justify-center transition-colors duration-[70ms] outline-none hover:bg-layer-selected"
+          >
+            <Add className="size-4" />
+          </button>
+        </span>
       </div>
     </label>
   );
@@ -183,7 +212,7 @@ export function Regler({
 }) {
   const text = anzeige ? anzeige(wert) : `${wert}${einheit ? ` ${einheit}` : ""}`;
   return (
-    <div className={cn("space-y-1.5", deaktiviert && "pointer-events-none opacity-40")}>
+    <div className={cn("space-y-2", deaktiviert && "pointer-events-none opacity-40")}>
       <Beschriftung text={label} hinweis={hinweis} wert={text} herkunft={herkunft} />
       <Slider
         value={[wert]}
@@ -209,8 +238,8 @@ export function Schalter({
   hinweis?: string;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 py-0.5">
-      <span className="flex items-center gap-1 text-muted-foreground">
+    <div className="flex items-center justify-between gap-3 py-1">
+      <span className="flex items-center gap-1 text-sm text-foreground">
         {label}
         {hinweis ? <Hinweis text={hinweis} /> : null}
       </span>
@@ -235,7 +264,7 @@ export function Auswahl<T extends string>({
   herkunft?: Herkunft;
 }) {
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       {label ? <Beschriftung text={label} hinweis={hinweis} herkunft={herkunft} /> : null}
       <Select value={wert} onValueChange={(v) => setzen(v as T)}>
         <SelectTrigger size="sm" className="w-full">
@@ -275,21 +304,21 @@ export function Kennzahl({
 }) {
   return (
     <div className="min-w-0">
-      <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
-        {label}
+      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+        <span className="truncate">{label}</span>
         {hinweis ? <Hinweis text={hinweis} /> : null}
       </div>
       <div
         className={cn(
-          "ziffern truncate font-semibold tabular-nums",
-          gross ? "text-xl" : "text-[15px]",
+          "ziffern mt-1 truncate tabular-nums",
+          gross ? "text-xl font-light" : "text-base font-semibold",
           ton === "akzent" && "text-akzent",
           ton === "verlust" && "text-verlust",
         )}
       >
         {wert}
       </div>
-      {zusatz ? <div className="text-[11px] text-muted-foreground">{zusatz}</div> : null}
+      {zusatz ? <div className="mt-0.5 text-xs text-helper">{zusatz}</div> : null}
     </div>
   );
 }
@@ -306,9 +335,9 @@ export function Abschnitt({
   children: ReactNode;
 }) {
   return (
-    <section className="space-y-2.5">
-      <div className="flex items-center justify-between gap-2 border-b border-border pb-1">
-        <h3 className="flex items-center gap-1 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+    <section className="space-y-4">
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="flex items-center gap-1.5 text-base font-semibold">
           {titel}
           {hinweis ? <Hinweis text={hinweis} /> : null}
         </h3>
@@ -316,5 +345,39 @@ export function Abschnitt({
       </div>
       {children}
     </section>
+  );
+}
+
+/** Auswahlkachel nach dem Carbon Radio Tile, ausgewählt mit Rahmen und Haken. */
+export function WahlKachel({
+  titel,
+  text,
+  gewaehlt,
+  waehlen,
+}: {
+  titel: string;
+  text: string;
+  gewaehlt: boolean;
+  waehlen: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={gewaehlt}
+      onClick={waehlen}
+      className={cn(
+        "relative min-h-16 bg-card p-4 pr-10 text-left transition-colors duration-[70ms] hover:bg-layer-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
+        gewaehlt && "outline-2 -outline-offset-2 outline-layer-selected-inverse",
+      )}
+    >
+      {gewaehlt ? (
+        <CheckmarkFilled className="absolute top-4 right-4 size-4 text-foreground" />
+      ) : (
+        <span className="absolute top-4 right-4 size-4 rounded-full border border-border-strong" />
+      )}
+      <div className="text-sm font-semibold">{titel}</div>
+      <div className="mt-1 text-xs text-pretty text-muted-foreground">{text}</div>
+    </button>
   );
 }

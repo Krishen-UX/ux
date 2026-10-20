@@ -23,7 +23,7 @@ export function SzenarioKarten({
 }) {
   const istLast = projekt.typ === "industrielle_last";
   return (
-    <div className="grid gap-2.5 md:grid-cols-3">
+    <div className="grid gap-4 md:grid-cols-3">
       {REIHENFOLGE.map((s) => {
         const z = auswertung.szenarien[s];
         const gewinnt = auswertung.gewinner === s;
@@ -31,28 +31,33 @@ export function SzenarioKarten({
           <article
             key={s}
             className={cn(
-              "seitenumbruch-vermeiden rounded-md border p-3",
-              gewinnt ? "border-akzent bg-akzent-schwach/40" : "border-border bg-card",
+              "seitenumbruch-vermeiden relative bg-card p-4",
+              gewinnt && "shadow-[inset_0_3px_0_var(--primary)]",
               !z.verfuegbar && "opacity-55",
             )}
           >
-            <header className="flex items-baseline gap-2">
+            <header className="flex items-center gap-2">
               <span
                 className={cn(
-                  "ziffern flex size-5 items-center justify-center rounded-[3px] text-[11px] font-bold",
-                  gewinnt ? "bg-akzent text-primary-foreground" : "bg-muted text-muted-foreground",
+                  "ziffern flex size-6 shrink-0 items-center justify-center text-sm font-semibold",
+                  gewinnt ? "bg-primary text-primary-foreground" : "bg-layer-selected text-foreground",
                 )}
               >
                 {s}
               </span>
-              <h4 className="flex items-center gap-1 font-semibold">
+              <h4 className="flex min-w-0 items-center gap-1.5 text-sm font-semibold">
                 {z.titel}
                 <Hinweis text={SZENARIO_HINWEIS[s]} />
               </h4>
+              {gewinnt ? (
+                <span className="ml-auto inline-flex h-6 shrink-0 items-center rounded-full bg-tag-blau px-2 text-xs text-tag-blau-text">
+                  Empfohlen
+                </span>
+              ) : null}
             </header>
-            <p className="mt-1 min-h-8 text-[11px] text-pretty text-muted-foreground">{z.kurz}</p>
+            <p className="mt-2 min-h-8 text-xs text-pretty text-muted-foreground">{z.kurz}</p>
 
-            <div className="mt-2 border-t border-border pt-2">
+            <div className="mt-4 border-t border-border-subtle pt-4">
               <Kennzahl
                 label="Kapitalwert"
                 hinweis={GLOSSAR.kapitalwert}
@@ -63,7 +68,7 @@ export function SzenarioKarten({
               />
             </div>
 
-            <dl className="mt-2.5 grid grid-cols-2 gap-2.5 border-t border-border pt-2.5">
+            <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-5 border-t border-border-subtle pt-4">
               <Kennzahl
                 label={istLast ? "Bezug im Jahr 1" : "Ertrag im Jahr 1"}
                 wert={fmtMWh(z.ertragJahr1MWh)}
@@ -101,7 +106,7 @@ export function SzenarioKarten({
             </dl>
 
             {z.hinweis ? (
-              <p className="mt-2 border-t border-border pt-2 text-[11px] text-pretty text-muted-foreground">
+              <p className="mt-4 border-t border-border-subtle pt-3 text-xs text-pretty text-helper">
                 {z.hinweis}
               </p>
             ) : null}

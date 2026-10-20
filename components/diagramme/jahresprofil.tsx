@@ -89,7 +89,7 @@ export function JahresprofilDiagramm({
           stroke={FARBEN.akzent}
           strokeWidth={1}
           fill={FARBEN.akzent}
-          fillOpacity={0.18}
+          fillOpacity={0.25}
           isAnimationActive={false}
         />
       </AreaChart>

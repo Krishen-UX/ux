@@ -36,7 +36,7 @@ export function DauerlinienDiagramm({
       }
     >
       <AreaChart data={daten} margin={{ top: 4, right: 4, bottom: 0, left: -8 }}>
-        <CartesianGrid stroke="var(--border)" strokeOpacity={0.5} vertical={false} />
+        <CartesianGrid stroke={FARBEN.raster} strokeDasharray="2 2" vertical={false} />
         <XAxis
           dataKey="anteil"
           type="number"

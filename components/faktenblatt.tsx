@@ -17,7 +17,7 @@ function Zeile({ k, v }: { k: string; v: string }) {
   return (
     <div className="flex justify-between gap-3 border-b border-border/60 py-[3px] last:border-0">
       <dt className="text-muted-foreground">{k}</dt>
-      <dd className="ziffern text-right font-medium tabular-nums">{v}</dd>
+      <dd className="ziffern text-right font-semibold tabular-nums">{v}</dd>
     </div>
   );
 }
@@ -25,7 +25,7 @@ function Zeile({ k, v }: { k: string; v: string }) {
 function Block({ titel, children }: { titel: string; children: React.ReactNode }) {
   return (
     <section className="seitenumbruch-vermeiden">
-      <h3 className="mb-1 border-b border-foreground/25 pb-0.5 text-[10px] font-bold tracking-wider uppercase">
+      <h3 className="mb-1 border-b border-border-subtle pb-0.5 text-[11px] font-semibold">
         {titel}
       </h3>
       <dl>{children}</dl>
@@ -79,10 +79,10 @@ export function Faktenblatt({
       : `${fmtMW(grenze)} von ${fmtMW(projekt.netzanschlussLeistungMW)}`;
 
   return (
-    <div className="druckseite mx-auto max-w-[820px] rounded-md border border-border bg-card p-6 print:max-w-none">
+    <div className="druckseite mx-auto max-w-[820px] border border-border bg-background p-8 shadow-[0_2px_6px_rgba(0,0,0,0.12)] print:max-w-none">
       <header className="flex items-start justify-between gap-6 border-b-2 border-foreground pb-2">
         <div>
-          <h1 className="text-lg leading-tight font-bold">
+          <h1 className="text-lg font-normal">
             Bewertung des Angebots für einen flexiblen Netzanschluss
           </h1>
           <p className="text-muted-foreground">
@@ -91,7 +91,7 @@ export function Faktenblatt({
           </p>
         </div>
         <div className="shrink-0 text-right text-[10px] text-muted-foreground">
-          <div className="font-semibold text-foreground">FCA Assessor</div>
+          <div className="text-foreground"><span className="font-semibold">FCA</span> Assessor</div>
           <div>{heute}</div>
         </div>
       </header>
@@ -106,7 +106,7 @@ export function Faktenblatt({
               : "border-schlecht",
         )}
       >
-        <div className="text-[10px] font-bold tracking-wider uppercase">
+        <div className="text-[11px] font-semibold">
           Ergebnis: Szenario {auswertung.gewinner}, {gewinner.titel}
         </div>
         <p className="mt-0.5 text-[15px] leading-snug font-semibold text-pretty">{e.satz}</p>
@@ -236,7 +236,7 @@ export function Faktenblatt({
       </div>
 
       <section className="mt-4 seitenumbruch-vermeiden">
-        <h3 className="mb-2 border-b border-foreground/25 pb-0.5 text-[10px] font-bold tracking-wider uppercase">
+        <h3 className="mb-2 border-b border-border-subtle pb-0.5 text-[11px] font-semibold">
           Punkte für die Nachverhandlung, nach Wirkung auf den Kapitalwert
         </h3>
         <SensitivitaetsBalken posten={auswertung.sensitivitaet} anzahl={4} />
@@ -244,7 +244,7 @@ export function Faktenblatt({
 
       {luecken.length > 0 ? (
         <section className="mt-4 seitenumbruch-vermeiden">
-          <h3 className="mb-1.5 border-b border-foreground/25 pb-0.5 text-[10px] font-bold tracking-wider uppercase">
+          <h3 className="mb-1.5 border-b border-border-subtle pb-0.5 text-[11px] font-semibold">
             Angaben, um die wir bitten, weil sie das Ergebnis tragen
           </h3>
           <ol className="grid gap-x-6 gap-y-1 sm:grid-cols-2">
@@ -255,7 +255,7 @@ export function Faktenblatt({
               >
                 <span className="ziffern shrink-0 text-muted-foreground">{i + 1}</span>
                 <span>
-                  <span className="font-medium">{l.angabe}.</span> {l.frage}
+                  <span className="font-semibold">{l.angabe}.</span> {l.frage}
                 </span>
               </li>
             ))}

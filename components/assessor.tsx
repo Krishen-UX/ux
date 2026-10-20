@@ -1,7 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, Printer, RotateCcw } from "lucide-react";
+import {
+  ArrowRight,
+  CheckmarkOutline,
+  CircleDash,
+  Incomplete,
+  Printer,
+  Reset,
+} from "@carbon/icons-react";
 import type {
   Alternative,
   AnlagenTyp,
@@ -19,10 +26,10 @@ import { Faktenblatt } from "./faktenblatt";
 import { cn } from "@/lib/utils";
 
 const SCHRITTE = [
-  { id: "projekt", titel: "Projekt" },
-  { id: "angebot", titel: "FCA-Angebot" },
-  { id: "ergebnis", titel: "Ergebnis" },
-  { id: "faktenblatt", titel: "Faktenblatt" },
+  { id: "projekt", titel: "Projekt", zusatz: "Anlage und Wirtschaftlichkeit" },
+  { id: "angebot", titel: "FCA-Angebot", zusatz: "Archetyp und Parameter" },
+  { id: "ergebnis", titel: "Ergebnis", zusatz: "Szenarien und Agenda" },
+  { id: "faktenblatt", titel: "Faktenblatt", zusatz: "Eine Seite zum Drucken" },
 ] as const;
 
 type SchrittId = (typeof SCHRITTE)[number]["id"];
@@ -51,57 +58,103 @@ export function Assessor() {
 
   const index = SCHRITTE.findIndex((s) => s.id === schritt);
 
+  // Jeder Schritt beginnt oben, sonst landet man mitten im nächsten Formular.
+  function wechseln(id: SchrittId) {
+    setSchritt(id);
+    window.scrollTo({ top: 0 });
+  }
+
   return (
     <div className="flex min-h-full flex-col">
-      <header className="nicht-drucken sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1600px] items-center gap-4 px-4 py-2">
-          <div className="flex items-baseline gap-2">
-            <span className="text-[15px] font-semibold tracking-tight">FCA Assessor</span>
-            <span className="hidden text-[11px] text-muted-foreground sm:inline">
-              Flexible Netzanschlüsse bewerten
-            </span>
-          </div>
+      <div className="nicht-drucken sticky top-0 z-30">
+        <header className="flex h-12 items-center border-b border-[#393939] bg-shell text-shell-text">
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              wechseln("projekt");
+            }}
+            className="flex h-full items-center px-4 text-sm text-[#f4f4f4] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
+          >
+            <span className="font-semibold">FCA</span>
+            <span className="ml-1">Assessor</span>
+          </a>
+          <span className="hidden h-6 border-l border-[#393939] pl-4 text-sm sm:inline-flex sm:items-center">
+            Flexible Netzanschlüsse bewerten
+          </span>
 
-          <nav className="flex items-center gap-0.5" aria-label="Schritte">
-            {SCHRITTE.map((s, i) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => setSchritt(s.id)}
-                className={cn(
-                  "flex items-center gap-1.5 rounded-md px-2.5 py-1 transition-colors",
-                  s.id === schritt
-                    ? "bg-akzent text-primary-foreground"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                )}
-              >
-                <span className="ziffern text-[11px] opacity-70">{i + 1}</span>
-                {s.titel}
-              </button>
-            ))}
-          </nav>
-
-          <div className="ml-auto flex items-center gap-1.5">
-            <Button
-              variant="ghost"
-              size="sm"
+          <div className="ml-auto flex h-full items-center">
+            <button
+              type="button"
               onClick={() => typWechseln(projekt.typ)}
               title="Alle Eingaben auf die Startwerte zurücksetzen"
+              className="flex h-full items-center gap-2 px-4 text-sm transition-colors duration-[70ms] hover:bg-shell-hover hover:text-white focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
             >
-              <RotateCcw className="size-3.5" />
-              Zurücksetzen
-            </Button>
+              <Reset className="size-5" />
+              <span className="hidden md:inline">Zurücksetzen</span>
+            </button>
             {schritt === "faktenblatt" ? (
-              <Button size="sm" onClick={() => window.print()}>
-                <Printer className="size-3.5" />
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="flex h-full items-center gap-2 bg-primary px-4 text-sm text-white transition-colors duration-[70ms] hover:bg-primary-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
+              >
+                <Printer className="size-5" />
                 Drucken
-              </Button>
+              </button>
             ) : null}
           </div>
-        </div>
-      </header>
+        </header>
 
-      <main className="mx-auto w-full max-w-[1600px] flex-1 px-4 pt-4 pb-14">
+        <nav aria-label="Schritte" className="border-b border-border bg-background">
+          <ol className="mx-auto flex max-w-[99rem] overflow-x-auto px-4 [scrollbar-width:none] md:px-8">
+            {SCHRITTE.map((s, i) => {
+              const status = i < index ? "fertig" : i === index ? "aktuell" : "offen";
+              return (
+                <li key={s.id} className="min-w-36 flex-1 lg:max-w-64">
+                  <button
+                    type="button"
+                    onClick={() => wechseln(s.id)}
+                    aria-current={status === "aktuell" ? "step" : undefined}
+                    className="group flex w-full flex-col gap-1 pt-0 pr-4 pb-3 text-left focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
+                  >
+                    <span
+                      className={cn(
+                        "h-0.5 w-full",
+                        status === "offen" ? "bg-border-subtle" : "bg-primary",
+                      )}
+                    />
+                    <span className="mt-2 flex items-start gap-2">
+                      {status === "fertig" ? (
+                        <CheckmarkOutline className="mt-px size-4 shrink-0 text-primary" />
+                      ) : status === "aktuell" ? (
+                        <Incomplete className="mt-px size-4 shrink-0 text-primary" />
+                      ) : (
+                        <CircleDash className="mt-px size-4 shrink-0 text-primary" />
+                      )}
+                      <span className="min-w-0">
+                        <span
+                          className={cn(
+                            "block text-sm group-hover:text-primary group-hover:underline",
+                            status === "aktuell" ? "font-semibold text-foreground" : "text-foreground",
+                          )}
+                        >
+                          {s.titel}
+                        </span>
+                        <span className="block truncate text-xs text-muted-foreground">
+                          {s.zusatz}
+                        </span>
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+      </div>
+
+      <main className="mx-auto w-full max-w-[99rem] flex-1 px-4 pt-8 pb-16 md:px-8">
         {schritt === "projekt" ? (
           <SchrittProjekt
             projekt={projekt}
@@ -145,29 +198,31 @@ export function Assessor() {
         ) : null}
       </main>
 
-      <footer className="nicht-drucken sticky bottom-0 border-t border-border bg-background/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-2">
-          <p className="text-[11px] text-muted-foreground">
+      <footer className="nicht-drucken sticky bottom-0 z-20 border-t border-border bg-background">
+        <div className="mx-auto flex max-w-[99rem] items-center justify-between gap-4 pl-4 md:pl-8">
+          <p className="hidden py-3 text-xs text-helper sm:block">
             Prototyp für Gespräche, keine Anlageberatung. Zeitreihen: Bundesnetzagentur | SMARD.de,
             CC BY 4.0.
           </p>
-          <div className="flex gap-1.5">
+          <div className="ml-auto flex gap-px">
             <Button
-              variant="outline"
-              size="sm"
+              variant="secondary"
+              size="lg"
               disabled={index === 0}
-              onClick={() => setSchritt(SCHRITTE[Math.max(0, index - 1)].id)}
+              onClick={() => wechseln(SCHRITTE[Math.max(0, index - 1)].id)}
             >
-              <ArrowLeft className="size-3.5" />
               Zurück
             </Button>
             <Button
-              size="sm"
+              size="lg"
+              className="min-w-52"
               disabled={index === SCHRITTE.length - 1}
-              onClick={() => setSchritt(SCHRITTE[Math.min(SCHRITTE.length - 1, index + 1)].id)}
+              onClick={() => wechseln(SCHRITTE[Math.min(SCHRITTE.length - 1, index + 1)].id)}
             >
-              {SCHRITTE[Math.min(SCHRITTE.length - 1, index + 1)].titel}
-              <ArrowRight className="size-3.5" />
+              {index === SCHRITTE.length - 1
+                ? "Letzter Schritt"
+                : `Weiter: ${SCHRITTE[index + 1].titel}`}
+              <ArrowRight />
             </Button>
           </div>
         </div>

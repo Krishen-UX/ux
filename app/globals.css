@@ -4,20 +4,33 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Typografie nach der Carbon-Skala: label-01, body-compact-01/02, heading-03 bis -05. */
+@theme {
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-xs--letter-spacing: 0.32px;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.125rem;
+  --text-sm--letter-spacing: 0.16px;
+  --text-base: 1rem;
+  --text-base--line-height: 1.375rem;
+  --text-base--letter-spacing: 0;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.5rem;
+  --text-xl--line-height: 2rem;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 2.25rem;
+  --text-3xl: 2rem;
+  --text-3xl--line-height: 2.5rem;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
   --color-chart-5: var(--chart-5);
   --color-akzent: var(--akzent);
   --color-akzent-schwach: var(--akzent-schwach);
@@ -46,6 +59,31 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+
+  /* Carbon-Tokens, die keine shadcn-Entsprechung haben. */
+  --color-layer-hover: var(--layer-hover);
+  --color-layer-selected: var(--layer-selected);
+  --color-layer-selected-inverse: var(--layer-selected-inverse);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-field: var(--field);
+  --color-field-hover: var(--field-hover);
+  --color-helper: var(--text-helper);
+  --color-placeholder: var(--text-placeholder);
+  --color-inverse: var(--background-inverse);
+  --color-text-inverse: var(--text-inverse);
+  --color-primary-hover: var(--button-primary-hover);
+  --color-primary-active: var(--button-primary-active);
+  --color-secondary-hover: var(--button-secondary-hover);
+  --color-shell: var(--shell);
+  --color-shell-hover: var(--shell-hover);
+  --color-shell-text: var(--shell-text);
+  --color-hinweis-gut: var(--notification-success);
+  --color-hinweis-mittel: var(--notification-warning);
+  --color-hinweis-schlecht: var(--notification-error);
+  --color-tag-blau: var(--tag-blau);
+  --color-tag-blau-text: var(--tag-blau-text);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -55,108 +93,98 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* IBM Carbon v11, White Theme. Werte aus @carbon/themes. */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.5 0.088 216);
-  --primary-foreground: oklch(0.99 0.004 216);
-  --secondary: oklch(0.968 0.003 240);
-  --secondary-foreground: oklch(0.24 0.012 240);
-  --muted: oklch(0.968 0.003 240);
-  --muted-foreground: oklch(0.505 0.012 240);
-  --accent: oklch(0.955 0.014 216);
-  --accent-foreground: oklch(0.36 0.07 216);
-  --destructive: oklch(0.55 0.16 32);
-  --border: oklch(0.905 0.005 240);
-  --input: oklch(0.895 0.006 240);
-  --ring: oklch(0.5 0.088 216);
+  --background: #ffffff;
+  --foreground: #161616;
+  --card: #f4f4f4;
+  --card-foreground: #161616;
+  --popover: #f4f4f4;
+  --popover-foreground: #161616;
+  --primary: #0f62fe;
+  --primary-foreground: #ffffff;
+  --secondary: #393939;
+  --secondary-foreground: #ffffff;
+  --muted: #f4f4f4;
+  --muted-foreground: #525252;
+  --accent: #e8e8e8;
+  --accent-foreground: #161616;
+  --destructive: #da1e28;
+  --border: #e0e0e0;
+  --input: #8d8d8d;
+  --ring: #0f62fe;
 
-  /* Eine Akzentfarbe fuer alles Aktive und fuer die genutzte Arbeit,
-     eine Verlustfarbe fuer die abgeregelte Flaeche, sonst Neutraltoene. */
-  --akzent: oklch(0.5 0.088 216);
-  --akzent-schwach: oklch(0.93 0.024 216);
-  --verlust: oklch(0.6 0.144 42);
-  --verlust-schwach: oklch(0.93 0.048 42);
-  --gut: oklch(0.52 0.098 158);
-  --mittel: oklch(0.66 0.125 76);
-  --schlecht: oklch(0.55 0.16 32);
+  --layer-hover: #e8e8e8;
+  --layer-selected: #e0e0e0;
+  --layer-selected-inverse: #161616;
+  --border-subtle: #c6c6c6;
+  --border-strong: #8d8d8d;
+  /* Felder liegen auf dem Hintergrund, in einer Kachel wird --field auf Weiss gesetzt. */
+  --field: #f4f4f4;
+  --field-hover: #e8e8e8;
+  --text-helper: #6f6f6f;
+  --text-placeholder: #a8a8a8;
+  --background-inverse: #393939;
+  --text-inverse: #ffffff;
+  --button-primary-hover: #0050e6;
+  --button-primary-active: #002d9c;
+  --button-secondary-hover: #474747;
+  --shell: #161616;
+  --shell-hover: #2c2c2c;
+  --shell-text: #c6c6c6;
+  --notification-success: #defbe6;
+  --notification-warning: #fcf4d6;
+  --notification-error: #fff1f1;
+  --tag-blau: #d0e2ff;
+  --tag-blau-text: #002d9c;
+
+  /* Genutzte Arbeit und alles Aktive in Blue 60, abgeregelte Arbeit in Magenta 60. */
+  --akzent: #0f62fe;
+  --akzent-schwach: #edf5ff;
+  --verlust: #d02670;
+  --verlust-schwach: #fff0f7;
+  --gut: #24a148;
+  --mittel: #f1c21b;
+  --schlecht: #da1e28;
 
   --chart-1: var(--akzent);
   --chart-2: var(--verlust);
-  --chart-3: oklch(0.62 0.02 240);
-  --chart-4: oklch(0.75 0.015 240);
-  --chart-5: oklch(0.4 0.02 240);
-  --radius: 0.375rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --chart-3: #8d8d8d;
+  --chart-4: #c6c6c6;
+  --chart-5: #525252;
+  --radius: 0rem;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring;
   }
   html {
     --font-sans:
-      ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-      sans-serif;
-    --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+      var(--font-plex-sans), "Helvetica Neue", Arial, sans-serif;
+    --font-mono: var(--font-plex-mono), Menlo, "Courier New", monospace;
     @apply font-sans;
-    font-size: 14px;
   }
   body {
-    @apply bg-background text-foreground text-[13px] leading-snug;
+    @apply bg-background text-sm text-foreground;
   }
   /* Kennzahlen sollen beim Ziehen am Regler nicht springen. */
   .ziffern {
     font-variant-numeric: tabular-nums;
-    letter-spacing: -0.01em;
   }
   input[type="number"] {
     font-variant-numeric: tabular-nums;
+    -moz-appearance: textfield;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  /* Carbon-Warnsymbol: gelbes Dreieck mit schwarzem Ausrufezeichen. */
+  [data-icon-path="inner-path"] {
+    fill: #000;
+    opacity: 1;
   }
 }
 

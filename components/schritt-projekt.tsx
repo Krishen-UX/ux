@@ -4,12 +4,11 @@ import type { AnlagenTyp, Annahmen, Auswertung, Projekt } from "@/lib/typen";
 import { ANLAGENTYPEN, BUNDESLAENDER, regelzoneVon } from "@/data/annahmen";
 import { LASTPROFILE } from "@/lib/sim/profile";
 import { fmtEur, fmtMWh, fmtProzent, fmtStunden, fmtZahl } from "@/lib/format";
-import { Abschnitt, Auswahl, Kennzahl, Zahlenfeld } from "./felder";
+import { Abschnitt, Auswahl, Kennzahl, WahlKachel, Zahlenfeld } from "./felder";
 import { SchrittKopf } from "./schritt-kopf";
 import { GLOSSAR } from "@/lib/glossar";
 import { JahresprofilDiagramm } from "./diagramme/jahresprofil";
 import { Karte } from "./karte";
-import { cn } from "@/lib/utils";
 
 export function SchrittProjekt({
   projekt,
@@ -43,7 +42,7 @@ export function SchrittProjekt({
       : 0);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-8">
       <SchrittKopf
         nummer={1}
         titel="Projekt"
@@ -61,40 +60,33 @@ export function SchrittProjekt({
           </>
         }
       />
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-      <div className="space-y-5">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+      <div className="space-y-10">
         <Abschnitt titel="Anlagentyp" hinweis="Bestimmt, wie das Projekt seinen Erlös erzielt und welche Richtung des Netzanschlusses das FCA überhaupt einschränken kann. Ein Wechsel setzt alle Eingaben zurück.">
-          <div className="grid gap-2 sm:grid-cols-3">
+          <div role="radiogroup" aria-label="Anlagentyp" className="grid gap-2 sm:grid-cols-3">
             {ANLAGENTYPEN.map((t) => (
-              <button
+              <WahlKachel
                 key={t.typ}
-                type="button"
-                onClick={() => typWechseln(t.typ)}
-                className={cn(
-                  "rounded-md border p-2.5 text-left transition-colors",
-                  projekt.typ === t.typ
-                    ? "border-akzent bg-akzent-schwach"
-                    : "border-border hover:border-akzent/40 hover:bg-muted/60",
-                )}
-              >
-                <div className="font-semibold">{t.titel}</div>
-                <div className="mt-0.5 text-[11px] text-pretty text-muted-foreground">{t.kurz}</div>
-              </button>
+                titel={t.titel}
+                text={t.kurz}
+                gewaehlt={projekt.typ === t.typ}
+                waehlen={() => typWechseln(t.typ)}
+              />
             ))}
           </div>
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-xs text-helper">
             Ein Wechsel setzt alle Eingaben auf die Startwerte des Typs zurück.
           </p>
         </Abschnitt>
 
         <Abschnitt titel="Anlage" hinweis="Technische Eckdaten. Aus Leistung, Standort und Anschlussleistung entsteht der Referenzfall, gegen den alles Weitere gemessen wird.">
-          <div className="grid gap-3 sm:grid-cols-2">
-            <label className="block space-y-1 sm:col-span-2">
-              <span className="text-muted-foreground">Projektname</span>
+          <div className="grid gap-x-4 gap-y-6 sm:grid-cols-2">
+            <label className="block space-y-2 sm:col-span-2">
+              <span className="text-xs text-muted-foreground">Projektname</span>
               <input
                 value={projekt.name}
                 onChange={(e) => aendern("name", e.target.value)}
-                className="h-8 w-full rounded-md border border-input bg-background px-2 font-medium outline-none focus:border-ring focus:ring-2 focus:ring-ring/25"
+                className="h-10 w-full border-b border-border-strong bg-field px-4 text-sm transition-colors duration-[70ms] hover:bg-field-hover focus:outline-2 focus:-outline-offset-2 focus:outline-ring"
               />
             </label>
 
@@ -155,7 +147,7 @@ export function SchrittProjekt({
         </Abschnitt>
 
         <Abschnitt titel="Wirtschaftlichkeit" hinweis="Investition, laufende Kosten und Kapitalkosten. Diese Werte entscheiden über die Höhe der Kapitalwerte, nicht über die Abregelung.">
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-x-4 gap-y-6 sm:grid-cols-2">
             <Zahlenfeld
               label="Investition je MW"
               hinweis={GLOSSAR.investition}
@@ -215,8 +207,8 @@ export function SchrittProjekt({
         </Abschnitt>
       </div>
 
-      <Karte className="h-fit lg:sticky lg:top-16">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <Karte className="h-fit lg:sticky lg:top-36">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-4">
           <Kennzahl
             label={istSpeicher ? "Jahreserlös" : istLast ? "Jahresbezug" : "Jahresertrag"}
             hinweis={
@@ -252,11 +244,11 @@ export function SchrittProjekt({
           />
         </div>
 
-        <div className="mt-4">
+        <div className="mt-8">
           <JahresprofilDiagramm lauf={lauf} projekt={projekt} annahmen={annahmen} hoehe={170} />
         </div>
 
-        <div className="mt-3 grid grid-cols-3 gap-3 border-t border-border pt-3">
+        <div className="mt-6 grid grid-cols-3 gap-4 border-t border-border-subtle pt-4">
           {auswertung.laeufe.map((l) => {
             const menge = istLast ? l.entnahmeReferenzMWh : l.einspeisungReferenzMWh;
             return (
@@ -274,7 +266,7 @@ export function SchrittProjekt({
             );
           })}
         </div>
-        <p className="mt-2 text-[11px] text-pretty text-muted-foreground">
+        <p className="mt-4 text-xs text-pretty text-helper">
           Grundlage sind die Ist-Reihen der Regelzone aus drei Wetterjahren. Das mittlere Jahr trägt
           die Kapitalwerte, das schwächste mit verschärftem Engpass den P90-Fall.
         </p>
