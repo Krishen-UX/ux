@@ -7,8 +7,8 @@ Die Skills sind unveränderte Kopien der Upstream-Repos (Tests und Evals weggela
 | Skill(s) | Quelle | Commit | Anpassung |
 | --- | --- | --- | --- |
 | `ui-ux-pro-max` | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | `3eccfd8` | Skriptpfade auf `.claude/skills/…` statt `${CLAUDE_PLUGIN_ROOT}` |
-| `taste-skill` (Name: `design-taste-frontend`) | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | `6010f91` | – |
-| `impeccable` | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | `e3083ac` | ohne Plugin-Hooks; die Engine lädt sich beim ersten Aufruf von `scripts/impeccable` aus den GitHub-Releases (per SHA-256 geprüft) |
+| `taste-skill` (Name: `design-taste-frontend`) | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | `12af471` | – |
+| `impeccable` | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | `6f269c4` | ohne Plugin-Hooks; die Engine lädt sich beim ersten Aufruf von `scripts/impeccable` aus den GitHub-Releases (per SHA-256 gegen `scripts/engine-checksums.txt` geprüft) |
 | `animate`, `animation-performance`, `animation-vocabulary`, `apple-design`, `ask-sonner`, `break-ui`, `emil-design-eng`, `find-animation-opportunities`, `improve-animations`, `mobile-native`, `pick-ui-library`, `prototype`, `review-animations` | [emilkowalski/skills](https://github.com/emilkowalski/skills) | `2d22863` | ohne `write-swift` und `animate-expo` (Swift/React Native) |
 | `hallmark` | [Nutlope/hallmark](https://github.com/Nutlope/hallmark) | `13ac0ec` | – |
 | `gsap-core`, `gsap-timeline`, `gsap-scrolltrigger`, `gsap-plugins`, `gsap-react`, `gsap-frameworks`, `gsap-utils`, `gsap-performance` | [greensock/gsap-skills](https://github.com/greensock/gsap-skills) | `aed9cfd` | – |
