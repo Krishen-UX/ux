@@ -13,8 +13,11 @@ Die Skills sind unveränderte Kopien der Upstream-Repos (Tests und Evals weggela
 | `hallmark` | [Nutlope/hallmark](https://github.com/Nutlope/hallmark) | `13ac0ec` | – |
 | `gsap-core`, `gsap-timeline`, `gsap-scrolltrigger`, `gsap-plugins`, `gsap-react`, `gsap-frameworks`, `gsap-utils`, `gsap-performance` | [greensock/gsap-skills](https://github.com/greensock/gsap-skills) | `aed9cfd` | – |
 | `scroll-world` | [oso95/scroll-world](https://github.com/oso95/scroll-world) | `71cc36d` | – |
+| `stageshow` | [benjitaylor/skills](https://github.com/benjitaylor/skills) | `8020574` | – (eigene `package.json` mit React 18/Vite nur für Playground und Film-Skripte; wird vom Projekt nicht installiert) |
 | `design-md` | [google-labs-code/design.md](https://github.com/google-labs-code/design.md) (`docs/spec.md`) + [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) (84 DESIGN.md-Dateien) | `6e5da53` / `3b60532` | eigene `SKILL.md`, die Spezifikation und Bibliothek zusammenführt |
 
 React Bits und Canvas UI sind keine Skills, sondern shadcn-Registries; sie sind in `components.json` eingetragen (`npx shadcn@latest add @react-bits/<Name>` bzw. `@canvas-ui/<Name>`).
+
+`.claude/` ist in `eslint.config.mjs` und `tsconfig.json` ausgenommen, damit der Fremdcode der Skills nicht in Lint, Typecheck und `next build` des Projekts landet.
 
 Aktualisieren: Upstream-Repo klonen und den jeweiligen Skill-Ordner über den alten kopieren, danach die Anpassungen aus der Tabelle erneut anwenden und den Commit hier nachtragen.
