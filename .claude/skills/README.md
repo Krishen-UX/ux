@@ -15,6 +15,7 @@ Die Skills sind unveränderte Kopien der Upstream-Repos (Tests und Evals weggela
 | `scroll-world` | [oso95/scroll-world](https://github.com/oso95/scroll-world) | `71cc36d` | – |
 | `stageshow` | [benjitaylor/skills](https://github.com/benjitaylor/skills) | `8020574` | – (eigene `package.json` mit React 18/Vite nur für Playground und Film-Skripte; wird vom Projekt nicht installiert) |
 | `unslop` | [heydamir/unslop](https://github.com/heydamir/unslop) | `a6f121e` | – (Lizenz CC BY 4.0, Urheber: Damir Sokolovsky) |
+| `design-review` | [manish-uxai/design-review](https://github.com/manish-uxai/design-review) | `3ce7ff2` | – (Lizenz MIT laut `SKILL.md`, Urheber: Manish-UXUI; das Repo hat keine eigene Lizenzdatei) |
 | `design-md` | [google-labs-code/design.md](https://github.com/google-labs-code/design.md) (`docs/spec.md`) + [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) (84 DESIGN.md-Dateien) | `6e5da53` / `3b60532` | eigene `SKILL.md`, die Spezifikation und Bibliothek zusammenführt |
 
 React Bits und Canvas UI sind keine Skills, sondern shadcn-Registries; sie sind in `components.json` eingetragen (`npx shadcn@latest add @react-bits/<Name>` bzw. `@canvas-ui/<Name>`).
